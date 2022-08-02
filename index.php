@@ -2,7 +2,6 @@
   
   <?php
     // require('./config/conection.php');
-    print_r($_SESSION['logged_in_user_id']);
     if($_SESSION['logged_in_user_id'] != '1'){
       //session_start();
       header('Location:http://localhost/SAME_BIT/login.html');
@@ -10,7 +9,9 @@
     else{
     }
   ?>
-
+    <!-- 2-Ago-2022
+    Aquí se modifica la forma en que se llama el archivo porque paso de ser .html a .php
+    -->
     <!--<link href="./index.css" rel="stylesheet" type="text/css">-->
     <style> <?php include 'index.css';?></style> 
     <meta charset="utf-8">
@@ -18,8 +19,7 @@
 
     <!-- Logo -->
     <div class="top_imagen">
-    <img src='img/SameinLogo.png,<?php echo base64_encode(file_get_contents("img/SameinLogo.png")); ?>'>
-       <!--  <img src='img/SameinLogo.png' alt="logo" width="130px"> -->
+      <img src='../img/SameinLogo.png' alt="logo" width="130px">
     </div>
     
     <nav>
@@ -33,7 +33,7 @@
       <!-- <a href="#">Cerrar sesión</a> -->
      <div class="LogOut">
       <span>Cerrar Sesión</span>
-      <a href="logout.php"><img src="img/off.png" alt="logo" width="30px"></a>
+      <a href="logout.php"><img src="../img/off.png" alt="logo" width="30px"></a>
      </div>
     </nav>
   </div>
@@ -71,39 +71,40 @@
                   </aside>
                 <form>
                   <div class="doble">
-
+                    <!-- DNI User -->
                     <div class="campo">
                       <label for="dni">Documento*</label>
                       <input required type="number" id="dni"/>
                     </div>
-        
+                    <!-- Name User -->
+                    <div class="campo">
+                      <label for="nombre">Nombres*</label>
+                      <input required type="text" id="nombre"/>
+                    </div>
+
                     <div class="campo">
                       <label for="apellido">Apellido*</label>
                       <input required type="text" id="apellido"/>
                     </div>
-
-                    <div class="campo">
-                      <label for="nombre">Nombre*</label>
-                      <input required type="text" id="nombre"/>
-                    </div>
-
                   </div>
 
 
 
                   <div class="doble">
                     <div class="campo">
-                      <label for="fecha_nac">Fecha comentario*</label>
+                      <label for="fec_Com">Fecha comentario*</label>
                       <input required type="date" id="Fec_Coment"/>
                     </div>
-                    <span>´ </span>
+                    
                     <div class="campo">
-                      <label for="fecha_nac">Hora comentario*</label>
+                      <label for="Com">Hora comentario*</label>
                       <input required type="time" id="Hor_Coment"/>
                     </div>
+                    <span> &nbsp; &nbsp; </span>
                     <div class="campo">
-                      <label for="fecha_nac">Aceptado*</label>
-                      <input required type="checkbox" id="cuil"/>
+                      <input required type="checkbox" id="Acp" name="Acp" value="Aceptado">
+                      <label for="option">Aceptado</label>
+                      
                     </div>
                   </div>
                   
@@ -128,7 +129,7 @@
                       <label for="altura">Altura</label>
                       <input type="number" min="1" max="3" step="0.01" id="altura"/>
                       <span>metros</span>
-                    </div>
+                    </div> 
                   </div>
 
                   <span class="label">Adjuntar ficha médica</span>
