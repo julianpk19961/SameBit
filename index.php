@@ -96,7 +96,6 @@
 
 <!-- SEGUNDO BLOQUE DE CAMPOS -->
 
-
                   <div class="doble">
                     <div class="campo">
                       <label for="fec_Com">Fecha comentario*</label>
@@ -109,17 +108,23 @@
                     </div>
                     <span> &nbsp; &nbsp; </span>
                     <div class="campo">
-                      <input required type="checkbox" id="Acp" name="Acp" value="Aceptado">
-                      <label for="option">Aceptado</label>
-                      
+                      <label for="Com">Aceptado*</label>
+                      <select class="Acpt" id="color" Size=2>
+                          <option value="1">SI</option>
+                          <option value="0">NO</option>
+                      </select>
+                      <!-- <label for="option">Aceptado</label>
+                      <input required type="text" id="Acp" name="Acp" value="Aceptado">
+                    -->
+                    </div>
+                    <div class="campo">
+                      <label for="Com">Fecha Cita*</label>
+                      <input required type="date" id="Hor_Coment"/>
                     </div>
                   </div>
                   
                   <div class="doble">
-                    <div class="campo">
-                      <label for="celular">Celular*</label>
-                      <input required type="tel" minlength="10" maxlength="14" id="celular"/>
-                    </div>
+                    
                     <div class="campo">
                       <label for="email">Email</label>
                       <input type="email" pattern="[^ @]+@[^ @]+.[a-z]+" id="email"/>
