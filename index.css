@@ -75,7 +75,7 @@ body {
       border-radius: 3px;
   }
   .dedo {
-    max-width: 10em;
+    max-width: 9em;
     opacity:.7;
     padding: 2em 0 0;
   }
@@ -596,6 +596,9 @@ body {
   /* The container must be positioned relative: */
 .Acpt {
   /* position: relative; */
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
   display: flex;
   justify-content: flex-start;
   width: 100%;
@@ -632,6 +635,7 @@ body {
 /* style the items (options), including the selected item: */
 .select-items div,.Acpt {
   color: #637487;
+  padding-top:1em;
   padding: .7em 1.1em;
   border: 1px solid #ebedf2;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;

@@ -106,10 +106,10 @@
                       <label for="Com">Hora comentario*</label>
                       <input required type="time" id="Hor_Coment"/>
                     </div>
-                    <span> &nbsp; &nbsp; </span>
                     <div class="campo">
                       <label for="Com">Aceptado*</label>
-                      <select class="Acpt" id="color" Size=2>
+                      
+                      <select class="Acpt" id="color">
                           <option value="1">SI</option>
                           <option value="0">NO</option>
                       </select>
