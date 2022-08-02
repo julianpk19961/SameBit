@@ -70,6 +70,8 @@
                   </a>
                   </aside>
                 <form>
+<!-- PRIMER BLOQUE DE CAMPOS -->
+
                   <div class="doble">
                     <!-- DNI User -->
                     <div class="campo">
@@ -83,11 +85,16 @@
                     </div>
 
                     <div class="campo">
-                      <label for="apellido">Apellido*</label>
+                      <label for="apellido">Apellidos*</label>
                       <input required type="text" id="apellido"/>
+                    </div>
+                    <div class="campo">
+                      <label for="celular">Celular*</label>
+                      <input required type="tel" minlength="10" maxlength="14" id="celular"/>
                     </div>
                   </div>
 
+<!-- SEGUNDO BLOQUE DE CAMPOS -->
 
 
                   <div class="doble">

@@ -3,7 +3,7 @@ body {
   }
   *,::before,::after {
     box-sizing: border-box;
-    margin:0;
+    margin:1;
     padding:0;
   }
   h1,h2,h3,h4 {
@@ -90,7 +90,7 @@ body {
   }
   
   .maxw {
-    max-width:65em;
+    max-width:937.5em;
     margin: 0 auto;
     padding: 0 1em;
     display: flex;
@@ -265,13 +265,15 @@ body {
       font-size: 0.9em;
   }
   form .doble {
-      display: flex;
-      /* justify-content: space-between; */
-      width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
   }
-  form .doble .campo:first-child {
+  /* form .doble .campo:first-child {
     margin-right:3em;
-  }
+  } */
   form span {
       font-size: 0.9em;
   }
