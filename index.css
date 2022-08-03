@@ -268,7 +268,7 @@ body {
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    align-items: center;
+    align-items: unset;
     flex-direction: row;
   }
   /* form .doble .campo:first-child {
@@ -604,7 +604,7 @@ body {
   width: 100%;
   align-items: center;
   flex-direction: row;
-  border: 1px solid #ebedf2;
+  border-radius: 3px;
   font-family: Arial;
   background-color: #f7f9fd;
   
@@ -622,9 +622,11 @@ body {
   right: 10px;
   width: 0;
   height: 0;
+  border-radius: 3px;
   border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
+ 
 }
+
 
 /* Point the arrow upwards when the select box is open (active): */
 .Acpt.select-arrow-active:after {
@@ -635,11 +637,11 @@ body {
 /* style the items (options), including the selected item: */
 .select-items div,.Acpt {
   color: #637487;
-  padding-top:1em;
-  padding: .7em 1.1em;
+  /* padding-top: 1em; */
+  padding: .9em 2em;
   border: 1px solid #ebedf2;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
   cursor: pointer;
+  border-radius: 3px;
 }
 
 /* Style items (options): */
