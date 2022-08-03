@@ -1,5 +1,13 @@
 <header id="cab">
-  
+<html lang="es">
+<head>
+  <title>SAME BIT</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
   <?php
     // require('./config/conection.php');
     if($_SESSION['logged_in_user_id'] != '1'){
@@ -128,7 +136,7 @@
                       <!-- Aceptacion del paciente -->
                     <div class="campo">
                       <label for="Com">Aceptado*</label>
-                        <select class="Acpt" id="color">
+                        <select id="color">
                           <option value="1">SI</option>
                           <option value="0">NO</option>
                         </select>

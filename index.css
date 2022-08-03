@@ -277,11 +277,12 @@ body {
   form span {
       font-size: 0.9em;
   }
-  input {
+  input, select { 
       border-radius: 3px;
       border: 1px solid #ebedf2;
       background: #f7f9fd;
       padding: .7em 1.1em;
+      height: 40px;
       margin-bottom:1em;
   }
   input:hover {
@@ -638,7 +639,7 @@ body {
 .select-items div,.Acpt {
   color: #637487;
   /* padding-top: 1em; */
-  padding: .9em 2em;
+  padding: .7em 1.1em;
   border: 1px solid #ebedf2;
   cursor: pointer;
   border-radius: 3px;
