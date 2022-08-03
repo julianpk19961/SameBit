@@ -70,7 +70,7 @@
                   </a>
                   </aside>
                 <form>
-<!-- PRIMER BLOQUE DE CAMPOS -->
+<!-- PRIMER BLOQUE DE CAMPOS/ DATOS PACIENTE -->
 
                   <div class="doble">
                     <!-- DNI User -->
@@ -94,55 +94,75 @@
                     </div>
                   </div>
 
-<!-- SEGUNDO BLOQUE DE CAMPOS -->
+<!-- SEGUNDO BLOQUE DE CAMPOS / DATOS OBSERVACIÓN-->
 
                   <div class="doble">
                     <div class="campo">
                       <label for="fec_Com">Fecha comentario*</label>
                       <input required type="date" id="Fec_Coment"/>
                     </div>
-                    
+                    <!-- Hora en la que el encargado diligencio el campo -->
                     <div class="campo">
                       <label for="Com">Hora comentario*</label>
                       <input required type="time" id="Hor_Coment"/>
                     </div>
+                   </div>
+
+<!-- TERCER BLOQUE DE CAMPOS / OBSERVACION --> 
+                   <div class="doble">
+                    <div class="campo">
+                      <label for="Com">Observacion*</label>
+                      <input required type="text" id="Obs" size="110px">
+                    </div>
+                   </div>
+
+<!-- CUARTO BLOQUE DE CAMPOS / DATOS DE CITA--> 
+                  <div class="doble">
+                      <!-- Aceptacion del paciente -->
                     <div class="campo">
                       <label for="Com">Aceptado*</label>
-                      
-                      <select class="Acpt" id="color">
+                        <select class="Acpt" id="color">
                           <option value="1">SI</option>
                           <option value="0">NO</option>
-                      </select>
-                      <!-- <label for="option">Aceptado</label>
-                      <input required type="text" id="Acp" name="Acp" value="Aceptado">
-                    -->
+                        </select>
                     </div>
+                    <!-- Fecha de la atención programada para el paciente -->
                     <div class="campo">
                       <label for="Com">Fecha Cita*</label>
-                      <input required type="date" id="Hor_Coment"/>
+                      <input required type="date" id="Fec_Cita"/>
+                    </div>
+                     <!-- Hora asiganda para la atención -->
+                    <div class="campo" >
+                      <label for="Com">Hora Cita*</label>
+                      <input required type="time" id="Hor_Cita"/>
+                    </div>
+                  </div>
+<!-- QUINTO BLOQUE DE CAMPOS / DATOS EPS--> 
+                  <div class="doble">
+                    <div class="campo">
+                      <label for="peso">EPS</label>
+                        <select class="Acpt" id="color">
+                          <option value="0">SANITAS</option>
+                          <option value="1">SURA</option>
+                          <option value="1">FAMISANAR</option>
+                        </select>
+                  </div>
+
+                  <div class="campo">
+                    <label for="Com">Refiere desde EPS</label>
+                    <input required type="txt" id="Ref_Eps"/>
+                  </div>
+
+                  <div class="campo">
+                      <label for="Com">Activo*</label>
+                        <select class="Acpt" id="color">
+                          <option value="1">SI</option>
+                          <option value="0">NO</option>
+                        </select>
                     </div>
                   </div>
                   
-                  <div class="doble">
-                    
-                    <div class="campo">
-                      <label for="email">Email</label>
-                      <input type="email" pattern="[^ @]+@[^ @]+.[a-z]+" id="email"/>
-                    </div>
-                  </div>
 
-                  <div class="doble">
-                    <div class="campo">
-                      <label for="peso">Peso</label>
-                      <input type="number" min="1" max="300" id="peso"/>
-                      <span>kg</span>
-                    </div>
-                    <div class="campo">
-                      <label for="altura">Altura</label>
-                      <input type="number" min="1" max="3" step="0.01" id="altura"/>
-                      <span>metros</span>
-                    </div> 
-                  </div>
 
                   <span class="label">Adjuntar ficha médica</span>
                   <input type="file" value="Seleccionar foto" id="file" class="custom-file-input">
