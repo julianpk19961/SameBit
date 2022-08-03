@@ -52,8 +52,9 @@
   <div class="cuerpo">
       <p>
         <div class="formulario">
+          
+<!-- BLOQUE IMG-ADJUNTOS -->
           <div class="slide">
-
             <div class="item">
               <h3>DATOS DEL PACIENTE</h3>
               <div class="campos">
