@@ -12,15 +12,17 @@ $nr = mysqli_num_rows($Query);
 
 if ($nr == 1)
 {
-    //echo "Bienvenido: " .$name0 ;
+    //echo "Bienvenido: ";
     session_start();
     $_SESSION['logged_in_user_id'] = '1';
-    include '../index.php';
-       
+    $_SESSION['name'] = 'Julian';
+    echo '1';
 }
 elseif ($nr == 0)
 {
-    echo "Usuario o clave invalida";
+    echo '0';
+    $_SESSION['name'] = 'Julian';
+   // echo "Usuario o clave invalida";
 }
 
 

@@ -258,3 +258,125 @@
     background: deepskyblue;
  }
  
+
+ .primary {
+  background: #3ac84f;
+  border-style: none;
+  padding: 10px 117px;
+  margin: auto;
+  color: white;
+  border-radius: 7px;
+}
+label{
+  margin-bottom: 0px;
+}
+
+img.logo {
+  width: 40%;
+  margin-top: -9%;
+}
+
+.navbar-nav {
+  float: right;
+  margin: 0;
+}
+
+
+/*================================================
+Preloader Area CSS
+=================================================*/
+.preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: #ffffff;
+}
+
+.preloader .loader {
+  left: 50%;
+  top: 46%;
+  -webkit-transform: translateX(-50%) translateY(-46%);
+          transform: translateX(-50%) translateY(-46%);
+  position: absolute;
+}
+
+.preloader .loader .sbl-half-circle-spin {
+  height: 80px;
+  width: 80px;
+  color: #fe4a55;
+  display: inline-block;
+  position: relative;
+  border: 1px solid;
+  border-radius: 50%;
+  animation: animeCircleSpin 5s ease-in-out infinite reverse;
+}
+
+.preloader .loader .sbl-half-circle-spin::after {
+  content: '';
+  border: 6px solid;
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  border-radius: inherit;
+}
+
+.preloader .loader .sbl-half-circle-spin div {
+  height: 50%;
+  width: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: auto;
+  border: 1px solid;
+  border-radius: 50%;
+  -webkit-animation: animeCircleSpin 4s ease-in-out infinite;
+          animation: animeCircleSpin 4s ease-in-out infinite;
+}
+
+.preloader .loader .sbl-half-circle-spin div::before {
+  height: 0;
+  width: 0;
+  content: '';
+  border-radius: 50%;
+  display: block;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  border: 19px solid;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+
+@-webkit-keyframes animeCircleSpin {
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  50% {
+    -webkit-transform: rotate(720deg);
+            transform: rotate(720deg);
+  }
+  100% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+}
+
+@keyframes animeCircleSpin {
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  50% {
+    -webkit-transform: rotate(720deg);
+            transform: rotate(720deg);
+  }
+  100% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+}
