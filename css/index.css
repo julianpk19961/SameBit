@@ -284,6 +284,7 @@ body {
       padding: .7em 1.1em;
       height: 40px;
       margin-bottom:1em;
+      grid-template-columns: auto auto auto;
   }
   input:hover {
       border-color: #aeaeae;
