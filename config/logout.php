@@ -5,10 +5,9 @@ if (isset($_SESSION))
 {
    // return session_destroy();
     $_SESSION['id'] = '';
-    header("Location: $index");
+    
     die();
 }
-
-
+header("Location: $index");
 ?>
 
