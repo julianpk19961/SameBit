@@ -1,7 +1,9 @@
 
 <?php 
 include '../config/setup.php';
-
+session_start();
+$nombre = $_SESSION['name'];
+$id = $_SESSION['id'];
 ?>
 <head>
   <title><?php echo $title;?></title>

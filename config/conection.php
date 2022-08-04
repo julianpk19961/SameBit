@@ -21,8 +21,6 @@ if ($nr == 1)
 elseif ($nr == 0)
 {
     echo '0';
-    $_SESSION['name'] = 'Julian';
-   // echo "Usuario o clave invalida";
 }
 
 
