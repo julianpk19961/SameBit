@@ -1,4 +1,4 @@
-on<?php 
+<?php 
 include './generales/header.php';
 ?>
 <body class="align">
