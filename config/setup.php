@@ -1,5 +1,5 @@
 <?php 
-$index ='http://localhost:8888/SAMEBIT/';
+$index ='http://localhost/samebit/';
 $url = '/pages/login.php';
-$urldashboard ='http://localhost:8888/SAMEBIT/pages/dashboard.php';
+$urldashboard ='http://localhost/samebit/pages/dashboard.php';
 $title = 'Same Bit';

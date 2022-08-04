@@ -1,4 +1,4 @@
-<?php 
+on<?php 
 include './generales/header.php';
 ?>
 <body class="align">
@@ -65,8 +65,8 @@ $("#login").submit(function(e){
         type : 'post',
         data : form_data,
         success : function( response ) {
-            // alert( response );
-            if(response ==0){  
+            console.log( response );
+            if(response ==1 ){  
                 $('#loader').addClass('hidden');
                location.href = '<?php echo $urldashboard; ?>';
             }

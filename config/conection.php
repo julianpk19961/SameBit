@@ -14,8 +14,8 @@ if ($nr == 1)
 {
     //echo "Bienvenido: ";
     session_start();
-    $_SESSION['logged_in_user_id'] = '1';
-    $_SESSION['name'] = 'Julian';
+    $_SESSION['id'] = '1';
+    $_SESSION['name'] = $name0 ;
     echo '1';
 }
 elseif ($nr == 0)
