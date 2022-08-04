@@ -45,7 +45,7 @@ include './generales/header.php';
 <!-- BLOQUE IMG-ADJUNTOS -->
           <div class="slide">
             <div class="item">
-              <h3>DATOS DEL PACIENTE <?php echo  $_SESSION['name']; ?></h3>
+              <h3>DATOS DEL PACIENTE <?php echo  $_SESSION['name']; ?> </h3>
               <div class="campos">
                 <aside>
                   <a href="#">
