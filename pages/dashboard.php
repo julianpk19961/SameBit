@@ -12,21 +12,19 @@ include './generales/header.php';
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li>
-      <li><a href="#">Page 3</a></li>
+      <li><a href="#">Pacientes</a></li>
+      <li><a href="#">Entidades</a></li>
+      <li><a href="#">Reeportes</a></li>
       <li>  
       <a href="../config/logout.php"><i class="fa fa-power-off"></i> Cerrar Sesión</a>
         </li>
     </ul>
   </div>
 </nav>
-
    <!-- Logo -->
-    <div class="top_imagen">
-    </div>
     
-    <nav>
+    
+<nav>
  
 <div class="maxw content">
 
@@ -45,7 +43,8 @@ include './generales/header.php';
 <!-- BLOQUE IMG-ADJUNTOS -->
           <div class="slide">
             <div class="item">
-              <h3>DATOS DEL PACIENTE <?php echo  $nombre;?> </h3>
+              <h3 name="Especial">BIENVENIDO DR. <?php echo  strtoupper($nombre);?>,
+              INGRESE LOS DATOS DEL PACIENTE</h3>
               <div class="campos">
                 <aside>
                   <a href="#">
