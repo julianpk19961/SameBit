@@ -639,8 +639,7 @@ body {
 /* style the items (options), including the selected item: */
 .select-items div,.Acpt {
   color: #637487;
-  /* padding-top: 1em; */
-  padding: .7em 1.1em;
+  padding: .7em .6em;
   border: 1px solid #ebedf2;
   cursor: pointer;
   border-radius: 3px;

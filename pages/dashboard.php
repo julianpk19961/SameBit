@@ -86,7 +86,7 @@ include './generales/header.php';
               <input required type="time" id="Hor_Coment"/>
             </div>
             <div class="campo">
-              <label for="Com">Diagnostico*</label>
+              <label for="Com">Diagnostico* </label>
               <select class="Acpt" id="color">
                 <option value="0">F319</option>
                 <option value="1">F322</option>
@@ -102,22 +102,48 @@ include './generales/header.php';
               </select>
             </div>
             <div class="campo">
-              <label for="peso">EPS</label>
+              <label for="peso" >EPS</label>
               <select class="Acpt" id="color">
-                <option value="0">SANITAS</option>
-                <option value="1">SURA</option>
-                <option value="1">FAMISANAR</option>
+                <option value="0">E.P.S.  SANITAS  S.A.</option>
+                <option value="1">NUEVA EPS S.A.</option>
+                <option value="2">E.P.S.  FAMISANAR  LTDA.</option>
+                <option value="3">SALUD  TOTAL  S.A.  E.P.S.</option>
+                <option value="4">EPS SERVICIO OCCIDENTAL DE SALUD  S.A.</option>
+                <option value="5">SALUDVIDA  S.A.  E.P.S.</option>
+                <option value="6">EPS  CONVIDA</option>
+                <option value="7">ANASWAYUU</option>
+
+              </select>
+            </div>
+            <div class="campo">
+              <label for="Com">EPS Activo*</label>
+              <select id="color">
+                <option value="1">SI</option>
+                <option value="0">NO</option>
               </select>
             </div>
           </div>
 <!-- TERCER BLOQUE DE CAMPOS / OBSERVACION --> 
-                   <div class="doble">
-                    <div class="campo">
-                      <label for="Com" height: 60px >Observacion*</label>
-                      <input required type="text" id="Obs" size="106px">
-                    </div>
-                   </div>
+          <div class="doble"> 
+            <div class="campo">
+              <label for="apellido">Remitido Por*</label>
+              <input required type="text" id="apellido" size="84Px">
+            </div>
+            <div class="campo">
+              <label for="peso">IPS</label>
+              <select class="Acpt" id="color">
+                <option value="0">EXPERTA SALUD</option>
+                <option value="1">SALUD Y VIDA </option>
+                <option value="1">RHS Alianza</option>
+              </select>
+            </div>
+          </div>
 
+<!-- 
+          <div class="campo">
+              <label for="Com" Size="1em">Observacion*</label>
+              <input required type="text" id="Obs" size="86Px">
+            </div> -->
 <!-- CUARTO BLOQUE DE CAMPOS / DATOS DE CITA--> 
                   <div class="doble">
                       <!-- Aceptacion del paciente -->
@@ -338,27 +364,11 @@ include './generales/header.php';
             </div> -->
 
             <div class="item">
-              <form>
-                <div class="campos">
-                  <figure>
-                    <h3>Para finalizar, ingrese la clave de cliente.</h3>
-                    <div class="formy">
-                        <div class="">
-                          <span>Usuario</span>
-                          <label for="clave_usuario">Clave</label>
-                        </div>
-                        <div class="">
-                          <span class="deni"></span>
-                          <input size="10" required id="clave_usuario" type="password" pattern="[0-9]{5,8}" title="La clave debe contener entre 5 y 8 caracteres numéricos." value="">
-                        </div>
-                    </div>
-                    <span class="aclar">La clave debe contener entre 5 y 8 caracteres numéricos.</span>
-                  </figure>
-                </div>
+              
                 <div class="clear_r">
                   <input type="submit" class="boton_ok" value="Confirmar"/>
                 </div>
-              </form>
+              
             </div>
 
           </div>
