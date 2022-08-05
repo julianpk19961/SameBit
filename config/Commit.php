@@ -7,27 +7,19 @@ $Dni = isset($_POST["username"])?$_POST["username"]:'';
 
 
 
-$Name = isset($_POST["password"])?$_POST["password"]:'';
-$LastName = isset($_POST["password"])?$_POST["password"]:'';
-$CellPhone = isset($_POST["password"])?$_POST["password"]:'';
-$CommentDate = isset($_POST["username"])?$_POST["username"]:'';
-$CommentHour = isset($_POST["password"])?$_POST["password"]:'';
-$Comment = isset($_POST["password"])?$_POST["password"]:'';
-$Acept = isset($_POST["password"])?$_POST["password"]:'';
-$AppointmentDate = isset($_POST["username"])?$_POST["username"]:'';
-$AppointmentHour = isset($_POST["password"])?$_POST["password"]:'';
-$Eps = isset($_POST["password"])?$_POST["password"]:'';
-$StatusEps = isset($_POST["password"])?$_POST["password"]:'';
-$Ips = isset($_POST["username"])?$_POST["username"]:'';
-$Range = isset($_POST["password"])?$_POST["password"]:'';
-$Diagnostic = isset($_POST["password"])?$_POST["password"]:'';
-$Calls = isset($_POST["password"])?$_POST["password"]:'';
-$Remitter = isset($_POST["password"])?$_POST["password"]:'';
-$StatusReg = isset($_POST["password"])?$_POST["password"]:''; 
-
-$AccountCrea = isset($_POST["password"])?$_POST["password"]:'';
-$AccountModify = isset($_POST["password"])?$_POST["password"]:'';
-$HourCrea= isset($_POST["password"])?$_POST["password"]:'';
-$HourModify= isset($_POST["password"])?$_POST["password"]:'';
-
+$Dni = isset($_POST["Dni"])?$_POST["Dni"]:'';
+$Name = isset($_POST["Name"])?$_POST["Name"]:'';
+$LastName = isset($_POST["LastName"])?$POST["LastName"]:'';
+$Phone = isset($_POST["Phone"])?$POST["Phone"]:'';
+$CommentDate = isset($_POST["CommentDate"])?$_POST["CommentDate"]:'';
+$CommentHour = isset($_POST["CommentHour"])?$_POST["CommentHour"]:'';
+$Diagnosis = isset($_POST["Diagnosis"])?$_POST["Diagnosis"]:'';
+$Accept = isset($_POST["Accept"])?$_POST["Accept"]:'';
+$Eps = isset($_POST["Eps"])?$_POST["Eps"]:'';
+$StatusEps = isset($_POST["StatusEps"])?$_POST["StatusEps"]:'';
+$SentBy = isset($_POST["SentBy"])?$_POST["SentBy"]:'';
+$Ips = isset($_POST["Ips"])?$_POST["Ips"]:'';
+$AppointmentDate = isset($_POST["AppointmentDate"])?$_POST["AppointmentDate"]:'';
+$CallsNumber = isset($_POST["CallsNumber"])?$_POST["CallsNumber"]:'';
+$Comment = isset($_POST["Comment"])?$_POST["Comment"]:'';
 ?>

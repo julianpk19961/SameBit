@@ -61,33 +61,31 @@ include './generales/header.php';
             <!-- Name User -->
             <div class="campo">
               <label for="nombre">Nombres*</label>
-              <input required type="text" id="nombre" nombre="Name"/>
+              <input required type="text" id="nombre" name="Name">
             </div>
             <div class="campo">
               <label for="apellido">Apellidos*</label>
-              <input required type="text" id="apellido" nombre="LastName"/>
+              <input required type="text" id="apellido" name="LastName"/>
             </div>
             <div class="campo">
               <label for="celular">Celular*</label>
-              <input required type="tel" maxlength="10" id="celular"/>
+              <input required type="tel" maxlength="10" id="celular" name="Phone"/>
             </div>
           </div>
-
-<!-- SEGUNDO BLOQUE DE CAMPOS / DATOS OBSERVACIÓN-->
-
+        <!-- SEGUNDO BLOQUE DE CAMPOS / DATOS EPS -->
           <div class="doble">
             <div class="campo">
               <label for="fec_Com">Fecha comentario*</label>
-              <input required type="date" id="Fec_Coment"/>
+              <input required type="date" id="CommentDate" name="CommentDate"/>
             </div>
             <!-- Hora en la que el encargado diligencio el campo -->
             <div class="campo">
               <label for="Com">Hora comentario*</label>
-              <input required type="time" id="Hor_Coment"/>
+              <input required type="time" id="CommentHour" name="CommentHour"/>
             </div>
             <div class="campo">
               <label for="Com">Diagnostico* </label>
-              <select class="Acpt" id="color">
+              <select class="Acpt" id="color"  name="Diagnosis">
                 <option value="0">F319</option>
                 <option value="1">F322</option>
                 <option value="0">F412</option>
@@ -96,14 +94,14 @@ include './generales/header.php';
             </div>
             <div class="campo">
               <label for="Com">Aceptado*</label>
-              <select id="color">
+              <select id="color" name="Accept">
                 <option value="1">SI</option>
                 <option value="0">NO</option>
               </select>
             </div>
             <div class="campo">
               <label for="peso" >EPS</label>
-              <select class="Acpt" id="color">
+              <select class="Acpt" id="color" name="Eps">
                 <option value="0">E.P.S.  SANITAS  S.A.</option>
                 <option value="1">NUEVA EPS S.A.</option>
                 <option value="2">E.P.S.  FAMISANAR  LTDA.</option>
@@ -117,7 +115,7 @@ include './generales/header.php';
             </div>
             <div class="campo">
               <label for="Com">EPS Activo*</label>
-              <select id="color">
+              <select id="color" name="StatusEps">
                 <option value="1">SI</option>
                 <option value="0">NO</option>
               </select>
@@ -126,12 +124,12 @@ include './generales/header.php';
 <!-- TERCER BLOQUE DE CAMPOS / DATOS CONTACTO --> 
           <div class="doble"> 
             <div class="campo">
-              <label for="apellido">Remitido Por*</label>
-              <input required type="text" id="apellido" size="80Px">
+              <label for="SentBy">Remitido Por*</label>
+              <input required type="text" id="SentBy" name="SentBy" size="80Px">
             </div>
             <div class="campo">
               <label for="peso">IPS</label>
-              <select class="Acpt" id="color">
+              <select class="Acpt" id="color" name="Ips">
                 <option value="0">EXPERTA SALUD</option>
                 <option value="1">SALUD Y VIDA </option>
                 <option value="1">IPS COOMEVA S.A.S MED</option>
@@ -143,22 +141,22 @@ include './generales/header.php';
           <div class="doble">
             <div class="campo">
               <label for="Com">Fecha Cita*</label>
-              <input required type="date" id="Fec_Cita"/>
+              <input required type="date" id="appointmentDate" name="AppointmentDate"/>
             </div>
             <div class="campo" >
               <label for="Com">Hora Cita*</label>
-              <input required type="time" id="Hor_Cita"/>
+              <input required type="time" id="AppointmentHour" name="AppointmentHour"/>
             </div>
             <div class="campo">
               <label for="dni">No Llamadas*</label>
-              <input required type="number" id="No_Llamadas"/>
+              <input required type="number" id="CallsNumber" name="CallsNumber">
             </div>
           </div>
 <!-- TERCER BLOQUE DE CAMPOS / OBSERVACION --> 
           <div class="doble">
             <div class="campo">
               <label for="dni">Observación*</label>
-              <input required type="text" id="No_Llamadas"  size="110px">
+              <input required type="text" id="Comment" name="Comment"  size="110px">
             </div>
           </div>
         </div>
