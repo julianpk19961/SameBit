@@ -2,9 +2,13 @@
 <?php 
 include '../config/setup.php';
 session_start();
-$nombre = $_SESSION['name'];
-$id = $_SESSION['id'];
+
+$nombre = isset($_POST[$_SESSION['name']])?$_SESSION['name']:'';
+$id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
+// $nombre = $_SESSION['name'];
+// $id = $_SESSION['id'];
 ?>
+
 <head>
   <title><?php echo $title;?></title>
   <meta charset="utf-8">

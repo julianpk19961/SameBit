@@ -127,80 +127,49 @@ include './generales/header.php';
           <div class="doble"> 
             <div class="campo">
               <label for="apellido">Remitido Por*</label>
-              <input required type="text" id="apellido" size="84Px">
+              <input required type="text" id="apellido" size="80Px">
             </div>
             <div class="campo">
               <label for="peso">IPS</label>
               <select class="Acpt" id="color">
                 <option value="0">EXPERTA SALUD</option>
                 <option value="1">SALUD Y VIDA </option>
-                <option value="1">RHS Alianza</option>
+                <option value="1">IPS COOMEVA S.A.S MED</option>
+                <option value="1">RHS Alianza IPS</option>
               </select>
             </div>
           </div>
-
-<!-- 
-          <div class="campo">
-              <label for="Com" Size="1em">Observacion*</label>
-              <input required type="text" id="Obs" size="86Px">
-            </div> -->
 <!-- CUARTO BLOQUE DE CAMPOS / DATOS DE CITA--> 
-                  <div class="doble">
-                      <!-- Aceptacion del paciente -->
-                    
-                    <!-- Fecha de la atención programada para el paciente -->
-                    <div class="campo">
-                      <label for="Com">Fecha Cita*</label>
-                      <input required type="date" id="Fec_Cita"/>
-                    </div>
-                     <!-- Hora asiganda para la atención -->
-                    <div class="campo" >
-                      <label for="Com">Hora Cita*</label>
-                      <input required type="time" id="Hor_Cita"/>
-                    </div>
-                  </div>
-<!-- QUINTO BLOQUE DE CAMPOS / DATOS EPS--> 
-                  <div class="doble">
-                   
-
-                    <div class="campo">
-                      <label for="Com">Refiere desde EPS</label>
-                      <input required type="txt" id="Ref_Eps"/>
-                    </div>
-
-                    <div class="campo">
-                      <label for="Com">Activo*</label>
-                        <select class="Acpt" id="color">
-                          <option value="1">SI</option>
-                          <option value="0">NO</option>
-                        </select>
-                    </div>
-                    <div class="campo">
-                      <label for="Com">Rango*</label>
-                        <select class="Acpt" id="color">
-                          <option value="0">A</option>
-                          <option value="1">B</option>
-                          <option value="0">C</option>
-                          <option value="1">SISBEN 1</option>
-                        </select>
-                    </div>
-                    <div class="campo">
-                      <label for="Com">Diagnostico*</label>
-                        <select class="Acpt" id="color">
-                          <option value="0">F319</option>
-                          <option value="1">F322</option>
-                          <option value="0">F412</option>
-                          <option value="1">F321</option>
-                        </select>
-                    </div>
-                    <div class="campo">
-                      <label for="dni">No Llamadas*</label>
-                      <input required type="number" id="No_Llamadas"/>
-                    </div>
-                  </div>
-                </form>
-              </div>
+          <div class="doble"> <!-- Fecha de la atención programada para el paciente -->
+            <div class="campo">
+              <label for="Com">Fecha Cita*</label>
+              <input required type="date" id="Fec_Cita"/>
             </div>
+            <div class="campo" >
+              <label for="Com">Hora Cita*</label>
+              <input required type="time" id="Hor_Cita"/>
+            </div>
+            <div class="campo">
+              <label for="dni">No Llamadas*</label>
+              <input required type="number" id="No_Llamadas"/>
+            </div>
+          </div>
+
+          <div class="doble">
+            <div class="campo">
+              <label for="dni">Observación*</label>
+              <input required type="text" id="No_Llamadas"  size="110px">
+            </div>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+    <div class="item">
+      <div class="clear_r">
+      <input type="submit" class="boton_ok" value="Confirmar"/>
+    </div>
+  </div>
 
             <!-- <div class="item">
               <h3>Actividades</h3>
@@ -362,15 +331,6 @@ include './generales/header.php';
                 <input id="back" type="submit" class="boton_pas" value="Volver">
               </div>
             </div> -->
-
-            <div class="item">
-              
-                <div class="clear_r">
-                  <input type="submit" class="boton_ok" value="Confirmar"/>
-                </div>
-              
-            </div>
-
           </div>
       </div>
 
