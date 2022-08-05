@@ -20,6 +20,11 @@ $StatusEps = isset($_POST["StatusEps"])?$_POST["StatusEps"]:'';
 $SentBy = isset($_POST["SentBy"])?$_POST["SentBy"]:'';
 $Ips = isset($_POST["Ips"])?$_POST["Ips"]:'';
 $AppointmentDate = isset($_POST["AppointmentDate"])?$_POST["AppointmentDate"]:'';
+$AppointmentHour = isset($_POST["AppointmentHour"])?$_POST["AppointmentHour"]:'';
 $CallsNumber = isset($_POST["CallsNumber"])?$_POST["CallsNumber"]:'';
 $Comment = isset($_POST["Comment"])?$_POST["Comment"]:'';
+
+
+$Sql = "INSERT INTO "
+
 ?>
