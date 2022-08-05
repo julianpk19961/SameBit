@@ -321,7 +321,8 @@ body {
       cursor: pointer;
       padding: 1em;
       background: #ebebeb;
-      display:flex;
+      display:
+      flex;
       justify-content: center;
       margin-bottom: 1em;
       fill: #b4b6bb;

@@ -56,20 +56,20 @@ include './generales/header.php';
             <!-- DNI User -->
             <div class="campo">
               <label for="dni">Documento*</label>
-              <input required type="number" id="dni" name= "Dni">
+              <input required type="tel" maxlength="20" id="dni" name= "Dni"  >
             </div>
             <!-- Name User -->
             <div class="campo">
               <label for="nombre">Nombres*</label>
-              <input required type="text" id="nombre"/>
+              <input required type="text" id="nombre" nombre="Name"/>
             </div>
             <div class="campo">
               <label for="apellido">Apellidos*</label>
-              <input required type="text" id="apellido"/>
+              <input required type="text" id="apellido" nombre="LastName"/>
             </div>
             <div class="campo">
               <label for="celular">Celular*</label>
-              <input required type="tel" minlength="10" maxlength="14" id="celular"/>
+              <input required type="tel" maxlength="10" id="celular"/>
             </div>
           </div>
 
@@ -123,7 +123,7 @@ include './generales/header.php';
               </select>
             </div>
           </div>
-<!-- TERCER BLOQUE DE CAMPOS / OBSERVACION --> 
+<!-- TERCER BLOQUE DE CAMPOS / DATOS CONTACTO --> 
           <div class="doble"> 
             <div class="campo">
               <label for="apellido">Remitido Por*</label>
@@ -139,8 +139,8 @@ include './generales/header.php';
               </select>
             </div>
           </div>
-<!-- CUARTO BLOQUE DE CAMPOS / DATOS DE CITA--> 
-          <div class="doble"> <!-- Fecha de la atención programada para el paciente -->
+<!-- TERCER BLOQUE DE CAMPOS / DATOS CONTACTO EMERGENCIA --> 
+          <div class="doble">
             <div class="campo">
               <label for="Com">Fecha Cita*</label>
               <input required type="date" id="Fec_Cita"/>
@@ -154,7 +154,7 @@ include './generales/header.php';
               <input required type="number" id="No_Llamadas"/>
             </div>
           </div>
-
+<!-- TERCER BLOQUE DE CAMPOS / OBSERVACION --> 
           <div class="doble">
             <div class="campo">
               <label for="dni">Observación*</label>
