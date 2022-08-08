@@ -106,11 +106,19 @@ include './generales/header.php';
                 <option value="1">NUEVA EPS S.A.</option>
                 <option value="2">E.P.S.  FAMISANAR  LTDA.</option>
                 <option value="3">SALUD  TOTAL  S.A.  E.P.S.</option>
-                <option value="4">EPS SERVICIO OCCIDENTAL DE SALUD  S.A.</option>
+                <option value="4">EPS SERVICIO OCCIDENTAL</option>
                 <option value="5">SALUDVIDA  S.A.  E.P.S.</option>
                 <option value="6">EPS  CONVIDA</option>
                 <option value="7">ANASWAYUU</option>
-
+              </select>
+            </div>
+            <div class="campo">
+              <label for="peso" >RANGO</label>
+              <select class="Acpt" id="color" name="Range">
+                <option value="0">SISBEN</option>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option value="3">C</option>
               </select>
             </div>
             <div class="campo">
