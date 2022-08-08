@@ -172,9 +172,11 @@ include './generales/header.php';
       </div>
     </div>
     <div class="item">
-      <div class="clear_r">
-      <input type="submit" class="boton_ok" value="Confirmar"/>
-    </div>
+      <form action="../config/commit.php" method="get">
+        <div class="clear_r">
+          <input type="submit" class="boton_ok" value="Confirmar"/>
+        </div>
+      </form>
   </div>
 
             <!-- <div class="item">
