@@ -25,6 +25,8 @@ $CallsNumber = isset($_POST["CallsNumber"])?$_POST["CallsNumber"]:'';
 $Comment = isset($_POST["Comment"])?$_POST["Comment"]:'';
 
 
-$Sql = "INSERT INTO "
+$Sql = "INSERT INTO BitPriorities ('PK_UUID', 'FK_Patient', 'FK_EPS', 'FK_Range', 'FK_Ips', 'FK_Diagnosis', 'Dni', 'Name0', 'LastName0','SentBy', 'Comment0'  , 'CommentDate' ,'AppointmentDate','Accept', 'StatusEps','AppointmentHour','CommentHour','CallsNumber','imageb64','z_xOne','created','updated','createdUser','updatedUser')
+) VALUES ( UUID(), 'ABC',$Eps, , ) 
+"
 
 ?>
