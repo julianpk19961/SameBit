@@ -23,25 +23,12 @@ include './generales/header.php';
 </nav>
 
 <nav>
- 
-<div class="maxw content">
-
-  <!-- <aside class="">
-    <nav>
-      <a class="activo" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M17 16a3 3 0 1 1-2.83 2H9.83a3 3 0 1 1-5.62-.1A3 3 0 0 1 5 12V4H3a1 1 0 1 1 0-2h3a1 1 0 0 1 1 1v1h14a1 1 0 0 1 .9 1.45l-4 8a1 1 0 0 1-.9.55H5a1 1 0 0 0 0 2h12zM7 12h9.38l3-6H7v6zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>Pacientes</a>
-      <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M20 11.46V20a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-4h-2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8.54A4 4 0 0 1 2 8V7a1 1 0 0 1 .1-.45l2-4A1 1 0 0 1 5 2h14a1 1 0 0 1 .9.55l2 4c.06.14.1.3.1.45v1a4 4 0 0 1-2 3.46zM18 12c-1.2 0-2.27-.52-3-1.35a3.99 3.99 0 0 1-6 0A3.99 3.99 0 0 1 6 12v8h3v-4c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v4h3v-8zm2-4h-4a2 2 0 1 0 4 0zm-6 0h-4a2 2 0 1 0 4 0zM8 8H4a2 2 0 1 0 4 0zm11.38-2l-1-2H5.62l-1 2h14.76z"/></svg> Farmacia </a>-->
-      <!-- <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 10v6h14v-6h-2.38l-1.45 2.9a2 2 0 0 1-1.79 1.1h-2.76a2 2 0 0 1-1.8-1.1L7.39 13H5zm14-2V5H5v6h2.38a2 2 0 0 1 1.8 1.1l1.44 2.9h2.76l1.45-2.9a2 2 0 0 1 1.79-1.1H19z"/></svg>Reportes</a>
-    </nav>
-  </aside> -->
-
-  <div class="cuerpo">
-    <p>
-      <div class="formulario">    
-      <!-- BLOQUE IMG-ADJUNTOS -->
-        <div class="slide">
+  <div class="maxw content">
+    <div class="cuerpo">
+      <p>
+        <div class="formulario">
           <div class="item">
-            <h3 name="Especial">BIENVENIDO DR. <?php echo  strtoupper($nombre);?>,
-            INGRESE LOS DATOS DEL PACIENTE</h3>
+            <h3 name="Especial">BIENVENIDO DR <?php echo  strtoupper($nombre);?>,INGRESE LOS DATOS DEL PACIENTE</h3>
             <div class="campos">
               <aside>
                 <a href="#">
@@ -50,34 +37,37 @@ include './generales/header.php';
                   <span width="90" height="90">Adjuntar Archivo</span>
                 </a>
               </aside>
-          <form>
-      <!-- PRIMER BLOQUE DE CAMPOS/ DATOS PACIENTE -->
-          <div class="doble">
-            <!-- DNI User -->
-            <div class="campo">
-              <label for="dni">Documento*</label>
-              <input required type="tel" maxlength="20" id="dni" name= "Dni"  >
             </div>
-            <!-- Name User -->
-            <div class="campo">
-              <label for="nombre">Nombres*</label>
-              <input required type="text" id="nombre" name="Name">
-            </div>
-            <div class="campo">
-              <label for="apellido">Apellidos*</label>
-              <input required type="text" id="apellido" name="LastName"/>
-            </div>
-            <div class="campo">
-              <label for="celular">Celular*</label>
-              <input required type="tel" maxlength="10" id="celular" name="Phone"/>
-            </div>
-          </div>
-        <!-- SEGUNDO BLOQUE DE CAMPOS / DATOS EPS -->
-          <div class="doble">
-            <div class="campo">
-              <label for="fec_Com">Fecha comentario*</label>
-              <input required type="date" id="CommentDate" name="CommentDate"/>
-            </div>
+            <form method="POST" action="../config/commit.php" >
+                <!-- PRIMER BLOQUE DE CAMPOS-->
+                <div class="doble">
+                  <!-- Documento de identidad - DNI - CC -->
+                  <div class="campo">
+                    <label for="dni">Documento*</label>
+                    <input required type="tel" maxlength="20" id="Dni" name= "Doc"  >
+                  </div>
+                  <!-- Nombres completos -->
+                  <div class="campo">
+                    <label for="nombre">Nombres*</label>
+                    <input required type="text" id="nombre" name="Name">
+                  </div>
+                  <!-- Apellidos completos -->
+                  <div class="campo">
+                    <label for="apellido">Apellidos*</label>
+                    <input required type="text" id="apellido" name="LastN">
+                  </div>
+                  <!-- Teléfono -->
+                  <div class="campo">
+                    <label for="celular">Celular*</label>
+                    <input required type="tel" maxlength="10" id="celular" name="Phone0">
+                  </div>
+                </div>
+                 <!-- SEGUNDO BLOQUE DE CAMPOS-->
+                <div class="doble">
+                  <div class="campo">
+                  <label for="fec_Com">Fecha comentario*</label>
+                  <input required type="date" id="CommentDate" name="CommentDate"/>
+                </div>
             <!-- Hora en la que el encargado diligencio el campo -->
             <div class="campo">
               <label for="Com">Hora comentario*</label>
@@ -168,16 +158,14 @@ include './generales/header.php';
             </div>
           </div>
         </div>
+
+      <div class="clear_r">
+        <input type="submit" class="boton_ok" value="Confirmar"/>
+      </div>
       </form>
       </div>
     </div>
-    <div class="item">
-      <form action="../config/commit.php" method="get">
-        <div class="clear_r">
-          <input type="submit" class="boton_ok" value="Confirmar"/>
-        </div>
-      </form>
-  </div>
+
 
             <!-- <div class="item">
               <h3>Actividades</h3>
