@@ -1,12 +1,12 @@
 <?php
-#Conexión
+// #Conexión
 include('config.php');
 
 #Captura Variables
-$Dni = isset($_POST["Dni"])?$_POST["Dni"]:'';
+$Dni = isset($_POST["Doc"])?$_POST["Doc"]:'';
 $Name = isset($_POST["Name"])?$_POST["Name"]:'';
-$LastName = isset($_POST["LastName"])?$POST["LastName"]:'';
-$Phone = isset($_POST["Phone"])?$POST["Phone"]:'';
+$LastName0 = isset($_POST["LastN"])?$POST["LastN"]:'';
+$Phone0 = isset($_POST["Phone0"])?$POST["Phone0"]:'';
 $CommentDate = isset($_POST["CommentDate"])?$_POST["CommentDate"]:'';
 $CommentHour = isset($_POST["CommentHour"])?$_POST["CommentHour"]:'';
 $Diagnosis = isset($_POST["Diagnosis"])?$_POST["Diagnosis"]:'';
@@ -22,8 +22,12 @@ $CallsNumber = isset($_POST["CallsNumber"])?$_POST["CallsNumber"]:'';
 $Comment = isset($_POST["Comment"])?$_POST["Comment"]:'';
 $TimeStamp = strtotime("now");
 
+// #Conexión
+// include('config.php');
+
 #Insert
-$Sql = "INSERT INTO BitPriorities ('PK_UUID','FK_Patient','FK_EPS','FK_Range','FK_Ips','FK_Diagnosis','Dni','Name0','LastName0','SentBy','Comment0','CommentDate','AppointmentDate','Accept','StatusEps','AppointmentHour','CommentHour','CallsNumber','imageb64','z_xOne','created','updated','createdUser','updatedUser') VALUES ('1', $Dni, $Eps, $Range, $Ips, $Diagnosis, $Dni,$Name,$LastName, $SentBy,$Comment,$CommentDate,$AppointmentDate,$Accept,$StatusEps,$AppointmentHour,$CommentHour,$CallsNumber,'1',1,$TimeStamp ,'','Julian','')"; 
+$Sql = "INSERT INTO BitPriorities (PK_UUID,FK_Patient,FK_EPS,FK_Range,FK_Ips,FK_Diagnosis,Dni,Name0,LastName0,SentBy,Comment0,CommentDate,AppointmentDate,Accept,StatusEps,AppointmentHour,CommentHour,CallsNumber,imageb64,z_xOne,created,updated,createdUser,updatedUser) VALUES ('1', '$Dni', '$Eps', '$Range', '$Ips', '$Diagnosis', '$Dni','$Name','$LastName0', '$SentBy','$Comment','$CommentDate','$AppointmentDate','$Accept','$StatusEps','$AppointmentHour','$CommentHour','$CallsNumber','1',1,'$TimeStamp' ,'','Julian','')"; 
+
 
 if(mysqli_query($conn, $Sql)){
        echo "Records added successfully.";
@@ -31,5 +35,5 @@ if(mysqli_query($conn, $Sql)){
        echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
    }
    
- ?>
+?>
 
