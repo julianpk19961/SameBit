@@ -2,11 +2,13 @@
 // #Conexión
 include('config.php');
 
+date_default_timezone_set('America/Bogota');
+
 #Captura Variables
 $Dni = isset($_POST["Doc"])?$_POST["Doc"]:'';
 $Name = isset($_POST["Name"])?$_POST["Name"]:'';
-$LastName0 = isset($_POST["LastN"])?$POST["LastN"]:'';
-$Phone0 = isset($_POST["Phone0"])?$POST["Phone0"]:'';
+$LastName0 = isset($_POST["LastN"])?$_POST["LastN"]:'';
+$Phone0 = isset($_POST["Phone0"])?$_POST["Phone0"]:'';
 $CommentDate = isset($_POST["CommentDate"])?$_POST["CommentDate"]:'';
 $CommentHour = isset($_POST["CommentHour"])?$_POST["CommentHour"]:'';
 $Diagnosis = isset($_POST["Diagnosis"])?$_POST["Diagnosis"]:'';
@@ -20,13 +22,15 @@ $AppointmentDate = isset($_POST["AppointmentDate"])?$_POST["AppointmentDate"]:''
 $AppointmentHour = isset($_POST["AppointmentHour"])?$_POST["AppointmentHour"]:'';
 $CallsNumber = isset($_POST["CallsNumber"])?$_POST["CallsNumber"]:'';
 $Comment = isset($_POST["Comment"])?$_POST["Comment"]:'';
-$TimeStamp = strtotime("now");
+$Time0 = date('G');
 
 // #Conexión
 // include('config.php');
 
 #Insert
-$Sql = "INSERT INTO BitPriorities (PK_UUID,FK_Patient,FK_EPS,FK_Range,FK_Ips,FK_Diagnosis,Dni,Name0,LastName0,SentBy,Comment0,CommentDate,AppointmentDate,Accept,StatusEps,AppointmentHour,CommentHour,CallsNumber,imageb64,z_xOne,created,updated,createdUser,updatedUser) VALUES ('1', '$Dni', '$Eps', '$Range', '$Ips', '$Diagnosis', '$Dni','$Name','$LastName0', '$SentBy','$Comment','$CommentDate','$AppointmentDate','$Accept','$StatusEps','$AppointmentHour','$CommentHour','$CallsNumber','1',1,'$TimeStamp' ,'','Julian','')"; 
+$Sql = "INSERT INTO BitPriorities (PK_UUID,FK_Patient,FK_EPS,FK_Range,FK_Ips,FK_Diagnosis,Dni,Name0,LastName0,SentBy,Comment0,CommentDate,AppointmentDate,Accept,StatusEps,AppointmentHour,CommentHour,CallsNumber,imageb64,z_xOne,created,updated,createdUser,updatedUser) 
+VALUES ('2', '$Dni', '$Eps', '$Range', '$Ips', '$Diagnosis', '$Dni','$Name','$LastName0', '$SentBy','$Comment','$CommentDate','$AppointmentDate','$Accept','$StatusEps','$AppointmentHour','$CommentHour','$CallsNumber','1',1,'$Time0' ,'','Julian','')"; 
+// echo "$Sql <br>";
 
 
 if(mysqli_query($conn, $Sql)){
