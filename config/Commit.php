@@ -29,7 +29,7 @@ $Time0 = date('G');
 
 #Insert
 $Sql = "INSERT INTO BitPriorities (PK_UUID,FK_Patient,FK_EPS,FK_Range,FK_Ips,FK_Diagnosis,Dni,Name0,LastName0,SentBy,Comment0,CommentDate,AppointmentDate,Accept,StatusEps,AppointmentHour,CommentHour,CallsNumber,imageb64,z_xOne,created,updated,createdUser,updatedUser) 
-VALUES ('2', '$Dni', '$Eps', '$Range', '$Ips', '$Diagnosis', '$Dni','$Name','$LastName0', '$SentBy','$Comment','$CommentDate','$AppointmentDate','$Accept','$StatusEps','$AppointmentHour','$CommentHour','$CallsNumber','1',1,'$Time0' ,'','Julian','')"; 
+VALUES (UUID(), '$Dni', '$Eps', '$Range', '$Ips', '$Diagnosis', '$Dni','$Name','$LastName0', '$SentBy','$Comment','$CommentDate','$AppointmentDate','$Accept','$StatusEps','$AppointmentHour','$CommentHour','$CallsNumber','1',1,'$Time0' ,'','Julian','')"; 
 // echo "$Sql <br>";
 
 

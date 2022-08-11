@@ -11,7 +11,7 @@ include './generales/header.php';
       </a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
+      <li class="active"><a href="#">Inicio</a></li>
       <li><a href="#">Pacientes</a></li>
       <li><a href="#">Entidades</a></li>
       <li><a href="#">Reportes</a></li>
@@ -71,13 +71,21 @@ include './generales/header.php';
                     <input required type="time" id="CommentHour" name="CommentHour"/>
                   </div>
                   <div class="campo">
-                    <label for="Com">Diagnostico* </label>
-                    <select class="Acpt" id="color"  name="Diagnosis">
-                      <option value="0">F319</option>
-                      <option value="1">F322</option>
-                      <option value="0">F412</option>
-                      <option value="1">F321</option>
-                    </select>
+
+                    <?php
+                    include '../config/config.php';
+                    $Sql = 'SELECT KP_UUID,codigo,observation  FROM diagnosis LIMIT 10';
+                      $Result = $conn->query($Sql);
+
+                      echo '<label for="Com"> Diagnostico* </label>';
+                      echo '<select class="Acpt" id="Com"  name="Diagnosis">';
+                        while ($row = $Result->fetch_assoc()){
+                        echo "<option value=\"".$row['KP_UUID']."\">".$row['codigo']." ".$row['observation']."</option>"; 
+                        }
+                      echo "</select>";
+                    
+                    ?>
+
                   </div>
                   <div class="campo">
                     <label for="Com">Aceptado*</label>
@@ -163,4 +171,4 @@ include './generales/header.php';
       </p>
     </div>
   </div>
-</div>
+</nav>
