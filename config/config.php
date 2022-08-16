@@ -6,6 +6,7 @@ $user="usrconect";
 $password="toor";
 $dbname="samebit";
 
+
 #Estabelercer conexión
 $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
 //$con->close();
@@ -13,4 +14,7 @@ $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
 if (!$conn) {
   die("No hay conexión: ".mysqli_connect_error());
 }
+
+// mysqli_set_charset($connect,"utf8");
+
 ?>

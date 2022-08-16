@@ -28,7 +28,7 @@ include './generales/header.php';
       <p>
         <div class="formulario">
           <div class="item">
-            <h3 name="Especial">BIENVENIDO DR <?php echo  strtoupper($nombre);?>,INGRESE LOS DATOS DEL PACIENTE</h3>
+            <h3 name="Especial">BIENVENIDO DR,<br> INGRESE LOS DATOS DEL PACIENTE</h3>
             <div class="campos">
               <aside>
                 <a href="#">
@@ -71,21 +71,10 @@ include './generales/header.php';
                     <input required type="time" id="CommentHour" name="CommentHour"/>
                   </div>
                   <div class="campo">
-
-                    <?php
-                    include '../config/config.php';
-                    $Sql = 'SELECT KP_UUID,codigo,observation  FROM diagnosis LIMIT 10';
-                      $Result = $conn->query($Sql);
-
-                      echo '<label for="Com"> Diagnostico* </label>';
-                      echo '<select class="Acpt" id="Com"  name="Diagnosis">';
-                        while ($row = $Result->fetch_assoc()){
-                        echo "<option value=\"".$row['KP_UUID']."\">".$row['codigo']." ".$row['observation']."</option>"; 
-                        }
-                      echo "</select>";
-                    
-                    ?>
-
+                    <label for="diagnosis"> Diagnostico* </label>
+                    <select for="diagnosis" id="diagnosis"  name="diagnosis">
+                      
+                    </select>                  
                   </div>
                   <div class="campo">
                     <label for="Com">Aceptado*</label>
@@ -94,6 +83,15 @@ include './generales/header.php';
                         <option value="0">NO</option>
                       </select>
                   </div>
+                  <div class="campo">
+                  <label for="Com">EPS Activo*</label>
+                    <select id="color" name="StatusEps">
+                      <option value="1">SI</option>
+                      <option value="0">NO</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="doble">
                   <div class="campo">
                     <label for="peso" >EPS</label>
                       <select class="Acpt" id="color" name="Eps">
@@ -116,13 +114,7 @@ include './generales/header.php';
                       <option value="3">C</option>
                     </select>
                   </div>
-                  <div class="campo">
-                  <label for="Com">EPS Activo*</label>
-                    <select id="color" name="StatusEps">
-                      <option value="1">SI</option>
-                      <option value="0">NO</option>
-                    </select>
-                  </div>
+                  
                 </div>
                 <!-- TERCER BLOQUE DE CAMPOS--> 
                 <div class="doble"> 
@@ -172,3 +164,5 @@ include './generales/header.php';
     </div>
   </div>
 </nav>
+
+<script src="../Js/index.js"></script>

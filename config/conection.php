@@ -17,6 +17,7 @@ if ($nr == 1)
     $_SESSION['id'] = '1';
     $_SESSION['name'] = $name0 ;
     echo '1';
+    
 }
 elseif ($nr == 0)
 {
