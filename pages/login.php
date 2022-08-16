@@ -46,35 +46,12 @@ include './generales/header.php';
         </symbol>
     </svg>
 
+
+    <script src="../Js/Login.Js"></script>
+
 </body>
 
 <div id="loader" class="lds-dual-ring hidden overlay"></div>
 
 </html>
 
-<script>
-
-
-$("#login").submit(function(e){
-	e.preventDefault();
-    $('#loader').removeClass('hidden');
-    var form_data = jQuery( this ).serializeArray();
-    console.log(form_data);
-     jQuery.ajax({
-        url: '../config/conection.php',
-        type : 'post',
-        data : form_data,
-        success : function( response ) {
-            console.log( response );
-            if(response ==1 ){  
-                $('#loader').addClass('hidden');
-               location.href = '<?php echo $urldashboard; ?>';
-            }
-        },
-        fail : function( err ) {
-            alert( "There was an error: " + err );
-        }
-    });
-    return false;
-});
-</script>
