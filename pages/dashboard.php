@@ -2,167 +2,311 @@
 <?php 
 include './generales/header.php';
 ?>
-<!-- Barra de menu -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">
-        <img src='../img/SameinLogo.png' alt="logo" class="logo">
-      </a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Inicio</a></li>
-      <li><a href="#">Pacientes</a></li>
-      <li><a href="#">Entidades</a></li>
-      <li><a href="#">Reportes</a></li>
-      <li>  
-        <a href="../config/logout.php"><i class="fa fa-power-off"></i> Cerrar Sesión</a>
-      </li>
-    </ul>
-  </div>
-</nav>
 
-<nav>
-  <div class="maxw content">
-    <div class="cuerpo">
-      <p>
-        <div class="formulario">
-          <div class="item">
-            <h3 name="Especial">BIENVENIDO DR,<br> INGRESE LOS DATOS DEL PACIENTE</h3>
-            <div class="campos">
-              <aside>
-                <a href="#">
-                  <svg class="imgperfil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="90" height="90">
-                  <path class="heroicon-ui" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/></svg>
-                  <span width="90" height="90">Adjuntar Archivo</span>
-                </a>
-              </aside>
+<header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <img src="../img/SameinLogo.png" height="40" class="logo">
+      </a>
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
+        <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
+      </ul>
+  </header>
+  <section class="h-100">
+    <form method="POST" action="../config/commit.php" >
+      <div class="container py-1 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col">
+            <div class="card card-registration my-4">
+              <div class="row g-0">
+                
+                <div class="col-xl-6">
+                  <div class="card-body p-md-5 text-black">
+                    <h4 class="mb-5 text-uppercase">BIENVENIDO, INGRESE LOS DATOS DEL PACIENTE <hr></h4>
+                    
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                          <input id="PK_UUID" name="PK_UUID" type="hidden">
+                        <!-- TIPO DNI -->
+                          <div class="form-outline">
+                            <label class="form-label" for="documenttype">Tipo Identificación</label>
+                            <!-- <input type="text" id="form3Example1m" class="form-control form-control-lg" /> -->
+                            <Select type="text" class="form-control form-control-lg" name="documenttype" id="documenttype" >
+                              <option value='0'>Elija una opción</option>
+                              <option value='11'>Registro Civil de nacimiento</option>
+                              <option value="12">Tarjeta Identidad</option>
+                              <option value="13">Cedula de ciudadanía</option>
+                              <option value="21">Tarjeta de extranjería</option>
+                              <option value="22">Cédula de extranjería</option>
+                              <option value="31">NIT</option>
+                              <option value="41">Pasaport</option>
+                              <option value="42">Tipo Documento extranjero</option>
+                              <option value="43">No definido por la DIAN</option>
+                            </Select>
+                          </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <!-- NUMERO DNI -->
+                          <div class="form-outline">
+                            <label class="form-label" for="Dni">Identificación</label>
+                            <input type="number" id="Dni" name="Dni" class="form-control form-control-lg" list='patientslist'/>
+                            <datalist id='patientslist' name="patientslist">
+                              
+                            </datalist>
+                          </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <!-- NOMBRES -->
+                        <div class="form-outline">
+                        <label class="form-label" for="nombre">Nombres</label>
+                          <input type="text" id="nombre" name="nombre" class="form-control form-control-lg" />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <!-- APELLIDOS -->
+                        <div class="form-outline">
+                          <label class="form-label" for="apellido">Apellidos</label>
+                          <input type="text" id="apellido" name="apellido" class="form-control form-control-lg" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <!-- TIPO DE CONTACTO -->
+                          <label class="form-label" for="contacttype">Tipo Contacto</label>
+                          <Select type="text" class="form-control form-control-lg" name="contacttype" id="contacttype" >
+                            <option value='0'>Elija una opción</option>
+                            <option value='1'>Llamada</option>
+                            <option value="2">Correo</option>
+                          </Select>
+                          
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <!-- FECHA COMENTARIO -->
+                          <label class="form-label" for="CommentDate">Fecha Comentario</label>
+                          <input type="date" id="CommentDate" name="CommentDate" class="form-control form-control-lg" />
+                          
+                        </div>              
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <!-- HORA COMENTARIO -->
+                            <label class="form-label" for="CommentTime">Hora Comentario</label>
+                            <input required type="time" id="CommentTime" name="CommentTime" class="form-control form-control-lg"/>
+                        </div> 
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline"> 
+                          <!-- ACEPTACION PACIENTE -->
+                          <label class="form-label" for="approved">Aprobado</label>
+                          <Select type="text" class="form-control form-control-lg" name="approved" id="approved" >
+                            <option value='0'>Elija una opción</option>
+                            <option value='1'>Sí</option>
+                            <option value="2">No</option>
+                          </Select>
+                          
+                        </div>
+                      </div>
+                    </div> 
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <!-- FECHA ATENCION -->
+                          <label class="form-label" for="AtentionDate">Fecha Atención</label>
+                          <input type="date" id="AtentionDate" name="AtentionDate" class="form-control form-control-lg" />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                          <div class="form-outline">
+                            <!-- HORA ATENCION -->
+                            <label class="form-label" for="AtentionTime">Hora Atención</label>
+                            <input required type="time" id="AtentionTime" name="AtentionTime" class="form-control form-control-lg"/>
+                          </div> 
+                        </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-outline mb-2">
+                        <div class="form-outline">
+                          <label class="form-label" for="Observation0">Observación #1</label>
+                          <input required type="textarea" id="Observation0" name="Observation0" class="form-control form-control-lg"/>
+                        </div>
+                      </div>
+                      <div class="form-outline mb-2">
+                        <div class="form-outline">
+                          <label class="form-label" for="Observation1">Observación #2</label>
+                          <input required type="textarea" id="Observation1" name="Observation1" class="form-control form-control-lg"/>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                        <label class="form-label" for="Eps">EPS</label>
+                          <Select type="text" class="form-control form-control-lg" name="Eps" id="Eps" >
+                            <option value='0'>Elija una opción</option>
+                            <option value='1'>Famisanar</option>
+                            <option value="2">EPS 2</option>
+                          </Select>
+                          
+                          </div>
+                        </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <label class="form-label" for="Ips">IPS</label>
+                          <Select type="text" class="form-control form-control-lg" name="Ips" id="Ips" >
+                            <option value='0'>Elija una opción</option>
+                            <option value='1'>Famisanar</option>
+                            <option value="2">IPS2</option>
+                          </Select>
+                            
+                        </div> 
+                      </div>
+                      <!-- REMISIÓN  -->
+                      <div class="form-outline mb-2">
+                        <div class="form-outline">
+                          <label class="form-label" for="SentBy">Remitido Desde EPS</label>
+                          <input type="text" id="SentBy" name="SentBy" class="form-control form-control-lg" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <!-- Estado en la eps -->
+                          <label class="form-label" for="EpsStatus">Activo</label>
+                          <Select type="text" class="form-control form-control-lg" name="EpsStatus" id="EpsStatus" >
+                            <option value=''>Elija una opción</option>
+                            <option value='1'>Sí</option>
+                            <option value='0'>No</option>
+                          </Select>
+                          
+                          </div>
+                        </div>
+                      <div class="col-md-6 mb-4">
+                          <div class="form-outline">
+                          <label class="form-label" for="EpsClassification">Rango</label>  
+                          <Select type="text" class="form-control form-control-lg" name="EpsClassification" id="EpsClassification" >
+                            <option value=''>Elija una opción</option>
+                            <option value='0'>A</option>
+                            <option value="1">B</option>
+                            <option value="1">C</option>
+                            <option value="1">Sisben</option>
+                          </Select>
+                            
+                        </div> 
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <label class="form-label" for="CallNumber">Número Llamadas</label>
+                          <input type="text" id="CallNumber" name="CallNumber" class="form-control form-control-lg" />  
+                        </div> 
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                        <label class="form-label" for="diagnosis">Diagnostico</label>
+                          <Select type="text" class="form-control form-control-lg" name="diagnosis" id="diagnosis" >
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end pt-3">
+                      <button type="button" class="btn btn-light btn-lg">Limpiar Formulario</button>
+                      <button type="button" class="btn btn-warning btn-lg ms-2">Enviar</button>
+                    </div>
+                    
+                  </div> 
+                </div>
+
+                <div class="col-xl-6">
+                  <div class="card-body p-md-5 text-black">
+                    <div class="row md-12" id="search-patients" >
+                    <h4 class="mb-5 text-uppercase">PACIENTES REGISTRADOS<hr></h4>
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <td class="table-primary"> Documento</td>
+                                    <td class="table-primary"> Paciente </td>
+                                    <td class="table-primary">  </td>
+                                </tr>
+                            </thead>
+                            <tbody id="patients">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row md-12" id="history-patient" >
+                      <h4 class="mb-5 text-uppercase"><br><br> HISTORICO DEL PACIENTE <hr></h4>
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Handle</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+              </div>  
+              </div>      
             </div>
-            <form method="POST" action="../config/commit.php" >
-              <div class="doble">
-                  <div class="campo">
-                    <label for="dni">Documento*</label>
-                    <input required type="tel" maxlength="20" id="Dni" name= "Doc"  >
-                  </div>
-                  <!-- Nombres completos -->
-                  <div class="campo">
-                    <label for="nombre">Nombres*</label>
-                    <input required type="text" id="nombre" name="Name">
-                  </div>
-                  <!-- Apellidos completos -->
-                  <div class="campo">
-                    <label for="apellido">Apellidos*</label>
-                    <input required type="text" id="apellido" name="LastN">
-                  </div>
-                  <!-- Teléfono -->
-                  <div class="campo">
-                    <label for="celular">Celular*</label>
-                    <input required type="tel" maxlength="10" id="celular" name="Phone0">
-                  </div>
-                </div>
-                <!-- SEGUNDO BLOQUE DE CAMPOS-->
-                <div class="doble">
-                  <div class="campo">
-                    <label for="fec_Com">Fecha comentario*</label>
-                    <input required type="date" id="CommentDate" name="CommentDate"/>
-                  </div>
-                  <div class="campo">
-                    <label for="Com">Hora comentario202*</label>
-                    <input required type="time" id="CommentHour" name="CommentHour"/>
-                  </div>
-                  <div class="campo">
-                    <label for="diagnosis"> Diagnostico* </label>
-                    <select for="diagnosis" id="diagnosis"  name="diagnosis">
-                      
-                    </select>                  
-                  </div>
-                  <div class="campo">
-                    <label for="Com">Aceptado*</label>
-                      <select id="color" name="Accept">
-                        <option value="1">SI</option>
-                        <option value="0">NO</option>
-                      </select>
-                  </div>
-                  <div class="campo">
-                  <label for="Com">EPS Activo*</label>
-                    <select id="color" name="StatusEps">
-                      <option value="1">SI</option>
-                      <option value="0">NO</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="doble">
-                  <div class="campo">
-                    <label for="peso" >EPS</label>
-                      <select class="Acpt" id="color" name="Eps">
-                      <option value="0">E.P.S.  SANITAS  S.A.</option>
-                      <option value="1">NUEVA EPS S.A.</option>
-                      <option value="2">E.P.S.  FAMISANAR  LTDA.</option>
-                      <option value="3">SALUD  TOTAL  S.A.  E.P.S.</option>
-                      <option value="4">EPS SERVICIO OCCIDENTAL</option>
-                      <option value="5">SALUDVIDA  S.A.  E.P.S.</option>
-                      <option value="6">EPS  CONVIDA</option>
-                      <option value="7">ANASWAYUU</option>
-                    </select>
-                  </div>
-                  <div class="campo">
-                    <label for="peso" >RANGO</label>
-                    <select class="Acpt" id="color" name="Range">
-                      <option value="0">SISBEN</option>
-                      <option value="1">A</option>
-                      <option value="2">B</option>
-                      <option value="3">C</option>
-                    </select>
-                  </div>
-                  
-                </div>
-                <!-- TERCER BLOQUE DE CAMPOS--> 
-                <div class="doble"> 
-                  <div class="campo">
-                    <label for="SentBy">Remitido Por*</label>
-                    <input required type="text" id="SentBy" name="SentBy" size="80Px">
-                  </div>
-                  <div class="campo">
-                    <label for="peso">IPS</label>
-                    <select class="Acpt" id="color" name="Ips">
-                      <option value="0">EXPERTA SALUD</option>
-                      <option value="1">SALUD Y VIDA </option>
-                      <option value="1">IPS COOMEVA S.A.S MED</option>
-                      <option value="1">RHS Alianza IPS</option>
-                    </select>
-                  </div>
-                </div>
-                <!-- CUARTO BLOQUE DE CAMPOS--> 
-                <div class="doble">
-                  <div class="campo">
-                    <label for="Com">Fecha Cita*</label>
-                    <input required type="date" id="appointmentDate" name="AppointmentDate"/>
-                  </div>
-                  <div class="campo" >
-                    <label for="Com">Hora Cita*</label>
-                    <input required type="time" id="AppointmentHour" name="AppointmentHour"/>
-                  </div>
-                  <div class="campo">
-                    <label for="dni">No Llamadas*</label>
-                    <input required type="number" id="CallsNumber" name="CallsNumber">
-                  </div>
-                </div>
-                <!-- QUINTO BLOQUE DE CAMPOS--> 
-                <div class="doble">
-                  <div class="campo">
-                    <label for="dni">Observación*</label>
-                    <input required type="text" id="Comment" name="Comment"  size="110px">
-                  </div>
-                </div>
-                <div class="clear_r">
-                  <input type="submit" class="boton_ok" value="Confirmar"/>
-                </div>
-            </form>
           </div>
         </div>
-      </p>
+      </div>
     </div>
-  </div>
-</nav>
+  </form>
+</section>  
 
-<script src="../Js/index.js"></script>
+<script src="../Js/dashboard.js"></script>
