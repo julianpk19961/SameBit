@@ -8,11 +8,11 @@ include './generales/header.php';
             <img src="<?php echo $index;?>img/SameinLogo.png" alt="logo" width="200px">
         </div>
         <!-- Welcome Message -->
+        <!-- Login Form -->
+        <form action="" id="login" method="POST" class="form login">
         <div class="welcome">
             <h1>BIENVENIDO</h1>
         </div>
-        <!-- Login Form -->
-        <form action="" id="login" method="POST" class="form login">
             <div class="form__field">
                 <label for="login__username"><svg class="icon">
                         <use xlink:href="#icon-user"></use>
