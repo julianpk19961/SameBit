@@ -10,59 +10,57 @@ include './generales/header.php';
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
         <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Tipos</a></li>
         <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
       </ul>
   </header>
   <section class="h-100">
-    <form method="POST" action="../config/commit.php" >
+    <form id="bitregister">
       <div class="container py-1 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col">
             <div class="card card-registration my-4">
-              <div class="row g-0">
-                
+              <div class="row g-0"> 
                 <div class="col-xl-6">
                   <div class="card-body p-md-5 text-black">
                     <h4 class="mb-5 text-uppercase">BIENVENIDO, INGRESE LOS DATOS DEL PACIENTE <hr></h4>
-                    
                     <div class="row">
                       <div class="col-md-6 mb-4">
-                          <input id="PK_UUID" name="PK_UUID" type="hidden">
+                        <input id="PK_UUID" name="PK_UUID" type="hidden">
                         <!-- TIPO DNI -->
-                          <div class="form-outline">
-                            <label class="form-label" for="documenttype">Tipo Identificación</label>
-                            <!-- <input type="text" id="form3Example1m" class="form-control form-control-lg" /> -->
-                            <Select type="text" class="form-control form-control-lg" name="documenttype" id="documenttype" >
-                              <option value='0'>Elija una opción</option>
-                              <option value='11'>Registro Civil de nacimiento</option>
-                              <option value="12">Tarjeta Identidad</option>
-                              <option value="13">Cedula de ciudadanía</option>
-                              <option value="21">Tarjeta de extranjería</option>
-                              <option value="22">Cédula de extranjería</option>
-                              <option value="31">NIT</option>
-                              <option value="41">Pasaport</option>
-                              <option value="42">Tipo Documento extranjero</option>
-                              <option value="43">No definido por la DIAN</option>
-                            </Select>
-                          </div>
+                        <div class="form-outline">
+                          <label class="form-label" for="documenttype">Tipo Identificación</label>
+                          <!-- <input type="text" id="form3Example1m" class="form-control form-control-lg" /> -->
+                          <Select type="text" class="form-control form-control-lg" name="documenttype" id="documenttype" >
+                            <option value='0'>Elija una opción</option>
+                            <option value='11'>Registro Civil de nacimiento</option>
+                            <option value="12">Tarjeta Identidad</option>
+                            <option value="13">Cedula de ciudadanía</option>
+                            <option value="21">Tarjeta de extranjería</option>
+                            <option value="22">Cédula de extranjería</option>
+                            <option value="31">NIT</option>
+                            <option value="41">Pasaport</option>
+                            <option value="42">Tipo Documento extranjero</option>
+                            <option value="43">No definido por la DIAN</option>
+                          </Select>
+                        </div>
                       </div>
                       <div class="col-md-6 mb-4">
                         <!-- NUMERO DNI -->
-                          <div class="form-outline">
-                            <label class="form-label" for="Dni">Identificación</label>
-                            <input type="number" id="Dni" name="Dni" class="form-control form-control-lg" list='patientslist'/>
-                            <datalist id='patientslist' name="patientslist">
-                              
-                            </datalist>
-                          </div>
+                        <div class="form-outline">
+                          <label class="form-label" for="Dni">Identificación</label>
+                          <input type="number" id="Dni" name="Dni" class="form-control form-control-lg" list='patientslist'/>
+                          <datalist id='patientslist' name="patientslist">
+                            
+                          </datalist>
+                        </div>
                       </div>
                       <div class="col-md-6 mb-4">
                         <!-- NOMBRES -->
                         <div class="form-outline">
                         <label class="form-label" for="nombre">Nombres</label>
-                          <input type="text" id="nombre" name="nombre" class="form-control form-control-lg" />
+                        <input type="text" id="nombre" name="nombre" class="form-control form-control-lg" />
                         </div>
                       </div>
                       <div class="col-md-6 mb-4">
@@ -92,7 +90,6 @@ include './generales/header.php';
                           <!-- FECHA COMENTARIO -->
                           <label class="form-label" for="CommentDate">Fecha Comentario</label>
                           <input type="date" id="CommentDate" name="CommentDate" class="form-control form-control-lg" />
-                          
                         </div>              
                       </div>
                     </div>
@@ -114,7 +111,6 @@ include './generales/header.php';
                             <option value='1'>Sí</option>
                             <option value="2">No</option>
                           </Select>
-                          
                         </div>
                       </div>
                     </div> 
@@ -226,7 +222,7 @@ include './generales/header.php';
 
                     <div class="d-flex justify-content-end pt-3">
                       <button type="button" class="btn btn-light btn-lg">Limpiar Formulario</button>
-                      <button type="button" class="btn btn-warning btn-lg ms-2">Enviar</button>
+                      <button type="submit" class="bit-submmmit btn btn-warning btn-lg ms-2">Enviar</button>
                     </div>
                     
                   </div> 
@@ -234,30 +230,31 @@ include './generales/header.php';
 
                 <div class="col-xl-6">
                   <div class="card-body p-md-5 text-black">
+                    <!-- Tabla de busquedas -->
                     <div class="row md-12" id="search-patients" >
-                    <h4 class="mb-5 text-uppercase">PACIENTES REGISTRADOS<hr></h4>
-                        <table class="table table-bordered">
-                            <thead class="thead-light">
-                                <tr>
-                                    <td class="table-primary"> Documento</td>
-                                    <td class="table-primary"> Paciente </td>
-                                    <td class="table-primary">  </td>
-                                </tr>
-                            </thead>
-                            <tbody id="patients">
-                            </tbody>
-                        </table>
+                      <h4 class="mb-5 text-uppercase">PACIENTES REGISTRADOS<hr></h4>
+                      <table class="table table-bordered">
+                        <thead class="thead-light">
+                          <tr>
+                            <th class="table-primary"> Documento</th>
+                            <th class="table-primary"> Paciente </th>
+                            <th class="table-primary"> </th>
+                          </tr>
+                        </thead>
+                        <tbody id="patients">
+                        </tbody>
+                      </table>
                     </div>
-
+                    <!-- Tabla de historico -->
                     <div class="row md-12" id="history-patient" >
-                      <h4 class="mb-5 text-uppercase"><br><br> HISTORICO DEL PACIENTE <hr></h4>
+                      <h4 class="mb-5 text-uppercase">HISTORICO DEL PACIENTE <hr></h4>
                       <table class="table table-bordered">
                         <thead>
                           <tr>
                             <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Atendido por</th>
+                            <th scope="col">Comentario</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -266,34 +263,6 @@ include './generales/header.php';
                             <td>Mark</td>
                             <td>Otto</td>
                             <td>@mdo</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
                           </tr>
                         </tbody>
                       </table>
