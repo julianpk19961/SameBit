@@ -42,6 +42,38 @@ $(document).on('keyup', '#Dni', function(){
     }
 });
 
+$(document).on('click', '.bit-submmmit', function(){
+    // e.preventDefault();
+    const postData = {
+
+        documenttype:$('#documenttype').val(),
+        pk_uuid: $('#PK_UUID').val(),
+        dni: $('#Dni').val(),
+        name: $('#nombre').val(),
+        lastname: $('#apellido').val(),
+        contacttype: $('#contacttype').val(),
+        CommentDate: $('#CommentDate').val(),
+        CommentTime: $('#CommentTime').val(),
+        approved: $('#approved').val(),
+        AtentionDate: $('#AtentionDate').val(),
+        AtentionTime: $('#AtentionTime').val(),
+        Observation0: $('#Observation0').val(),
+        Observation1: $('#Observation1').val(),
+        Eps: $('#Eps').val(),
+        Ips: $('#Ips').val(),
+        SentBy: $('#SentBy').val(),
+        EpsStatus: $('#EpsStatus').val(),
+        EpsClassification: $('#EpsClassification').val(),
+        CallNumber: $('#CallNumber'),
+        diagnosis: $('#diagnosis')
+
+    };
+    console.log(postData);
+    // 
+});
+
+
+
 $(document).on('click', '.patient-select', function(){
     if(confirm('¿Está seguro de querer selecionar el paciente')){
         let element = $(this)[0].parentElement.parentElement;
@@ -64,8 +96,6 @@ $(document).on('click', '.patient-select', function(){
         });
     }
 });
-
-
 
 
 
