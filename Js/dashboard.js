@@ -43,33 +43,46 @@ $(document).on('keyup', '#Dni', function(){
 });
 
 $(document).on('click', '.bit-submmmit', function(){
-    // e.preventDefault();
-    const postData = {
+    if(confirm('¿Está seguro de querer selecionar el paciente')){
+        
+        const postData = {
 
-        documenttype:$('#documenttype').val(),
-        pk_uuid: $('#PK_UUID').val(),
-        dni: $('#Dni').val(),
-        name: $('#nombre').val(),
-        lastname: $('#apellido').val(),
-        contacttype: $('#contacttype').val(),
-        CommentDate: $('#CommentDate').val(),
-        CommentTime: $('#CommentTime').val(),
-        approved: $('#approved').val(),
-        AtentionDate: $('#AtentionDate').val(),
-        AtentionTime: $('#AtentionTime').val(),
-        Observation0: $('#Observation0').val(),
-        Observation1: $('#Observation1').val(),
-        Eps: $('#Eps').val(),
-        Ips: $('#Ips').val(),
-        SentBy: $('#SentBy').val(),
-        EpsStatus: $('#EpsStatus').val(),
-        EpsClassification: $('#EpsClassification').val(),
-        CallNumber: $('#CallNumber'),
-        diagnosis: $('#diagnosis')
+            pk_uuid: $('#PK_UUID').val(),
+            documenttype:$('#documenttype').val(),
+            dni: $('#Dni').val(),
+            name: $('#nombre').val(),
+            lastname: $('#apellido').val(),
+            contacttype: $('#contacttype').val(),
+            CommentDate: $('#CommentDate').val(),
+            CommentTime: $('#CommentTime').val(),
+            approved: $('#approved').val(),
+            AtentionDate: $('#AtentionDate').val(),
+            AtentionTime: $('#AtentionTime').val(),
+            Observation0: $('#Observation0').val(),
+            Observation1: $('#Observation1').val(),
+            Eps: $('#Eps').val(),
+            Ips: $('#Ips').val(),
+            SentBy: $('#SentBy').val(),
+            EpsStatus: $('#EpsStatus').val(),
+            EpsClassification: $('#EpsClassification').val(),
+            CallNumber: $('#CallNumber').val(),
+            diagnosis: $('#diagnosis').val()
 
-    };
-    console.log(postData);
-    // 
+        };
+
+        $.post('../config/commit.php', postData, function(response){
+
+            console.log(response);
+        //     // const patient = JSON.parse(response);
+        //     // $('#PK_UUID').val(patient.PK_UUID);
+        //     // $('#Dni').val(patient.dni);
+        //     // $('#nombre').val(patient.name);
+        //     // $('#apellido').val(patient.lastname);
+        //     // $('#search-patients').hide();
+        //     // $('#history-patient').show();
+           
+        });
+    }   // 
 });
 
 
@@ -88,11 +101,7 @@ $(document).on('click', '.patient-select', function(){
             $('#apellido').val(patient.lastname);
             $('#search-patients').hide();
             $('#history-patient').show();
-            // edit = true;
-
-            // console.log(patient);
-
-            // fetchTask();
+           
         });
     }
 });
@@ -100,13 +109,39 @@ $(document).on('click', '.patient-select', function(){
 
 
 
+$(document).on('click','.bit-clean',function(){
+    if(confirm('¿Está seguro de limpiar el formulario? Los datos no serán recuperados')){
+        $('#bitregister').trigger('reset');
+        $('#search-patients').hide();
+        $('#history-patient').hide();
+    }
+});
+
+
+$(document).ready(function() {
+    $(document).on('click', '#Eps', function(e){
+        $.ajax({
+            url: '../config/calleps.php',
+            type: 'GET',
+            success: function(response){
+                let eps = JSON.parse(response);
+                let template = '';
+                eps.forEach(eps => {
+                    template += `
+                        <option value=${eps.pk_uuid}>${eps.name} </option>
+                        ` 
+                });
+                $('#Eps').html(template);
+                e.preventDefault()
+            }
+        });
+
+    });
+});
 
 
 
-
-
-
-$(document).on('click', '#diagnosis', function(){
+$(document).on('click', '#diagnosis', function(e){
     $.ajax({
         url: '../config/calldiagnosis.php',
         type: 'GET',
@@ -119,6 +154,7 @@ $(document).on('click', '#diagnosis', function(){
                     ` 
             });
             $('#diagnosis').html(template);
+            e.preventDefault()
         }
     });
 

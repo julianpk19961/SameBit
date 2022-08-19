@@ -131,7 +131,7 @@ include './generales/header.php';
                           </div> 
                         </div>
                     </div>
-
+                    <!-- Observaciones -->
                     <div class="row">
                       <div class="form-outline mb-2">
                         <div class="form-outline">
@@ -150,15 +150,11 @@ include './generales/header.php';
                     <div class="row">
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
-                        <label class="form-label" for="Eps">EPS</label>
-                          <Select type="text" class="form-control form-control-lg" name="Eps" id="Eps" >
-                            <option value='0'>Elija una opción</option>
-                            <option value='1'>Famisanar</option>
-                            <option value="2">EPS 2</option>
+                          <label class="form-label" for="Eps">EPS</label>
+                          <Select type="text" class="form-control form-control-lg" name="Eps" id="Eps">
                           </Select>
-                          
-                          </div>
                         </div>
+                      </div>
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
                           <label class="form-label" for="Ips">IPS</label>
@@ -166,8 +162,7 @@ include './generales/header.php';
                             <option value='0'>Elija una opción</option>
                             <option value='1'>Famisanar</option>
                             <option value="2">IPS2</option>
-                          </Select>
-                            
+                          </Select> 
                         </div> 
                       </div>
                       <!-- REMISIÓN  -->
@@ -208,7 +203,7 @@ include './generales/header.php';
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
                           <label class="form-label" for="CallNumber">Número Llamadas</label>
-                          <input type="text" id="CallNumber" name="CallNumber" class="form-control form-control-lg" />  
+                          <input type="number" id="CallNumber" name="CallNumber" class="form-control form-control-lg" />  
                         </div> 
                       </div>
                       <div class="col-md-6 mb-4">
@@ -221,7 +216,7 @@ include './generales/header.php';
                     </div>
 
                     <div class="d-flex justify-content-end pt-3">
-                      <button type="button" class="btn btn-light btn-lg">Limpiar Formulario</button>
+                      <button type="button" class="bit-clean btn btn-light btn-lg">Limpiar Formulario</button>
                       <button type="submit" class="bit-submmmit btn btn-warning btn-lg ms-2">Enviar</button>
                     </div>
                     
