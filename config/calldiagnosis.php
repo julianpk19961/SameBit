@@ -15,10 +15,11 @@
 
         $json = array();
         while($row = mysqli_fetch_array($result)) {
+            $Observation = utf8_encode( $row['Observation'] ); 
             $json[] = array (
                 'KP_UUID' => $row['KP_UUID'],
                 'Codigo' => $row['Codigo'],
-                // 'Observation' => $row['Observation']
+                'Observation' => $Observation
             );
         }
         

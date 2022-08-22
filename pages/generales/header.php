@@ -1,11 +1,11 @@
 
-<!-- <?php 
+ <?php 
 include '../config/setup.php';
 session_start();
 
 $nombre = isset($_POST[$_SESSION['name']])?$_SESSION['name']:'';
 $id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
-?> -->
+?>
 
 <head>
   <title><?php echo $title;?></title>
