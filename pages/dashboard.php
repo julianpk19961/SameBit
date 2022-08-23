@@ -78,9 +78,9 @@ include './generales/header.php';
                           <!-- TIPO DE CONTACTO -->
                           <label class="form-label" for="contacttype">TIPO CONTACTO*</label>
                           <Select required type="text" class="form-control form-control-lg" name="contacttype" id="contacttype" >
-                            <option value='0'>Elija una opción</option>
-                            <option value='1'>Llamada</option>
-                            <option value="2">Correo</option>
+                            <option value=''>Elija una opción</option>
+                            <option value='0'>Llamada</option>
+                            <option value="1">Correo</option>
                           </Select>
                           
                         </div>
