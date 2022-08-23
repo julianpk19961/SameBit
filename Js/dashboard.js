@@ -34,8 +34,9 @@ $(document).on('keyup', '#Dni', function(){
                         $('#documenttype').val(pacients.documentType);
                         });
                         // Ocultar el cuadro de selección y mostrar el cuadro del historico
-                        $('#search-patients').hide();
-                        $('#history-patient').show();
+                        cargar_historico();
+                        
+                        
                     }else{
                         // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
                         let template = '';
@@ -65,7 +66,6 @@ $(document).on('keyup', '#Dni', function(){
     }
 });
 
-
 // Accion: seleccionar paciente del listado [Se ejecuta al oprimir el botón Seleccionar en la tabla generada con la función anterior]
 $(document).on('click', '.patient-select', function(){
     if(confirm('¿Está seguro de querer selecionar el paciente')){
@@ -86,6 +86,7 @@ $(document).on('click', '.patient-select', function(){
             $('#history-patient').show();
            
         });
+        // cargar_historico()
     }
 });
 
@@ -114,8 +115,6 @@ function cargar_eps(){
   //Cuando la página esté cargada ejecutará la función.
 $(document).ready(cargar_eps);
 
-
-
 // Funcion creada para llamar las ips registradas en la base de datos
 function cargar_ips(){
     // Ajax para llamado de datos mediante metodo get para llamar ips
@@ -140,8 +139,6 @@ function cargar_ips(){
 //Cuando la página esté cargada ejecutará la función.
 $(document).ready(cargar_ips);
 
-
-
 // Funcion creada para llamar los diagnosticos registrados en la base de datos
 function cargar_diagnosis(){
     // Ajax para llamado de datos mediante metodo get para llamar diagnosticos
@@ -165,6 +162,47 @@ function cargar_diagnosis(){
 }
 //Cuando la página esté cargada ejecutará la función.
 $(document).ready(cargar_diagnosis);
+
+// Función para cargar el historico
+function cargar_historico(){
+    // Establezco el valor de la CC
+    let dni = $('#Dni').val();
+    $.ajax({
+        url:'../config/callhistory.php',
+        type: 'POST',
+        data:{dni},
+        success: function(response){
+            // Sin respuesta
+            if (response == 'error'){
+                $('#history-patient').hide();
+            }
+            else{
+                // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
+                let history = JSON.parse(response);
+                    // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
+                let template = '';
+                history.forEach(history => {
+                    template += 
+                        `<tr>
+                        <td style="vertical-align:middle;">${history.commentdate} </td>
+                        <td style="vertical-align:middle;">${history.commenttime} </td>
+                        <td style="vertical-align:middle;">${history.createdUser}</td>
+                        <td style="vertical-align:middle;">${history.comment0}</td>
+                        </tr>`
+                });
+                // Mostrar el template en la etiqueta pacientes
+                // Mostrar cuadro de selección y ocultar cuadro de historico
+                $('#patienshistory').html(template);
+                $('#search-patients').hide();
+                $('#history-patient').show();
+                }
+        }
+    });
+}
+
+
+
+
 
 // Acción: clic en el botón de limpiar formulario
 $(document).on('click','.bit-clean',function(){
@@ -213,7 +251,7 @@ $(document).on('click', '.bit-submmmit', function(){
             diagnosis: $('#diagnosis').val(),
             CallNumber: $('#CallNumber').val(),
             SentBy: $('#SentBy').val(),
-            Observation: $('#Observation').val()
+            Observation: $('#Observation0').val()
         };
 
         // confirm(postData)
@@ -221,6 +259,9 @@ $(document).on('click', '.bit-submmmit', function(){
         $.post('../config/commit.php', postData, function(response){
 
             confirm(response)
+            $('#bitregister').trigger('reset');
+            $('#search-patients').hide();
+            $('#history-patient').hide();
 
         });
     }  

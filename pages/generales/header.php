@@ -3,8 +3,8 @@
 include '../config/setup.php';
 session_start();
 
-$nombre = isset($_POST[$_SESSION['name']])?$_SESSION['name']:'';
-$id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
+$nombre = isset($_POST[$_SESSION['name']])?$_SESSION['name']:1;
+// $id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
 ?>
 
 <head>
@@ -21,8 +21,6 @@ $id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
      if($page =='login.php'){ ?>
         <link href="../css/login.css" rel="stylesheet" type="text/css">
     <?php } else{?> 
-        <!-- <link href="../css/login.css" rel="stylesheet" type="text/css"> -->
-        <!-- <link href="./css/main.css" rel="stylesheet" type="text/css"> -->
         <link href="../css/pacientes.css" rel="stylesheet" type="text/css">
    <?php }?>
 
@@ -31,8 +29,4 @@ $id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-<!--    
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
 </head>
