@@ -9,12 +9,12 @@ $("#login").submit(function(e){
         data : form_data,
         success : function( response ) {
             console.log( response );
-            if(response ==1 ){ 
-                $('#loader').addClass('hidden');
-                location.href = 'http://localhost/samebit/pages/dashboard.php';
+            if (response == 0){
+                confirm('Usuario o contraseña invalidos')
             }
             else{
-                confirm('Usuario o contraseña invalidos')
+                $('#loader').addClass('hidden');
+                location.href = 'http://localhost/samebit/pages/dashboard.php';
             }
         },
         fail : function( err ) {

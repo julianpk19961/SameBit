@@ -24,7 +24,7 @@ include './generales/header.php';
               <div class="row g-0"> 
                 <div class="col-xl-6">
                   <div class="card-body p-md-5 text-black">
-                    <h4 class="mb-5 text-uppercase">BIENVENIDO, INGRESE LOS DATOS DEL PACIENTE <hr></h4>
+                    <h4 class="mb-5 text-uppercase">BIENVENIDO,<?php echo $nombre ?> INGRESE LOS DATOS DEL PACIENTE <hr></h4>
                     <div class="row">
                     <div class="col-md-6 mb-4">
                         <!-- NUMERO DNI -->
@@ -43,7 +43,7 @@ include './generales/header.php';
                           <label class="form-label" for="documenttype">TIPO IDENTIFICACIÓN*</label>
                           <!-- <input type="text" id="form3Example1m" class="form-control form-control-lg" /> -->
                           <Select required type="text" class="form-control form-control-lg" name="documenttype" id="documenttype" >
-                            <option value='0'>Elija una opción</option>
+                            <option value=''>Elija una opción</option>
                             <option value='11'>Registro Civil de nacimiento</option>
                             <option value="12">Tarjeta Identidad</option>
                             <option value="13">Cedula de ciudadanía</option>
@@ -107,7 +107,7 @@ include './generales/header.php';
                           <!-- ACEPTACION PACIENTE -->
                           <label class="form-label" for="approved">APROBADO*</label>
                           <Select required type="text" class="form-control form-control-lg" name="approved" id="approved" >
-                            <option value='0'>Elija una opción</option>
+                            <option value=''>Elija una opción</option>
                             <option value='1'>Sí</option>
                             <option value="2">No</option>
                           </Select>
@@ -168,8 +168,8 @@ include './generales/header.php';
                             <option value=''>Elija una opción</option>
                             <option value='0'>A</option>
                             <option value="1">B</option>
-                            <option value="1">C</option>
-                            <option value="1">Sisben</option>
+                            <option value="2">C</option>
+                            <option value="3">Sisben</option>
                           </Select>
                             
                         </div> 
@@ -235,21 +235,15 @@ include './generales/header.php';
                     <div class="row md-12" id="history-patient" >
                       <h4 class="mb-5 text-uppercase">HISTORICO DEL PACIENTE <hr></h4>
                       <table class="table table-bordered">
-                        <thead>
+                        <thead class="thead-light">
                           <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Atendido por</th>
-                            <th scope="col">Comentario</th>
+                            <th class="table-primary"> Fecha</th>
+                            <th class="table-primary"> Hora </th>
+                            <th class="table-primary"> Atiende </th>
+                            <th class="table-primary"> Observación </th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                          </tr>
+                        <tbody id="patienshistory">
                         </tbody>
                       </table>
                     </div>
