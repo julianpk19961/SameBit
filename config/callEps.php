@@ -28,6 +28,4 @@
         $result = "No hay resultados";       
     }
 
-    
-    
 ?>

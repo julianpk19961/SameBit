@@ -3,7 +3,7 @@
     include 'config.php';
     $Dni = $_POST['dni'];
     
-    $sql = "SELECT  KP_UUID,Name0,LastName0,Dni FROM patients WHERE Dni LIKE '$Dni%' ORDER BY Dni DESC";
+    $sql = "SELECT  KP_UUID,Name0,LastName0,Dni,documentType FROM patients WHERE Dni LIKE '$Dni%' ORDER BY Dni DESC";
     $result = mysqli_query($conn,$sql);
     
     if (!$result){
@@ -19,7 +19,8 @@
             'PK_UUID' => $row['KP_UUID'],
             'Name' => $row['Name0'],
             'LastName' => $row['LastName0'],
-            'dni' => $row['Dni']
+            'dni' => $row['Dni'],
+            'documentType' => $row['documentType']
         );
         }
         $jsonstring = json_encode($json);
