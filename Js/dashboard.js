@@ -90,6 +90,34 @@ $(document).on('click', '.patient-select', function(){
     }
 });
 
+
+// Funcion para habilitar e inhabilitar campos de atencion  dependiedo de la casilla aceptado
+function atentionswitch(){
+
+    // se captura el valor de el input asi como los dos campos que tendran el switch
+    let accept = $('#approved').val();
+    var AtentionDate = document.getElementById('AtentionDate');
+    var AtentionTime = document.getElementById('AtentionTime');
+
+    if(accept == 1){
+    // si el valor es igual a 1 en aprobado, el sistema habilitara los campos
+        AtentionDate.disabled = false;
+        AtentionTime.disabled = false;
+    }else{
+    // si el valor es igual !a 1 en aprobado, el sistema inhabilitara los campos
+        AtentionDate.disabled = true;
+        AtentionTime.disabled = true;
+    }
+};
+  //Cuando la página esté cargada ejecutará la función.
+$(document).ready(atentionswitch);
+
+
+// Lllamado a la funcion de inactivar o activar casillas de atencion depndiendo del contenido de el input aprobado
+$(document).on('change','#approved',function(){
+    atentionswitch();
+});
+
 // Funcion creada para llamar las eps registradas en la base de datos
 function cargar_eps(){
 

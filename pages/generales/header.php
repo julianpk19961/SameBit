@@ -3,7 +3,7 @@
 include '../config/setup.php';
 session_start();
 
-$nombre = isset($_POST[$_SESSION['name']])?$_SESSION['name']:1;
+// $nombre = isset($_POST[$_SESSION['name']])?$_SESSION['name']:1;
 // $id =isset($_POST[$_SESSION['id']])?$_SESSION['id']:'';
 ?>
 
