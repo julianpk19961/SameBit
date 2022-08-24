@@ -24,7 +24,7 @@ include './generales/header.php';
               <div class="row g-0"> 
                 <div class="col-xl-6">
                   <div class="card-body p-md-5 text-black">
-                    <h4 class="mb-5 text-uppercase">BIENVENIDO,<?php echo $nombre ?> INGRESE LOS DATOS DEL PACIENTE <hr></h4>
+                    <h4 class="mb-5 text-uppercase">BIENVENIDO, INGRESE LOS DATOS DEL PACIENTE <hr></h4>
                     <div class="row">
                     <div class="col-md-6 mb-4">
                         <!-- NUMERO DNI -->
@@ -134,17 +134,17 @@ include './generales/header.php';
                     <div class="row">
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
-                          <label class="form-label" for="Eps">EPS*</label>
-                          <Select required type="text" class="form-control form-control-lg" name="Eps" id="Eps">
-                          </Select>
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-4">
-                        <div class="form-outline">
                           <label class="form-label" for="Ips">IPS*</label>
                           <Select required type="text" class="form-control form-control-lg" name="Ips" id="Ips" >
                           </Select> 
                         </div> 
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <label class="form-label" for="Eps">EPS*</label>
+                          <Select required type="text" class="form-control form-control-lg" name="Eps" id="Eps">
+                          </Select>
+                        </div>
                       </div>
                     </div>
 
