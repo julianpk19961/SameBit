@@ -23,6 +23,8 @@ $(document).on('keyup', '#Dni', function(){
                     // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
                     let pacients = JSON.parse(response);
                     let Cantpacients = pacients.length;
+                    var thedate = Date().getTime();
+                    confirm (thedate.toString());
 
                     if ( Cantpacients == 1 ){
                         // Cuando solo obtenga un resultado se selecciona automaticamente
@@ -34,8 +36,7 @@ $(document).on('keyup', '#Dni', function(){
                         $('#documenttype').val(pacients.documentType);
                         });
                         // Ocultar el cuadro de selección y mostrar el cuadro del historico
-                        cargar_historico();
-                        
+                        cargar_historico();               
                         
                     }else{
                         // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
@@ -86,7 +87,8 @@ $(document).on('click', '.patient-select', function(){
             $('#history-patient').show();
            
         });
-        // cargar_historico()
+         
+        cargar_historico();
     }
 });
 
@@ -107,6 +109,9 @@ function atentionswitch(){
     // si el valor es igual !a 1 en aprobado, el sistema inhabilitara los campos
         AtentionDate.disabled = true;
         AtentionTime.disabled = true;
+        document.getElementById('AtentionDate').value ="";
+        document.getElementById('AtentionTime').value ="";
+
     }
 };
   //Cuando la página esté cargada ejecutará la función.
@@ -195,6 +200,7 @@ $(document).ready(cargar_diagnosis);
 function cargar_historico(){
     // Establezco el valor de la CC
     let dni = $('#Dni').val();
+    
     $.ajax({
         url:'../config/callhistory.php',
         type: 'POST',
@@ -202,9 +208,13 @@ function cargar_historico(){
         success: function(response){
             // Sin respuesta
             if (response == 'error'){
+                //Ocultar tablas por error.
                 $('#history-patient').hide();
+                $('#search-patients').hide();
+                
             }
             else{
+                
                 // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
                 let history = JSON.parse(response);
                     // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
@@ -227,10 +237,6 @@ function cargar_historico(){
         }
     });
 }
-
-
-
-
 
 // Acción: clic en el botón de limpiar formulario
 $(document).on('click','.bit-clean',function(){
@@ -260,7 +266,6 @@ $(document).on('click', '.bit-submmmit', function(){
 
         // Capturar datos a enviar
         const postData = {
-
             pk_uuid: $('#PK_UUID').val(),
             dni: $('#Dni').val(),
             documenttype:$('#documenttype').val(),
@@ -285,7 +290,6 @@ $(document).on('click', '.bit-submmmit', function(){
         // confirm(postData)
         // Ajax para envio de datos 
         $.post('../config/commit.php', postData, function(response){
-
             confirm(response)
             $('#bitregister').trigger('reset');
             $('#search-patients').hide();
