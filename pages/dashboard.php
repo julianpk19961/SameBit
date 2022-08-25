@@ -4,35 +4,34 @@ include './generales/header.php';
 ?>
 
 <header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <img src="../img/SameinLogo.png" height="40" class="logo">
-      </a>
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
-        <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Tipos</a></li>
-        <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
-      </ul>
-  </header>
-  <section class="h-100">
-    <form id="bitregister">
-      <div class="container py-1 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+    <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
+      <img src="../img/SameinLogo.png" height="40" class="logo">
+    </a>
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
+      <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Tipos</a></li>
+      <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
+    </ul>
+</header>
+  <section class="h-50">
+    <form id="bitregister" accept-charset="UTF-8">
+      <div class="container py-1 h-50">
+        <div class="row d-flex justify-content-center align-items-center h-50">
           <div class="col">
             <div class="card card-registration my-4">
               <div class="row g-0"> 
                 <div class="col-xl-6">
                   <div class="card-body p-md-5 text-black">
-                    <h4 class="mb-5 text-uppercase">BIENVENIDO, INGRESE LOS DATOS DEL PACIENTE <hr></h4>
+                    <h4 class="mb-5 text-uppercase">BIENVENIDO <?php echo $_SESSION['usuario']; ?>,<br> INGRESE LOS DATOS DEL PACIENTE <hr></h4>
                     <div class="row">
-                    <div class="col-md-6 mb-4">
+                      <div class="col-md-6 mb-4">
                         <!-- NUMERO DNI -->
                         <div class="form-outline">
                           <label class="form-label" for="Dni">IDENTIFICACIÓN*</label>
                           <input required type="number" id="Dni" name="Dni" class="form-control form-control-lg" list='patientslist'/>
                           <datalist id='patientslist' name="patientslist">
-                            
                           </datalist>
                         </div>
                       </div>
@@ -133,6 +132,7 @@ include './generales/header.php';
                     </div>
                     <div class="row">
                       <div class="col-md-6 mb-4">
+                        <!-- IPS -->
                         <div class="form-outline">
                           <label class="form-label" for="Ips">IPS*</label>
                           <Select required type="text" class="form-control form-control-lg" name="Ips" id="Ips" >
@@ -140,6 +140,7 @@ include './generales/header.php';
                         </div> 
                       </div>
                       <div class="col-md-6 mb-4">
+                        <!-- EPS -->
                         <div class="form-outline">
                           <label class="form-label" for="Eps">EPS*</label>
                           <Select required type="text" class="form-control form-control-lg" name="Eps" id="Eps">
@@ -150,19 +151,8 @@ include './generales/header.php';
 
                     <div class="row">
                       <div class="col-md-6 mb-4">
+                        <!-- Rango EPS -->
                         <div class="form-outline">
-                          <!-- Estado en la eps -->
-                          <label class="form-label" for="EpsStatus">ACTIVO*</label>
-                          <Select required type="text" class="form-control form-control-lg" name="EpsStatus" id="EpsStatus" >
-                            <option value=''>Elija una opción</option>
-                            <option value='1'>Sí</option>
-                            <option value='0'>No</option>
-                          </Select>
-                          
-                          </div>
-                        </div>
-                      <div class="col-md-6 mb-4">
-                          <div class="form-outline">
                           <label class="form-label" for="EpsClassification">RANGO*</label>  
                           <Select required type="text" class="form-control form-control-lg" name="EpsClassification" id="EpsClassification" >
                             <option value=''>Elija una opción</option>
@@ -171,9 +161,21 @@ include './generales/header.php';
                             <option value="2">C</option>
                             <option value="3">Sisben</option>
                           </Select>
-                            
                         </div> 
                       </div>
+
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                          <!-- Estado en la eps -->
+                          <label class="form-label" for="EpsStatus">ACTIVO*</label>
+                          <Select required type="text" class="form-control form-control-lg" name="EpsStatus" id="EpsStatus" >
+                            <option value=''>Elija una opción</option>
+                            <option value='1'>Sí</option>
+                            <option value='0'>No</option>
+                          </Select>
+                        </div>
+                      </div>
+                      <!-- Diagnostico aplicado a paciente -->
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
                         <label class="form-label" for="diagnosis">DIAGNÓSTICO*</label>
@@ -181,6 +183,7 @@ include './generales/header.php';
                           </Select>
                         </div>
                       </div>
+                      <!-- Numero de llamadas -->
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
                           <label class="form-label" for="CallNumber">NÚMERO LLAMADAS</label>
@@ -195,7 +198,6 @@ include './generales/header.php';
                         </div>
                       </div>
                     </div>
-
                     <!-- Observaciones -->
                     <div class="row">
                       <div class="form-outline mb-2">

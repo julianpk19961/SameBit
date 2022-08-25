@@ -1,25 +1,45 @@
 <?php
-#Conexión
-include('config.php');
+session_start();
+if(isset($_POST["Accion"])){
+    if(isset($_POST["Accion"])=='login'){
+        login();
+    };
+};
 
-#Verificar Credenciales
+function login()
+{
+    #Conexión
+    include('config.php');
 
-$name0 = isset($_POST["username"])?$_POST["username"]:'';
-$pass0 = isset($_POST["password"])?$_POST["password"]:'';
+    try {
+       #Verificar Credenciales
+        $name0 = isset($_POST["name"])?$_POST["name"]:'';
+        $pass0 = isset($_POST["pass"])?$_POST["pass"]:'';
+        $md5pass = md5($pass0);
+        $json = array();
+        $nombreUser = '';
 
-$result = mysqli_query($conn,"SELECT * FROM bitusers WHERE NickName = '".$name0."' AND Password0 = '".$pass0."'");
+        $sql = "SELECT Name0,Name1,LastName0,LastName1 FROM bitusers WHERE NickName = '".$name0."' AND Password0 = '".$md5pass."'";
+        $result = mysqli_query($conn,$sql);
+        $rowsresult = $result->num_rows;
+            if ($rowsresult > 0){
+                $row = $result->fetch_array(MYSQLI_NUM);
+                $userFullName=$row[0]." ".$row[2];
+                $_SESSION['usuario'] =  $userFullName;
+                $nombreUser = $_SESSION['usuario'];
+                // echo '<pre>';
+                // var_dump($SqlRow);
+                // exit();
+            }
+            
+        $message=['Title'=>'Éxito','Mensaje'=>'Conexión exitosa','Tipo'=>'success','nombreusuario'=>$nombreUser];
+    } catch (\Throwable $th) {
+        $message=['Title'=>'Error','Mensaje'=>'Conexión fallida','Tipo'=>'error'];
+    }
 
-while($row = mysqli_fetch_array($result)){
-    mysqli_close($conn);
-    $Exist = $row['KP_UUID'];
+    
+    $message = json_encode($message);
+    echo $message;
 }
 
-if (empty($Exist)){
-    $Exist = 0 ;
-}else{
-    session_start();
-    $_SESSION['name'] = $name0 ;
-}
-
-echo $Exist;
 ?>
