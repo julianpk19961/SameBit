@@ -1,6 +1,8 @@
 <?php
     // #Conexión
     include('config.php');
+    session_start();
+
 
     // Establecer zona horaria.
     date_default_timezone_set('America/Bogota');
@@ -19,21 +21,22 @@
     $commentdate = isset($_POST["CommentDate"])?$_POST["CommentDate"]:'';
     $commenttime = isset($_POST["CommentTime"])?$_POST["CommentTime"]:'';
     $approved = isset($_POST["approved"])?$_POST["approved"]:'';
-    $appointmentdate = isset($_POST["AtentionDate"])?$_POST["AtentionDate"]:'';
+    $appointmentdate = isset($_POST["AtentionDate"])?$_POST["AtentionDate"]:'NULL';
     $appointmenttime = isset($_POST["AtentionTime"])?$_POST["AtentionTime"]:'';
-    $comment = isset($_POST["Observation"])?$_POST["Observation"]:''; 
+    $comment = utf8_encode(isset($_POST["Observation"])?$_POST["Observation"]:''); 
     $sentby = isset($_POST["SentBy"])?$_POST["SentBy"]:'';
     $statuseps = isset($_POST["EpsStatus"])?$_POST["EpsStatus"]:'';
     $callsnumber = isset($_POST["CallNumber"])?$_POST["CallNumber"]:'';
+    $username = $_SESSION['usuario'];
 
     // Crear-Actualizar registros.
     if($PK_UUID == 1){
         // Crear el registro.
-        $sql = "INSERT INTO Patients (KP_UUID,Dni,documentType,Name0,LastName0,Fk_Eps,FK_Range) 
-                VALUES ( UUID(),'$dni','$documenttype','$name','$lastname','$FK_EPS','$FK_Range' ) ";
+        $sql = "INSERT INTO Patients (KP_UUID,Dni,documentType,Name0,LastName0,Fk_Eps,FK_Range,createdUser,updatedUser) 
+                VALUES ( UUID(),'$dni','$documenttype','$name','$lastname','$FK_EPS','$FK_Range',' $username,'$username' ) ";
     }else{
         // Actualizar el registro.
-        $sql = "UPDATE Patients SET Dni = '$dni' , documentType = '$documenttype' , Name0 = '$name', LastName0 = '$lastname', Fk_Eps = '$FK_EPS', FK_Range = '$FK_Range' 
+        $sql = "UPDATE Patients SET Dni = '$dni' , documentType = '$documenttype' , Name0 = '$name', LastName0 = '$lastname', Fk_Eps = '$FK_EPS', FK_Range = '$FK_Range' , updatedUser = '$username' 
         WHERE Dni = '$dni' "; 
     }
 
@@ -56,9 +59,17 @@
         $PK_UUID = $row['KP_UUID'];
     }
 
+
+    if ($approved == 1 ){
+        $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,appointmentdate,appointmenttime,sentby,statuseps,callsnumber,comment0,createdUser,updatedUser )
+        VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved', '$appointmentdate','$appointmenttime','$sentby','$statuseps','$callsnumber','$comment','$username','$username') ";
+    }else{
+        $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,sentby,statuseps,callsnumber,comment0,createdUser,updatedUser )
+        VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved','$sentby','$statuseps','$callsnumber','$comment','$username','$username') ";
+
+    }
+
     // Inserción de datos a la tabla de bitacora de prioridades.
-    $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,appointmentdate,appointmenttime,sentby,statuseps,callsnumber,comment0 )
-    VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved','$appointmentdate','$appointmenttime','$sentby','$statuseps','$callsnumber','$comment') ";
     $result = mysqli_query($conn,$sql);
 
     if (!$result){
@@ -66,7 +77,7 @@
         die('Query Error'. mysqli_error($conn));
     }
 
-    echo "Registro enviado satisfactoriamente";
+    echo $result;
 
 ?>
 

@@ -5,7 +5,7 @@
     if(isset($_POST['PK_UUID'])){
         $PK_UUID = $_POST['PK_UUID'];
            
-        $sql = "SELECT KP_UUID,Name0,LastName0,Dni,documentType FROM patients WHERE KP_UUID = '$PK_UUID' ";
+        $sql = "SELECT KP_UUID,Name0,LastName0,Dni,documentType,FK_Eps,FK_Range FROM patients WHERE KP_UUID = '$PK_UUID' ";
         $result = mysqli_query($conn,$sql);
         if(!$result){
             die('Query Error'. mysqli_error($conn));
@@ -18,7 +18,9 @@
                 'name' => $row['Name0'],
                 'lastname' => $row['LastName0'],
                 'dni' => $row['Dni'],
-                'documentType' => $row['documentType']
+                'documentType' => $row['documentType'],
+                'eps' => $row['FK_Eps'],
+                'range' => $row['FK_Range']
             );
         }
         $jsonString = json_encode($json[0]);

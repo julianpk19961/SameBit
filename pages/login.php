@@ -1,18 +1,23 @@
 <?php 
 include './generales/header.php';
+// echo '<pre>';
+// var_dump('LLEGA');
+// exit();
 ?>
 <body class="align">
     <div class="grid">
-        <!-- Logo -->
+        
         <div class="top_imagen">
             <img src="<?php echo $index;?>img/SameinLogo.png" alt="logo" width="200px">
         </div>
-        <!-- Welcome Message -->
+        <div class="px-4 my-3 text-center">
+                <h1 class="display-5 fw-bold">BIENVENIDO</h1>
+        </div>
         <!-- Login Form -->
         <form action="" id="login" method="POST" class="form login">
-        <div class="welcome">
-            <h1>BIENVENIDO</h1>
-        </div>
+            <!-- Mensaje bienvenida -->
+            <!-- Parametros de sesion -->
+            <!-- Sn -->
             <div class="form__field">
                 <label for="login__username"><svg class="icon">
                         <use xlink:href="#icon-user"></use>
@@ -20,7 +25,7 @@ include './generales/header.php';
                 <input autocomplete="username" id="login__username" type="text" name="username" class="form__input"
                     placeholder="Usuario" required>
             </div>
-
+            <!-- pss -->
             <div class="form__field">
                 <label for="login__password"><svg class="icon">
                         <use xlink:href="#icon-lock"></use>

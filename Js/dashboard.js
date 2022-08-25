@@ -23,8 +23,8 @@ $(document).on('keyup', '#Dni', function(){
                     // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
                     let pacients = JSON.parse(response);
                     let Cantpacients = pacients.length;
-                    var thedate = Date().getTime();
-                    confirm (thedate.toString());
+                    // var thedate = Date().getTime();
+                    // confirm (thedate.toString());
 
                     if ( Cantpacients == 1 ){
                         // Cuando solo obtenga un resultado se selecciona automaticamente
@@ -34,6 +34,9 @@ $(document).on('keyup', '#Dni', function(){
                         $('#nombre').val(pacients.Name);
                         $('#apellido').val(pacients.LastName);
                         $('#documenttype').val(pacients.documentType);
+                        $('#apellido').val(pacients.LastName);
+                        $('#Eps').val(pacients.eps);
+                        $('#EpsClassification').val(pacients.range);
                         });
                         // Ocultar el cuadro de selección y mostrar el cuadro del historico
                         cargar_historico();               
@@ -69,6 +72,7 @@ $(document).on('keyup', '#Dni', function(){
 
 // Accion: seleccionar paciente del listado [Se ejecuta al oprimir el botón Seleccionar en la tabla generada con la función anterior]
 $(document).on('click', '.patient-select', function(){
+
     if(confirm('¿Está seguro de querer selecionar el paciente')){
         // Capturar el elemnento padre y posterior tomar el atributo almacenado en el id=pacientid
         let element = $(this)[0].parentElement.parentElement;
@@ -78,16 +82,22 @@ $(document).on('click', '.patient-select', function(){
         $.post('../config/usepatient.php', {PK_UUID}, function(response){
             // Establecer los datos del Json encontrado en los campos indicados.
             const patient = JSON.parse(response);
+            // echo '<pre>';
+            // var_dump(patient);
+            // exit();
+            // return false;
+            $('#bitregister').trigger('reset');
             $('#PK_UUID').val(patient.PK_UUID);
             $('#Dni').val(patient.dni);
             $('#nombre').val(patient.name);
             $('#apellido').val(patient.lastname);
             $('#documenttype').val(patient.documentType);
+            $('#Eps').val(pacients.eps);
+            $('#EpsClassification').val(pacients.range);
             $('#search-patients').hide();
             $('#history-patient').show();
            
         });
-         
         cargar_historico();
     }
 });
@@ -125,7 +135,6 @@ $(document).on('change','#approved',function(){
 
 // Funcion creada para llamar las eps registradas en la base de datos
 function cargar_eps(){
-
     // Ajax para llamado de datos mediante metodo get para llamar eps
     $.ajax({
         url: '../config/calleps.php',
@@ -250,51 +259,58 @@ $(document).on('click','.bit-clean',function(){
 });
 
 // Accion: Oprimir el botón enviar
-$(document).on('click', '.bit-submmmit', function(){
+$(document).on('click', '.bit-submmmit', function(event){
     // confirmacion
     if(confirm('¿Está seguro de enviar el formulario')){
         
         //Validar campos vacios
-        if( $('#documenttype').val().length == 0 || $('#Dni').val().length == 0 || $('#nombre').val().length == 0 || $('#apellido').val().length == 0 
-        || $('#contacttype').val().length == 0 || $('#CommentDate').val().length == 0 || $('#CommentTime').val().length == 0 || $('#Eps').val().length == 0 
-        || $('#Ips').val().length == 0 || $('#SentBy').val().length == 0 || $('#EpsStatus').val().length == 0 || $('#EpsClassification').val().length == 0
+        if( $('#documenttype').val() == '' || $('#Dni').val() == '' || $('#nombre').val() == '' || $('#apellido').val() == '' || $('#contacttype').val()  == '' || $('#CommentDate').val()  == '' || $('#CommentTime').val()  == '' || $('#Eps').val()  == '' || $('#Ips').val()  == ''  || $('#SentBy').val()  == '' || $('#EpsStatus').val()  == ''|| $('#EpsClassification').val()  == ''
         ){
-            // Error campos vacois 
-            confirm('Datos obligatorios vacios');
-            return;
+            // Error por campos vacios.
+            Swal.fire({
+                icon: 'error',
+                title: 'Faltan datos',
+                text: 'Campos Obligatorios vacios',
+                timer: 5000
+              })
+            return false;
+        }
+        else{
+
+            // Capturar datos a enviar
+            const postData = {
+                pk_uuid: $('#PK_UUID').val(),
+                dni: $('#Dni').val(),
+                documenttype:$('#documenttype').val(),
+                name: $('#nombre').val(),
+                lastname: $('#apellido').val(),
+                contacttype: $('#contacttype').val(),
+                CommentDate: $('#CommentDate').val(),
+                CommentTime: $('#CommentTime').val(),
+                approved: $('#approved').val(),
+                AtentionDate: $('#AtentionDate').val(),
+                AtentionTime: $('#AtentionTime').val(),
+                Eps: $('#Eps').val(),
+                Ips: $('#Ips').val(),
+                EpsStatus: $('#EpsStatus').val(),
+                EpsClassification: $('#EpsClassification').val(),
+                diagnosis: $('#diagnosis').val(),
+                CallNumber: $('#CallNumber').val(),
+                SentBy: $('#SentBy').val(),
+                Observation: $('#Observation0').val()
+            };
+
+            $.post('../config/commit.php', postData, function(response){
+                
+                // Error por campos vacios.
+                $('#bitregister').trigger('reset');
+                $('#search-patients').hide();
+                $('#history-patient').hide();
+                
+
+            });
         }
 
-        // Capturar datos a enviar
-        const postData = {
-            pk_uuid: $('#PK_UUID').val(),
-            dni: $('#Dni').val(),
-            documenttype:$('#documenttype').val(),
-            name: $('#nombre').val(),
-            lastname: $('#apellido').val(),
-            contacttype: $('#contacttype').val(),
-            CommentDate: $('#CommentDate').val(),
-            CommentTime: $('#CommentTime').val(),
-            approved: $('#approved').val(),
-            AtentionDate: $('#AtentionDate').val(),
-            AtentionTime: $('#AtentionTime').val(),
-            Eps: $('#Eps').val(),
-            Ips: $('#Ips').val(),
-            EpsStatus: $('#EpsStatus').val(),
-            EpsClassification: $('#EpsClassification').val(),
-            diagnosis: $('#diagnosis').val(),
-            CallNumber: $('#CallNumber').val(),
-            SentBy: $('#SentBy').val(),
-            Observation: $('#Observation0').val()
-        };
-
-        // confirm(postData)
-        // Ajax para envio de datos 
-        $.post('../config/commit.php', postData, function(response){
-            confirm(response)
-            $('#bitregister').trigger('reset');
-            $('#search-patients').hide();
-            $('#history-patient').hide();
-
-        });
+        
     }  
 });
