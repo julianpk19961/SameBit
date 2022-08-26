@@ -3,7 +3,7 @@
     include('config.php');
     session_start();
 
-
+    header('Content-Type: text/html; charset=UTF-8');
     // Establecer zona horaria.
     date_default_timezone_set('America/Bogota');
 
@@ -23,7 +23,7 @@
     $approved = isset($_POST["approved"])?$_POST["approved"]:'';
     $appointmentdate = isset($_POST["AtentionDate"])?$_POST["AtentionDate"]:'NULL';
     $appointmenttime = isset($_POST["AtentionTime"])?$_POST["AtentionTime"]:'';
-    $comment = utf8_encode(isset($_POST["Observation"])?$_POST["Observation"]:''); 
+    $comment = isset($_POST["Observation"])?$_POST["Observation"]:''; 
     $sentby = isset($_POST["SentBy"])?$_POST["SentBy"]:'';
     $statuseps = isset($_POST["EpsStatus"])?$_POST["EpsStatus"]:'';
     $callsnumber = isset($_POST["CallNumber"])?$_POST["CallNumber"]:'';
@@ -66,7 +66,6 @@
     }else{
         $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,sentby,statuseps,callsnumber,comment0,createdUser,updatedUser )
         VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved','$sentby','$statuseps','$callsnumber','$comment','$username','$username') ";
-
     }
 
     // Inserción de datos a la tabla de bitacora de prioridades.
@@ -77,7 +76,7 @@
         die('Query Error'. mysqli_error($conn));
     }
 
-    echo $result;
+    echo $sql;
 
 ?>
 
