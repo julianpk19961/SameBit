@@ -299,9 +299,15 @@ $(document).on('click', '.bit-submmmit', function(event){
                 SentBy: $('#SentBy').val(),
                 Observation: $('#Observation0').val()
             };
+            
+            // event.preventDefault();
+            // console.log (postData);
+            
 
             $.post('../config/commit.php', postData, function(response){
                 
+                // console.log (response);
+
                 // Error por campos vacios.
                 $('#bitregister').trigger('reset');
                 $('#search-patients').hide();

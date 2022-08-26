@@ -32,8 +32,7 @@ $("#login").submit(function(e){
                 Swal.fire({
                     icon: Tipo,
                     title: Titulo,
-                    text: Mensaje,
-                    timer: 5000
+                    text: Mensaje
                   })
                 //   Redirección
                 $('#loader').addClass('hidden');

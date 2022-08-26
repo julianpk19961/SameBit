@@ -7,17 +7,23 @@ session_start();
 
 <head>
   <title><?php echo $title;?></title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" http-equiv="content-type" content="text/html; charset=UTF-8">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    
    <?php 
-     $nombre = isset($_POST[$_SESSION['usuario']])?$_SESSION['usuario']:'no se cargó';
+    if ( empty($_SESSION['usuario']) ){
+      // No hacer nada si viene vacio
+    }else{
+      $nombre = isset($_POST[$_SESSION['usuario']])?$_SESSION['usuario']:'1';
+    }
+    //  Identificar pagina
      $link = $_SERVER['PHP_SELF'];
      $link_array = explode('/',$link);
      $page = end($link_array);
+
+    // Cargar estilo dependiendo de página
      if($page =='login.php'){ ?>
         <link href="../css/login.css" rel="stylesheet" type="text/css">
     <?php } else{?> 
