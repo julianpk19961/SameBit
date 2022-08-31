@@ -41,8 +41,8 @@
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="./dashboard.php" class="nav-link">Inicio</a></li>
         <li class="nav-item"><a href="#" class="nav-link active" >Pacientes</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
+        <li class="nav-item"><a href="../pages/asisttop.php" class="nav-link">Asist-Top</a></li>
         <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
       </ul>
   </header>
