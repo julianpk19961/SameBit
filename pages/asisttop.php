@@ -420,7 +420,12 @@ include './generales/header.php';
       <div class="col-md-1">
         <input class="form-control" type="text" id="psychologicalstate" placeholder="Valor (1-20)" size="10px" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
       </div>
-      <div class="col-md-6">
+      <div class="col-md-12">
+      <div class="progress">
+    <div class="progress-bar"   id="_progress-wrappsy" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
+      <span class="sr-only">70% Complete</span>
+    </div>
+  </div>
         <label>1</label>
         <div id="progress-wrappsy" class="progress-wrap progress" data-progress-percent="10"  >
           <div id="progress-barpsy" class="progress-bar progress"></div>
@@ -602,37 +607,7 @@ include './generales/header.php';
   <br /><br />
 
   <script src="../Js/asisttop.Js"></script>
-  <style>
-    .progress {
-      width: 1200px;
-      max-width: 100%;
-      margin: 0px 10px;
-      padding: 0;
-      display: grid;
-      grid-template-columns: auto auto auto;
-    }
-    .progress-wrap {
-        width: 1200px;
-        max-width: calc(100% - 10px);
-        background: #252D59;
-        
-        overflow: hidden;
-        position: relative;
-        display: grid;
-        grid-template-columns: auto auto auto;
-    }
-
-    .progress-bar {
-        width: 1200px;
-        max-width: calc(100% - 10px);
-        background: #ddd;
-        /* margin: 0px 10px; */
-        position: absolute;
-        top: 0;
-        display: grid;
-        grid-template-columns: auto auto auto;
-        }
-  </style>
+  
 
   <footer class="container">
     <p>Todos los derechos reservados para ESE Hospital San Rafael de Girardota.</p>

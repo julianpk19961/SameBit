@@ -59,10 +59,13 @@ var d = new Date();
         // capturar el valor ingresado en el input
         let values = $('#psychologicalstate').val();
         // Si el valor está vacio lo establece como 0
-        if (!values ){
-            $('#psychologicalstate').val(0);
-        }
-        moveProgressBarPsy();
+        // if (!values ){
+        //     $('#psychologicalstate').val(0);
+        // }
+        console.log(values);  
+$('#_progress-wrappsy').css("width",values+"%");
+
+        // moveProgressBarPsy();
     });
      // Lanza función para barra de progreso del estado fisico, se valida que no se envíe valor vacio
     $('#physicalstate').on('keyup',function(){
