@@ -17,7 +17,7 @@ include './generales/header.php';
     <section class="row">
       <div class="col-md-12">
         <h1 class="text-center">Perfil de Resultados de Tratamiento (TOP)</h1>
-        <p class="text-center">SAMEIN S.A.S.</p>
+        <p class="text-center"><strong>SAMEIN S.A.S.</strong></p>
       </div>
     </section>
     <hr><br/>
@@ -413,16 +413,19 @@ include './generales/header.php';
     </section>
     <!--  Item 1  -->
     <section class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <p><strong>a. Calificar el resultado de salud psicológica del usuario</strong>
         (Ansiedad, depresión y/o problemas emocionales)</p>
       </div>
-      <div class="col-md-2">
-        <input class="form-control" type="text" id="psychologicalstate" placeholder="Calificación(1-20)" size="10px" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
+      <div class="col-md-1">
+        <input class="form-control" type="text" id="psychologicalstate" placeholder="Valor (1-20)" size="10px" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
       </div>
-       1<div id="progress-wrappsy" class="progress-wrap progress col-md-2" data-progress-percent="50"  >
-        <div id="progress-barpsy" class="progress-bar progress"></div>
-      </div>20
+      <div class="col-md-6">
+        <label>1</label>
+        <div id="progress-wrappsy" class="progress-wrap progress" data-progress-percent="10"  >
+          <div id="progress-barpsy" class="progress-bar progress"></div>
+        </div>20
+      </div>
     </section>
     <p></p>
     <!-- encabezado de inputs -->
@@ -500,10 +503,12 @@ include './generales/header.php';
       </div>
       <div class="col-md-2">
         <input class="form-control" type="text" id="physicalstate" size="10px" placeholder="Calificación(1-20)" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
-      </div>
-      1<div  id="progress-wrapphy" class="progress-wrap progress col-md-2" data-progress-percent="50"  >
+        </div>
+      <div class="md-6">
+        1<div  id="progress-wrapphy" class="progress-wrap progress col-md-2" data-progress-percent="50"  >
         <div id="progress-barphy" class="progress-bar progress"></div>
       </div>20
+      </div>
     </section>
     <p></p>
     <section class="row">
@@ -559,9 +564,11 @@ include './generales/header.php';
       <div class="col-md-2">
         <input class="form-control" type="text" id="housestate" size="10px" placeholder="Calificación(1-20)" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
       </div>
+      <div class="md-6">
       1<div  id="progress-wrahou" class="progress-wrap progress col-md-2" data-progress-percent="50"  >
         <div id="progress-barhou" class="progress-bar progress"></div>
       </div>20
+      </div>
     </section>
 
 
@@ -597,21 +604,33 @@ include './generales/header.php';
   <script src="../Js/asisttop.Js"></script>
   <style>
     .progress {
-      width: 224px;
-      margin: 0 auto;
+      width: 1200px;
+      max-width: 100%;
+      margin: 0px 10px;
       padding: 0;
+      display: grid;
+      grid-template-columns: auto auto auto;
     }
     .progress-wrap {
+        width: 1200px;
+        max-width: calc(100% - 10px);
         background: #252D59;
-        margin: 10px 0;
+        
         overflow: hidden;
         position: relative;
+        display: grid;
+        grid-template-columns: auto auto auto;
     }
 
     .progress-bar {
+        width: 1200px;
+        max-width: calc(100% - 10px);
         background: #ddd;
+        /* margin: 0px 10px; */
         position: absolute;
         top: 0;
+        display: grid;
+        grid-template-columns: auto auto auto;
         }
   </style>
 
