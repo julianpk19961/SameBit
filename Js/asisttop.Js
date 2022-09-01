@@ -1,4 +1,130 @@
-var d = new Date();
+//VALIDACIÓN: LA FECHA DEL FORMATO SIEMPRE SE LLENE CON EL VALOR DE LA FECHA ACTUAL
+    // Se inactiva campo por propuesta a equipo de trabajo
+    // Capturar fecha
+    var d = new Date();
+
+    // Ejecutar función: validar que la fecha del formato nunca sea vacio
+    fechaActual ();
+
+    function fechaActual (){
+        let fechaFormulario = $('#interviewDate').val();
+    //    preguntar por la posibilidad de crear formularios para días anteriores
+        if ( fechaFormulario == '' ){
+            year = '' + d.getFullYear(),
+            month = '' + (d.getMonth() +1 )
+            day = ''+ d.getDate();
+
+            if (month.length < 2){
+                month = '0' + month;
+            }
+            if (day.length < 2) {
+                day = '0' + day;
+            }
+            $('#interviewDate').val(year + '-' + month + '-' + day);
+        }
+    }
+
+    // al finalizar la edición del campo se ejecuta la funcion fecha actual
+    $(document).on('blur','#interviewDate', function(){fechaActual();});
+
+
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    // estado psicologico
+    $('#psychologicalstate').on('click', function() {
+        $(this).select();
+    });
+    // estado fisico
+    $('#physicalstate').on('click', function() {
+        $(this).select();
+    });
+    // estado vivienda
+    $('#housestate').on('click', function() {
+        $(this).select();
+    });
+
+    // Lanza función para barra de progreso del estado psicologico, se valida que no se envíe valor vacio
+    $('#psychologicalstate').on('keyup',function(){
+        // capturar el valor ingresado en el input
+        let values = $('#psychologicalstate').val();
+        let percent = 0;
+        let maxvalue = 20;
+
+        // Si el valor está vacio lo establece como 0
+        if (!values ){
+            values = 0;
+        }
+        else if(values>maxvalue){
+            values = maxvalue;
+        }
+
+        if (values > 0 ){
+            percent = Math.round((values*100)/maxvalue);
+        }
+
+        $('#psychologicalstate').val( values);  
+        $('#_progress-wrappsy').css("width",percent+"%");
+    });
+
+    $('#physicalstate').on('keyup',function(){
+        // capturar el valor ingresado en el input
+        let values = $('#physicalstate').val();
+        let percent = 0;
+        let maxvalue = 20;
+
+        // Si el valor está vacio lo establece como 0
+        if (!values ){
+            values = 0;
+        }
+        else if(values>maxvalue){
+            values = maxvalue;
+        }
+
+        if (values > 0 ){
+            percent = Math.round((values*100)/maxvalue);
+        }
+
+        $('#physicalstate').val( values);  
+        $('#_progress-wrapphy').css("width",percent+"%");
+    });
+
+    $('#housestate').on('keyup',function(){
+        // capturar el valor ingresado en el input
+        let values = $('#housestate').val();
+        let percent = 0;
+        let maxvalue = 20;
+
+        // Si el valor está vacio lo establece como 0
+        if (!values ){
+            values = 0;
+        }
+        else if(values>maxvalue){
+            values = maxvalue;
+        }
+
+        if (values > 0 ){
+            percent = Math.round((values*100)/maxvalue);
+        }
+
+        $('#housestate').val( values);  
+        $('#_progress-wraphou').css("width",percent+"%");
+    });
+    
+    
+
+
+
+
+// $(document).ready(atentionswitch);
 
 // // $("input:radio[name='pregunta']:checked").val();
 
@@ -37,135 +163,6 @@ var d = new Date();
 // Estado psicologico
 
 // Seleccionar todo el contenido de un input
-
-    // estado psicologico
-    $('#psychologicalstate').on('click', function() {
-        $(this).select();
-    });
-    // estado fisico
-    $('#physicalstate').on('click', function() {
-        $(this).select();
-    });
-    // estado vivienda
-    $('#housestate').on('click', function() {
-        $(this).select();
-    });
-
-
-//   Lanzar funciones y validar valores vacios
-
-    // Lanza función para barra de progreso del estado psicologico, se valida que no se envíe valor vacio
-    $('#psychologicalstate').on('keyup',function(){
-        // capturar el valor ingresado en el input
-        let values = $('#psychologicalstate').val();
-        // Si el valor está vacio lo establece como 0
-        // if (!values ){
-        //     $('#psychologicalstate').val(0);
-        // }
-        console.log(values);  
-$('#_progress-wrappsy').css("width",values+"%");
-
-        // moveProgressBarPsy();
-    });
-     // Lanza función para barra de progreso del estado fisico, se valida que no se envíe valor vacio
-    $('#physicalstate').on('keyup',function(){
-        // capturar el valor ingresado en el input
-        let values = $('#physicalstate').val();
-        // Si el valor está vacio lo establece como 0
-        if (!values ){
-            $('#physicalstate').val(0);
-        }
-        moveProgressBarPhy();
-    });
-     // Lanza función para barra de progreso del estado familiar o de vivienda, se valida que no se envíe valor vacio
-    $('#housestate').on('keyup',function(){
-        // capturar el valor ingresado en el input
-        let values = $('#housestate').val();
-        // Si el valor está vacio lo establece como 0
-        if (!values ){
-            $('#housestate').val(0);
-        }
-        moveProgressBarHou();
-    });
-
-//  Funciones para barra de progreso
-    // Barra de progreso estado psicologico
-    function moveProgressBarPsy() {
-        var progressPercent = $('#psychologicalstate').val();
-        var limit = 20;
-
-        if (progressPercent > limit){
-            progressPercent = limit;
-            $('#psychologicalstate').val(limit);
-        }else if (progressPercent == 0){
-            $('#progress-barpsy').show();
-            $('#progress-wrappsy').show();
-            return false;
-        }else{
-            $('#progress-barpsy').show();
-            $('#progress-wrappsy').show();
-        }
-        var getPercent = ( progressPercent / limit);
-        var getProgressWrapWidth = $('#progress-wrappsy').width();
-        var progressTotal = getPercent * getProgressWrapWidth;
-        var animationLength = 1000;
-    
-        // on page load, animate percentage bar to data percentage length
-        // .stop() used to prevent animation queueing
-        $('#progress-barpsy').stop().animate({ 
-            left: progressTotal
-        }, 
-        animationLength);
-    }
-
-    // Barra de progreso estado físico
-    function moveProgressBarPhy() {
-        var progressPercent = $('#physicalstate').val();
-        var limit = 20;
-
-        if (progressPercent > limit){
-            progressPercent = limit;
-            $('#physicalstate').val(limit);
-        }
-        var getPercent = ( progressPercent / limit);
-        var getProgressWrapWidth = $('#progress-wrapphy').width();
-        var progressTotal = getPercent * getProgressWrapWidth;
-        var animationLength = 1000;
-        
-        // on page load, animate percentage bar to data percentage length
-        // .stop() used to prevent animation queueing
-        $('#progress-barphy').stop().animate({ 
-            left: progressTotal
-        }, 
-        animationLength);
-    }
-
-    // Barra de progreso estado hogar / situacion convivencia
-    function moveProgressBarHou() {
-        var progressPercent = $('#housestate').val();
-        var limit = 20;
-
-        if (progressPercent > limit){
-            progressPercent = limit;
-            $('#housestate').val(limit);
-        }
-        var getPercent = ( progressPercent / limit);
-        var getProgressWrapWidth = $('#progress-wrahou').width();
-        var progressTotal = getPercent * getProgressWrapWidth;
-        var animationLength = 1000;
-        
-        // on page load, animate percentage bar to data percentage length
-        // .stop() used to prevent animation queueing
-        $('#progress-barhou').stop().animate({ 
-            left: progressTotal
-        }, 
-        animationLength);
-    }
-
-
-
-
-
 
 // $('#clearForm').click(()=>{
 //   alert('hola mundos')
