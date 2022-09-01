@@ -94,6 +94,13 @@ var d = new Date();
         if (progressPercent > limit){
             progressPercent = limit;
             $('#psychologicalstate').val(limit);
+        }else if (progressPercent == 0){
+            $('#progress-barpsy').show();
+            $('#progress-wrappsy').show();
+            return false;
+        }else{
+            $('#progress-barpsy').show();
+            $('#progress-wrappsy').show();
         }
         var getPercent = ( progressPercent / limit);
         var getProgressWrapWidth = $('#progress-wrappsy').width();
