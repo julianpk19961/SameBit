@@ -24,20 +24,71 @@
         }
     }
 
-    // al finalizar la edición del campo se ejecuta la funcion fecha actual
+    // Al finalizar la edición del campo se ejecuta la funcion fecha actual.
     $(document).on('blur','#interviewDate', function(){fechaActual();});
 
 
+    $(document).on('click keyup', function() {
+            var exit = document.activeElement.getAttribute("id");
+            if(!exit){
+                return false;
+            }
+            var select = document.activeElement.parentElement.parentElement.getAttribute("id");
+
+            if (!exit && !select){
+                return false;
+            }else if (exit != '' && select != ''){
+                calculoconsumo(exit,select);
+            }else{
+
+            }
+
+    });
+
+    function calculoconsumo (input,select){
+        
+        if (!input || !select){
+            return false;
+        }
+        let i = 0;
+        let total = 0;
+        // let und = $('#und'+ select +'').val();
+        // console.log(und);
+
+        $('#'+ select +'').find(':input').each(function(){
+            i = i + 1 ;
+            tag = ''+ '#week'+i+ select +'';
+            values = Number($(tag).val());
+            // Validación de valores.
+            if (!values || values < 0 ){
+                values = 0; 
+            }
+            if ( values > 7 ){
+                values = 7;
+            }
+            // Recalcular valores a formato número.
+            $(tag).val(Number(values));
+            
+
+            // calcular totales.
+            total = total + values;
+        });
+
+        $('#MonthTotal'+ select +'').val(Number(total));
+        
+        
+        // Verificar el valor de la dosis.
+        daylyAverage = Number($('#daylyAverage'+ select +'').val());
+        if (!daylyAverage || daylyAverage < 0 ){
+            daylyAverage = 0;
+        }
+        $('#daylyAverage'+ select +'').val(Number(daylyAverage));
+
+    } 
     
-    
-    
-   
-    
-    
-    
-    
-    
-    
+
+
+
     
     // estado psicologico
     $('#psychologicalstate').on('click', function() {
@@ -74,6 +125,7 @@
         $('#psychologicalstate').val( values);  
         $('#_progress-wrappsy').css("width",percent+"%");
     });
+
 
     $('#physicalstate').on('keyup',function(){
         // capturar el valor ingresado en el input
