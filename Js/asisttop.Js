@@ -27,27 +27,27 @@
     // Al finalizar la edición del campo se ejecuta la funcion fecha actual.
     $(document).on('blur','#interviewDate', function(){fechaActual();});
 
-    // Funcion generica para calcular si se debe ejecutar la función de calculo de calculoconsumo, 
+    // Funcion generica para calcular si se debe ejecutar la función de calculo de calculoconsumo,
     // barra de progreso o solo dejar que el formulario ejecute el evento automático esperado
-    $(document).on('click keyup', function() {
-            var exit = document.activeElement.getAttribute("id");
-            if(!exit){
+    $('#form').on('click keyup', function() {
+            var input = document.activeElement.getAttribute("id");
+            if(!input){
                 return false;
             }
             var select = document.activeElement.parentElement.parentElement.getAttribute("id");
-            if (!exit && !select){
+            if (!input && !select){
                 return false;
-            }else if (exit != null && select != null ){
-                calculoconsumo(exit,select);
+            }else if (input != null && select != null ){
+                calculoconsumo(input,select);
             }else{
-            
-                if (exit.includes('state') == 1 )
+
+                if (input.includes('state') == 1 )
                 {
-                   if( $('#'+exit+'').val() == '' ){
-                    $('#'+exit+'').val(0);
+                   if( $('#'+input+'').val() == '' ){
+                    $('#'+input+'').val(0);
                    }
                    $(this).select();
-                   barrasprogreso('#'+exit+'')
+                   barrasprogreso('#'+input+'')
                 }
             }
 
@@ -67,10 +67,18 @@
         if (!input || !select){
             return false;
         }
+
         let i = 0;
         let total = 0;
-        // let und = $('#und'+ select +'').val();
-        // console.log(und);
+        totalConsumo = 0;
+
+
+        let und = document.getElementById('und'+ select +'');
+        if (und == null ){
+            und = '';
+        }else{
+            und = und.textContent;
+        }
 
         $('#'+ select +'').find(':input').each(function(){
             i = i + 1 ;
@@ -80,50 +88,89 @@
             values = Number($(tag).val());
             // Validación de valores.
             if (!values || values < 0 ){
-                values = 0; 
+                values = 0;
             }
             if ( values > 7 ){
                 values = 7;
             }
+
+            dailytotal =  values*daylyAverage;
+
             // Recalcular valores a formato número.
             $(tag).val(Number(values));
-            $(tagdaily).val(Number(values*daylyAverage));
+            $(tagdaily).val(Number(dailytotal));
+            $(tagdaily).attr("title" , 'Consumo semanal: '+dailytotal + ' '+und);
+
+
             // calcular totales.
             total = total + values;
+            totalConsumo = totalConsumo + dailytotal;
+
         });
 
         $('#MonthTotal'+ select +'').val(Number(total));
-        
-        
-        
 
-    } 
-    
+        if (und == '') {
+            $('#MonthTotal'+ select +'').attr("title" , 'Total días: '+total);
+            }else{
+            $('#MonthTotal'+ select +'').attr("title" , 'Consumió en total: '+totalConsumo + ' '+und);
+            }
+    }
+
     // Función para barras de progreso
     function barrasprogreso(id){
         // obtener el valor del id
         let values = $(id).val();
         let percent = 0;
         let maxvalue = 20;
+        let progressId = '_progress-wrap'+id.substring(1,4)+'';
+
 
         // validaciones previas a cálculos
         if (!values ){
-            values = 0;
-        }
-        else if(values>maxvalue){
-            values = maxvalue;
-        }
+                values = 0;
+            }
+            else if(values>maxvalue){
+                values = maxvalue;
+            }
 
         // Calculos
         if (values > 0 ){
-            percent = Math.round((values*100)/maxvalue);
-        }
+                percent = Math.round((values*100)/maxvalue);
+            }
+        
+        // Definir el nivel de peligro
+        if (percent <= 29){
+                typeBar = "bg-success";
+            } else if(percent>= 30 && percent<= 49){
+                typeBar = "bg-info";
+            }
+            else if(percent>= 30 && percent<= 69){
+                typeBar = "bg-warning";
+            }else{
+                typeBar = "bg-danger";
+            };
+
         // Actualizar el valor del input con el valor númerico asignado
         $(id).val( Number(values));
-        // Actualizar el width de la barra de progreso
-        $('#_progress-wrap'+id.substring(1,4)+'').css("width",percent+"%");
+
+        // Actualización barra de progreso
+        $('#'+progressId).css("width",percent+"%");
+        // document.getElementById(progressId).innerHTML=''+percent+'%';
+        document.getElementById(progressId).className+= "progress-bar"+ " "+typeBar ;
+
     }
 
+    // Limpiar inputs de formulario
+    $('#clearForm').click(()=>{
+        var elements = document.getElementsByTagName("input");
+        for (var i=0; i < elements.length; i++) {
+                console.log(elements[i]);
+                console.log(elements[i]).value;
+                elements[i].value = "";
+        }
+        $('#comment').val('');
+    });
 
 
 // guardar todos los datos.
@@ -161,11 +208,3 @@
 // Estado psicologico
 
 // Limpiar formulario
-
-    $('#clearForm').click(()=>{
-        var elements = document.getElementsByTagName("input");
-        for (var ii=0; ii < elements.length; ii++) {
-                elements[ii].value = ""; 
-        }
-    }); 
-

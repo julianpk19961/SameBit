@@ -1,18 +1,20 @@
 <?php 
 include './generales/header.php';
 ?>
+
 <header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
       <img src="../img/SameinLogo.png" height="40" class="logo">
     </a>
     <ul class="nav nav-pills">
-      <li class="nav-item"><a href="./dashboard.php" class="nav-link" aria-current="page">Inicio</a></li>
+    <li class="nav-item"><a href="../pages/dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
       <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Diagnósticos</a></li>
-      <li class="nav-item"><a href="../pages/asisttop.php" class="nav-link active">Asist-Top</a></li>
-      <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
+      <li class="nav-item"><a href="" class="nav-link">Asist-Top</a></li>
+      <li class="nav-item"><a href="http://localhost/samebit/" class="nav-link">Cerrar Sesión</a></li>
     </ul>
 </header>
+
   <div class="container" id="form">
     <section class="row">
       <div class="col-md-12">
@@ -129,7 +131,7 @@ include './generales/header.php';
               Dias Semana / Consumo</label>
             </div>
         <div class="form-group col-md-1">
-            <label class="text"><strong>Cnt</strong></label>
+            <label class="text"><strong>Días Consumo Total</strong></label>
         </div>   
     </section>
     <p></p>
@@ -139,10 +141,10 @@ include './generales/header.php';
             <label class="text mx-auto" ><strong>Alcohol</strong></label>
         </div>
         <div class="form-group col-md-1 ">
-            <input type="number" class="form-control input-sm" id="daylyAverageAlcohol"  placeholder="cnt" min="0" title="cantidad tragos diarios" required>  
+            <input type="number" class="form-control input-sm" id="daylyAverageAlcohol"  placeholder="Total" min="0" title="Cantidad tragos diarios" required>  
         </div>
         <div class="form-group col-md-1">
-           <label id="UndAlcohol" class="text"><strong>Tragos</strong></label>
+           <label id="undAlcohol" class="text"><strong>Tragos</strong></label>
         </div>
         <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week4Alcohol" title="Días de la semana" min="0" max="7" required>
@@ -169,7 +171,7 @@ include './generales/header.php';
             <input type="number" class="form-control" id="week1dailyAlcohol" title="Consumo" disabled>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalAlcohol" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="MonthTotalAlcohol" placeholder="Total" disabled>      
         </div>   
     </section>
 
@@ -180,11 +182,10 @@ include './generales/header.php';
             <label class="text"><strong>Marihuana</strong></label>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="daylyAverageWeed" placeholder="cnt" min="0" title="cantidad cripas diarias" required>  
+            <input type="number" class="form-control" id="daylyAverageWeed" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
         </div>
         <div class="form-group col-md-1">
-
-           <label for=""><strong>Cripas</strong></label>
+           <label id="undWeed"><strong>Cripas</strong></label>
         </div>
         <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week4Weed" title="Días de la semana" min="1" max="7" required>
@@ -211,35 +212,47 @@ include './generales/header.php';
             <input type="number" class="form-control" id="week1dailyWeed" title="Consumo" disabled>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalWeed" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="MonthTotalWeed" placeholder="Total" disabled>      
         </div>   
     </section>
     <p></p>
     <!--  PBC  -->
     <section class="row" id="Pbc">
         <div class="col-md-1">
-            <label class="text"><strong>Pasta Base</strong></label>
+            <label  class="text"><strong>Pasta Base</strong></label>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="daylyAveragePbc" placeholder="cnt" min="0" title="cantidad cripas diarias" required>  
+            <input type="number" class="form-control" id="daylyAveragePbc" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
         </div>
         <div class="form-group col-md-1">
-           <label ><strong>Papeletas</strong></label>
+           <label id="undPbc"><strong>Papeletas</strong></label>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week4Pbc" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week4dailyPbc" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week3Pbc" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week3dailyPbc" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week2Pbc" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week2dailyPbc" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week1Pbc" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalPbc" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="week1dailyPbc" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="MonthTotalPbc" placeholder="Total" disabled>      
         </div>   
     </section>
     <p></p>
@@ -249,25 +262,37 @@ include './generales/header.php';
             <label class="text"><strong>Estimulantes</strong></label>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="daylyAverageStimulants" placeholder="cnt" min="0" title="cantidad cripas diarias" required>  
+            <input type="number" class="form-control" id="daylyAverageStimulants" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
         </div>
         <div class="form-group col-md-1">
-           <label for=""><strong>Gramos</strong></label>
+           <label id="undStimulants" for=""><strong>Gramos</strong></label>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week4Stimulants" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week4dailyStimulants" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week3Stimulants" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week3dailyStimulants" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week2Stimulants" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week2dailyStimulants" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week1Stimulants" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalStimulants" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="week1dailyStimulants" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="MonthTotalStimulants" placeholder="Total" disabled>      
         </div>   
     </section>
     <p></p>
@@ -277,56 +302,119 @@ include './generales/header.php';
             <label class="text"><strong>Sedantes</strong></label>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="daylyAverageSedative" placeholder="cnt" min="0" title="cantidad cripas diarias" required>  
+            <input type="number" class="form-control" id="daylyAverageSedative" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
         </div>
         <div class="form-group col-md-1">
-           <label for=""><strong>Comprimidos</strong></label>
+           <label id="undSedative" for=""><strong>Comprimidos</strong></label>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week4Sedative" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week4dailySedative" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week3Sedative" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week3dailySedative" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week2Sedative" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week2dailySedative" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week1Sedative" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalSedative" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="week1dailySedative" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="MonthTotalSedative" placeholder="Total" disabled>      
         </div>   
     </section>
     <p></p>
      <!--  Sustancia 6  -->
      <section class="row" id="Opiates">
         <div class="col-md-1">
-            <label class="text"><strong>Opiáceos</strong></label>
+            <label  class="text"><strong>Opiáceos</strong></label>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="daylyAverageOpiates" placeholder="cnt" min="0" title="cantidad cripas diarias" required>  
+            <input type="number" class="form-control" id="daylyAverageOpiates" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
         </div>
         <div class="form-group col-md-1">
-           <label for=""><strong>Gramos</strong></label>
+           <label id="undOpiates"><strong>Gramos</strong></label>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week4Opiates" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week4dailyOpiates" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week3Opiates" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week3dailyOpiates" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week2Opiates" title="Días de la semana" min="1" max="7" required>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week2dailyOpiates" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
             <input type="number" class="form-control" id="week1Opiates" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalOpiates" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="week1dailyOpiates" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="MonthTotalOpiates" placeholder="Total" disabled>      
         </div>   
     </section>
-    
+    <p></p>
+     <!--  Sustancia 6  -->
+     <section class="row" id="Gambling">
+        <div class="col-md-1">
+            <label class="text"><strong>Ludopatia</strong></label>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="daylyAverageGambling" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
+        </div>
+        <div class="form-group col-md-1">
+           <label id="undGambling" contenteditable="true" ><strong>Modificar Unidad</strong></label>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week4Gambling" title="Días de la semana" min="1" max="7" required>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week4dailyGambling" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week3Gambling" title="Días de la semana" min="1" max="7" required>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week3dailyGambling" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week2Gambling" title="Días de la semana" min="1" max="7" required>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week2dailyGambling" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week1Gambling" title="Días de la semana" min="1" max="7" required>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="week1dailyGambling" title="Consumo" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control" id="MonthTotalGambling" placeholder="Total" disabled>      
+        </div>   
+    </section>
     <br>
     <hr>
     <!--  Sección 2  -->
@@ -431,7 +519,7 @@ include './generales/header.php';
         </div>
         <div class="form-group col-md-1">
             <input type="number" class="form-control" id="MonthTotalAbuse" placeholder="" disabled >
-            Cnt
+            Total
         </div>
     </section>
     <p></p>
@@ -471,16 +559,16 @@ include './generales/header.php';
         (Ansiedad, depresión y/o problemas emocionales)</p>
       </div>
       <div class="col-md-1">
-        <input class="form-control" type="text" id="psychologicalstate" placeholder="Valor (1-20)" size="10px" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
+        <input class="form-control" type="text" id="psychologicalstate" placeholder="(1 a 20)" size="10px" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
       </div>
       <div class="col-md-7">
-        <div class="progress">
-        <div class="progress-bar"   id="_progress-wrappsy" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"> 
+
+        <div class="progress" style="height: 20px;" style="height: 20px;">
+        <div class="progress-bar" id="_progress-wrappsy" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"> 
         </div>
        </div>
       </div>
     </section>
-    <p></p>
     <!-- encabezado de inputs -->
     <section class="row">
         <div class="col-md-1">
@@ -502,7 +590,7 @@ include './generales/header.php';
             <label class="text"><strong>Semana 1</strong></label>
             </div>
         <div class="form-group col-md-1">
-            <label class="text"><strong>Cnt</strong></label>
+            <label class="text"><strong>Total días</strong></label>
         </div>   
     </section>
     <p></p>
@@ -524,7 +612,7 @@ include './generales/header.php';
             <input type="number" class="form-control" id="week1Work" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalWork" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="MonthTotalWork" placeholder="Total" disabled>      
         </div>   
     </section>
     <p></p>
@@ -532,7 +620,7 @@ include './generales/header.php';
         <div class="col-md-3">
             <label class="text"><strong>Días asistidos al Colegio, Instituto, Universidad o Centro Capacitación</strong></label>
         </div>
-        <div class="form-group col-md-2">
+        <div lass="col-md-1" class="form-group col-md-2">
             <input type="number" class="form-control" id="week4School" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-2">
@@ -545,7 +633,7 @@ include './generales/header.php';
             <input type="number" class="form-control" id="week1School" title="Días de la semana" min="1" max="7" required>
         </div>
         <div class="form-group col-md-1">
-            <input type="number" class="form-control" id="MonthTotalSchool" placeholder="Cnt" disabled>      
+            <input type="number" class="form-control" id="MonthTotalSchool" placeholder="Total" disabled>      
         </div>   
     </section>
     <p></p>
@@ -555,11 +643,12 @@ include './generales/header.php';
         (Agrado de síntomas físicos u molestias por enfermedad)</p>
       </div>
       <div class="col-md-1">
-        <input class="form-control" type="text" id="physicalstate" size="10px" placeholder="Calificación(1-20)" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
+        <input class="form-control" type="text" id="physicalstate" size="10px" placeholder="(1 a 20)" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
       </div>
       <div class="col-md-7">
-        <div class="progress">
-          <div class="progress-bar"   id="_progress-wrapphy" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"> </div>
+      <p></p>
+        <div class="progress" style="height: 20px;">
+          <div class="progress-bar" id="_progress-wrapphy" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"> </div>
         </div>
       </div>
     </section>
@@ -604,11 +693,11 @@ include './generales/header.php';
         (Ej. Es capaz de disfrutar de la vida, consigue estar bien con su familia y el entorno)</p>
       </div>
       <div class="col-md-1">
-        <input class="form-control" type="text" id="housestate" size="10px" placeholder="Calificación(1-20)" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
+        <input class="form-control" type="text" id="housestate" size="10px" placeholder="(1 a 20)" title="calificación de 1 a 20 dónde 1 es muy malo y 20 excelente" >
       </div>
       <div class="col-md-7">
-        <label>1</label>
-        <div class="progress">
+        <p></p>
+        <div class="progress" style="height: 20px;">
           <div class="progress-bar"   id="_progress-wraphou" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
         </div>
       </div>
