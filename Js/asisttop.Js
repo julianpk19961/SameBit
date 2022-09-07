@@ -53,6 +53,185 @@
 
     });
 
+    $('#modBtn').on('click', function () {
+
+        // Vars
+        var modBtn  = $('#modBtn'),
+        modal   = $('#modal'),
+        close   = modal.find('.close'),
+        modContent = modal.find('.modal-content');
+
+        modal.css('display', 'block');
+        modContent.removeClass('modal-animated-out').addClass('modal-animated-in');
+        
+        chart();
+      })
+
+
+      function chart (){
+
+        const colors = [
+            "#fe8856","#fec339","#d9242b","#9062a0","#144377","#bafac5","#009975"
+        ];
+        
+        var names = [];
+
+        var array = $('#Drugs').find('.text');
+        // .each(function(){
+        //     // idSelect = $(this).attr('id');
+        //     // text = idSelect.textContent();
+
+        // });
+
+        console.log(array);
+        return false;
+
+
+        // var mycategories = [];
+
+        // var array = $("#Drugs").find('.row').each(function(){
+
+        //     mycategories.push(
+
+        //         ''+ {
+        //             color: "#f8a928",
+        //             data: [1,3,5,7],
+        //             stack: "MONEDA",
+        //             name: ''+ $(this).attr('id') +'',
+        //             yAxis: 0
+        //         }+''
+        //         )    
+        // 
+
+        // 
+        
+        var myseries1 = [
+            // Alcohol
+            {
+                color: colors[0],
+                data: [1,3,5,7],
+                stack: "MONEDA",
+                name: "Alcohol",
+                yAxis: 0
+            },
+            // Marihuana
+            {
+                color: colors[1],
+                data: [1, 2, 3, 4],
+                stack: "OPERACI\u00d3N",
+                name: "Marihuana",
+                yAxis: 1
+            },
+            // PBC
+            {
+                // linkedTo: ":previous",
+                color: colors[2],
+                data: [5, 10, 15, 20],
+                stack: "OPERACI\u00d3N",
+                name: "Pasta Base",
+                yAxis: 0
+              },
+            //   Estimulantes
+              {
+                color: colors[3],
+                data: [12, 24, 36, 48],
+                stack: "OPERACI\u00d3N",
+                name: "Estimulantes",
+                yAxis: 1
+              },
+            //   Sedantes
+              {
+                color: colors[4],
+                data: [12, 24, 36, 48],
+                stack: "OPERACI\u00d3N",
+                name: "Sedantes",
+                yAxis: 0
+              },
+            //   Opiaceos
+              {
+                color: colors[5],
+                data: [12, 24, 36, 48],
+                stack: "OPERACI\u00d3N",
+                name: "Opiáceos",
+                yAxis: 1
+              }
+              ,
+            //   Ludopatia
+              {
+                color: colors[6],
+                data: [12, 24, 36, 48],
+                stack: "OPERACI\u00d3N",
+                name: "Ludopatia",
+                yAxis: 1
+              }
+
+          ];
+
+
+          var mycategories = [
+            "Ingreso",
+            "Egreso",
+            "En tratamiento",
+            "Seguimiento"
+          ];
+          
+          var config = {
+            chart: {type: "bar"},
+            title: {text: "Evolución Consumo"},
+            xAxis: {categories: mycategories},
+
+            yAxis: [
+                { title: { text: "Consumo"}},// Primary yAxis 
+                {title: { text: "cobertura"},opposite: true} // Secondary yAxis
+            ],
+
+            tooltip: {
+              formatter: function () {
+                return (
+                  "<b>" +
+                  this.x +
+                  "</b><br/>" +
+                  this.series.name +
+                  ": " +
+                  this.y +
+                  "<br/>" +
+                  "Total: " +
+                  this.point.stackTotal
+                );
+              }
+            },
+
+            plotOptions: {
+              column: { stacking: "normal"}},
+            series: []
+
+           };
+
+          config.series = myseries1;
+
+          $("#chart1").highcharts(config);
+          $("#chart-container").bind("mousedown", function () {
+          $(this).toggleClass("modal");
+          $(".chart", this).highcharts().reflow();
+          });
+
+      } 
+
+
+
+
+      // close modal when click on close button or somewhere out the modal content 
+      $('#modCls').on('click', function(e) {
+
+        var modBtn  = $('#modBtn'),
+        modal   = $('#modal'),
+        close   = modal.find('.close'),
+        modContent = modal.find('.modal-content');
+
+        modal.css('display', 'none');
+        modContent.removeClass('modal-animated-in').addClass('modal-animated-out').delay(300);
+    });
+
     // Calcular la cantidad consumida al mes del paciente
     function calculoconsumo (input,select){
 
