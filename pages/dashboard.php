@@ -12,9 +12,6 @@ include './generales/header.php';
 
     <ul class="nav nav-pills">
       <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
-      <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
-      <li class="nav-item"><a href="../pages/asisttop.php" class="nav-link">Asist-Top</a></li>
       <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
     </ul>
 </nav>

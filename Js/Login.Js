@@ -10,6 +10,8 @@ $("#login").submit(function(e){
         'name': $("#login__username").val(),
         'pass': $("#login__password").val()
     };
+
+    
     // Ajax
      jQuery.ajax({
         // Credenciales y datos para ejeccion
@@ -18,6 +20,7 @@ $("#login").submit(function(e){
         data : parametros,
 
         success : function( response ) {
+            
             // Funcion para respuesta
             // Decomponer respuesta
             var data = JSON.parse(response);
@@ -25,6 +28,7 @@ $("#login").submit(function(e){
             var Mensaje = data.Mensaje;
             var Tipo = data.Tipo;
             var nombreusuario = data.nombreusuario;
+            var url =  data.url;
 
             // validaciones de sesión  
             if ( Tipo == 'success' && nombreusuario != '' ){
@@ -36,7 +40,7 @@ $("#login").submit(function(e){
                   })
                 //   Redirección
                 $('#loader').addClass('hidden');
-                location.href = 'http://localhost/samebit/pages/dashboard.php';
+                location.href = url;
             }
             else{
                 // Mensaje de error con respuesta obtenida.
