@@ -1,5 +1,6 @@
 // Funcion en documento para envio de formulario login
 $("#login").submit(function(e){
+
     // Prevenir eventos automáticos por defecto
 	e.preventDefault();
     $('#loader').removeClass('hidden');
@@ -20,7 +21,10 @@ $("#login").submit(function(e){
         data : parametros,
 
         success : function( response ) {
-            
+
+            // console.log(response);
+            // return false;
+
             // Funcion para respuesta
             // Decomponer respuesta
             var data = JSON.parse(response);
@@ -33,24 +37,18 @@ $("#login").submit(function(e){
             // validaciones de sesión  
             if ( Tipo == 'success' && nombreusuario != '' ){
                 // Mensaje de confirmación con respuesta obtenida.
-                Swal.fire({
-                    icon: Tipo,
-                    title: Titulo,
-                    text: Mensaje
-                  })
+                
                 //   Redirección
                 $('#loader').addClass('hidden');
                 location.href = url;
             }
-            else{
-                // Mensaje de error con respuesta obtenida.
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Usuario no encontrado',
-                    text: 'El usuario o contraseña no han sido encontrado',
-                    timer: 5000
-                  })
-            }
+            
+            Swal.fire({
+                icon: Tipo,
+                title: Titulo,
+                text: Mensaje,
+                timer: 5000
+              })
         },
         fail : function( err ) {
             // Alerta de error

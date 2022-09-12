@@ -19,7 +19,8 @@ function login()
         $pass0 = isset($_POST["pass"])?$_POST["pass"]:'';
         $md5pass = md5($pass0);
         $json = array();
-        $nombreUser = '';
+        $nombreUsuario = '';
+        $url = '';
 
         $sql = "SELECT Name0,Name1,LastName0,LastName1 FROM bitusers WHERE NickName = '".$name0."' AND Password0 = '".$md5pass."'";
         $result = mysqli_query($conn,$sql);
@@ -28,21 +29,38 @@ function login()
                 $row = $result->fetch_array(MYSQLI_NUM);
                 $userFullName=$row[0]." ".$row[2];
                 $_SESSION['usuario'] =  $userFullName;
-                $nombreUser = $_SESSION['usuario'];
-                $urlDashboard = "http://192.168.1.22/samebit/pages/dashboard.php";
-                // echo '<pre>';
-                // var_dump($SqlRow);
-                // exit();
-            }
-            
-        $message=['Title'=>'Éxito','Mensaje'=>'Conexión exitosa','Tipo'=>'success','nombreusuario'=>$nombreUser,'url'=>$urlDashboard];
+                // $urlDashboard = "http://localhost/samebit/pages/dashboard.php";
+
+                // Parametros Sweet Alert
+                $titulo = 'Éxito';
+                $subMensaje = 'Conexión Exitosa';
+                $tipo = 'success';
+                $nombreUsuario = $_SESSION['usuario'];
+                $url = "http://localhost/samebit/pages/dashboard.php";
+
+            }else{
+
+                $titulo = 'Error';
+                $subMensaje = 'Usuario no encontrado';
+                $tipo = 'error';
+                $nombreUsuario = '';
+                $url = '';
+            }       
+
     } catch (\Throwable $th) {
-        $message=['Title'=>'Error','Mensaje'=>'Conexión fallida','Tipo'=>'error'];
+
+                $titulo = 'Error';
+                $subMensaje = 'Usuario no encontrado';
+                $tipo = 'error';
+                $nombreUsuario = '';
+                $url = '';
     }
 
     
+    $message = [ 'Title'=> $titulo , 'Mensaje'=> $subMensaje, 'Tipo'=>$tipo ,'nombreusuario'=>$nombreUsuario,'url'=>$url  ];
     $message = json_encode($message);
     echo $message;
+
 }
 
 ?>
