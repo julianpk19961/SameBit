@@ -162,13 +162,13 @@ include './generales/header.php';
        <!-- ALCOHOL -->
       <section class="row" id="Alcohol">
           <div class="col-md-1">
-              <label class="text" ><strong>Alcohol</strong></label>
+              <label id="lblAlcohol" name="Alcohol" class="text" ><strong>Alcohol</strong></label>
           </div>
           <div class="form-group col-md-1 ">
               <input type="number" class="form-control input-sm" id="daylyAverageAlcohol"  placeholder="Total" min="0" title="Cantidad tragos diarios" required>  
           </div>
           <div class="form-group col-md-1">
-            <label id="undAlcohol" class="text"><strong>Tragos</strong></label>
+            <label id="undAlcohol" ><strong>Tragos</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="week4Alcohol" title="Días de la semana" min="0" max="7" required>
@@ -203,7 +203,7 @@ include './generales/header.php';
       <!--  WEED  -->
       <section class="row" id="Weed">
           <div class="col-md-1">
-              <label class="text"><strong>Marihuana</strong></label>
+              <label id="lblWeed" name="Marihuana" class="text"><strong>Marihuana</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="daylyAverageWeed" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
@@ -243,7 +243,7 @@ include './generales/header.php';
       <!--  PBC  -->
       <section class="row" id="Pbc">
           <div class="col-md-1">
-              <label  class="text"><strong>Pasta Base</strong></label>
+              <label  id="lblPbc" name="Pasta Base" class="text"><strong>Pasta Base</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="daylyAveragePbc" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
@@ -283,7 +283,7 @@ include './generales/header.php';
       <!--  Sustancia 4  -->
       <section class="row" id="Stimulants">
           <div class="col-md-1">
-              <label class="text"><strong>Estimulantes</strong></label>
+              <label id="lblStimulants" name="Estimulantes" class="text"><strong>Estimulantes</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="daylyAverageStimulants" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
@@ -323,7 +323,7 @@ include './generales/header.php';
       <!--  Sustancia 5  -->
       <section class="row" id="Sedative">
           <div class="col-md-1">
-              <label class="text"><strong>Sedantes</strong></label>
+              <label id="lblSedative" name="Sedantes" class="text"><strong>Sedantes</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="daylyAverageSedative" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
@@ -363,7 +363,7 @@ include './generales/header.php';
       <!--  Sustancia 6  -->
       <section class="row" id="Opiates">
           <div class="col-md-1">
-              <label  class="text"><strong>Opiáceos</strong></label>
+              <label  id="lblOpiates" name="Opiáceos" class="text"><strong>Opiáceos</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="daylyAverageOpiates" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
@@ -403,7 +403,7 @@ include './generales/header.php';
       <!--  Sustancia 6  -->
       <section class="row" id="Gambling">
           <div class="col-md-1">
-              <label class="text"><strong>Ludopatia</strong></label>
+              <label id="lblGambling" name="Ludopatia" class="text"><strong>Ludopatia</strong></label>
           </div>
           <div class="form-group col-md-1">
               <input type="number" class="form-control" id="daylyAverageGambling" placeholder="Total" min="0" title="Cantidad cripas diarias" required>  
