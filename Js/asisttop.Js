@@ -70,40 +70,32 @@
 
       function chart (){
 
+        var names = [];
+
+        var mycategories = [
+            "Ingreso",
+            "Egreso",
+            "En tratamiento",
+            "Seguimiento"
+          ];
+
         const colors = [
             "#fe8856","#fec339","#d9242b","#9062a0","#144377","#bafac5","#009975"
         ];
         
-        var names = [];
+        
 
-        var array = $('#Drugs').find('.text');
-        // .each(function(){
-        //     // idSelect = $(this).attr('id');
-        //     // text = idSelect.textContent();
+        var array = $('#Drugs').find('.text').each(function(){
 
-        // });
+            id = $(this).attr('id');
+            row = document.getElementById(id);
+            value = row.getAttribute('name');
+            names.push(value);
 
-        console.log(array);
+        });
+
+        console.log(names);
         return false;
-
-
-        // var mycategories = [];
-
-        // var array = $("#Drugs").find('.row').each(function(){
-
-        //     mycategories.push(
-
-        //         ''+ {
-        //             color: "#f8a928",
-        //             data: [1,3,5,7],
-        //             stack: "MONEDA",
-        //             name: ''+ $(this).attr('id') +'',
-        //             yAxis: 0
-        //         }+''
-        //         )    
-        // 
-
-        // 
         
         var myseries1 = [
             // Alcohol
@@ -167,14 +159,6 @@
 
           ];
 
-
-          var mycategories = [
-            "Ingreso",
-            "Egreso",
-            "En tratamiento",
-            "Seguimiento"
-          ];
-          
           var config = {
             chart: {type: "bar"},
             title: {text: "Evolución Consumo"},
