@@ -1,10 +1,12 @@
 <?php
+
 session_start();
 if(isset($_POST["Accion"])){
     if(isset($_POST["Accion"])=='login'){
         login();
     };
 };
+
 
 function login()
 {
@@ -27,12 +29,13 @@ function login()
                 $userFullName=$row[0]." ".$row[2];
                 $_SESSION['usuario'] =  $userFullName;
                 $nombreUser = $_SESSION['usuario'];
+                $urlDashboard = "http://192.168.1.22/samebit/pages/dashboard.php";
                 // echo '<pre>';
                 // var_dump($SqlRow);
                 // exit();
             }
             
-        $message=['Title'=>'Éxito','Mensaje'=>'Conexión exitosa','Tipo'=>'success','nombreusuario'=>$nombreUser];
+        $message=['Title'=>'Éxito','Mensaje'=>'Conexión exitosa','Tipo'=>'success','nombreusuario'=>$nombreUser,'url'=>$urlDashboard];
     } catch (\Throwable $th) {
         $message=['Title'=>'Error','Mensaje'=>'Conexión fallida','Tipo'=>'error'];
     }
