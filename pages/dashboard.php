@@ -19,7 +19,7 @@ include './generales/header.php';
 
 <body>
   
-<section class="h-50">
+<section id="priorit" class="h-50">
     <form id="bitregister" accept-charset="UTF-8">
       <div class="container py-1 h-50">
         <div class="row d-flex justify-content-center align-items-center h-50">

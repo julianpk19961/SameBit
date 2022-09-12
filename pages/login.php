@@ -1,8 +1,5 @@
 <?php 
 include './generales/header.php';
-// echo '<pre>';
-// var_dump('LLEGA');
-// exit();
 ?>
 <body class="align">
     <div class="grid">
@@ -39,6 +36,7 @@ include './generales/header.php';
             </div>
         </form>
     </div>
+    
     <svg xmlns="http://www.w3.org/2000/svg" class="icons">
 
         <symbol id="icon-lock" viewBox="0 0 1792 1792">
@@ -56,7 +54,6 @@ include './generales/header.php';
 
 </body>
 
-<div id="loader" class="lds-dual-ring hidden overlay"></div>
 
 </html>
 
