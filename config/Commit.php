@@ -8,7 +8,7 @@
     date_default_timezone_set('America/Bogota');
 
     // Captura Variables.
-    $PK_UUID = isset($_POST["pk_uuid"])?$_POST["pk_uuid"]:1;
+    $PK_UUID = isset($_POST["pk_uuid"])?$_POST["pk_uuid"]:'';
     $FK_EPS = isset($_POST["Eps"])?$_POST["Eps"]:''; 
     $FK_Ips = isset($_POST["Ips"])?$_POST["Ips"]:''; 
     $FK_Range = isset($_POST["EpsClassification"])?$_POST["EpsClassification"]:'';
@@ -30,10 +30,10 @@
     $username = $_SESSION['usuario'];
 
     // Crear-Actualizar registros.
-    if($PK_UUID == 1){
+    if( empty($PK_UUID ) ){
         // Crear el registro.
         $sql = "INSERT INTO Patients (KP_UUID,Dni,documentType,Name0,LastName0,Fk_Eps,FK_Range,createdUser,updatedUser) 
-                VALUES ( UUID(),'$dni','$documenttype','$name','$lastname','$FK_EPS','$FK_Range',' $username,'$username' ) ";
+                VALUES ( UUID(),'$dni','$documenttype','$name','$lastname','$FK_EPS','$FK_Range','$username','$username' ) ";
     }else{
         // Actualizar el registro.
         $sql = "UPDATE Patients SET Dni = '$dni' , documentType = '$documenttype' , Name0 = '$name', LastName0 = '$lastname', Fk_Eps = '$FK_EPS', FK_Range = '$FK_Range' , updatedUser = '$username' 
@@ -43,7 +43,7 @@
     // Salida por error.
     $result = mysqli_query($conn,$sql);
     if (!$result){
-        // error
+    //     error
         die('Query Error'. mysqli_error($conn));
     }
 
