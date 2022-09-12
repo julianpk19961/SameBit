@@ -3,10 +3,13 @@
 include './generales/header.php';
 ?>
 
+<meta name="viewport" content="width=device-width, initial-scale=1" http-equiv="content-type" content="text/html; charset=UTF-8">
 <header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
       <img src="../img/SameinLogo.png" height="40" class="logo">
     </a>
+
+
     <ul class="nav nav-pills">
       <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
       <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
@@ -14,8 +17,12 @@ include './generales/header.php';
       <li class="nav-item"><a href="../pages/asisttop.php" class="nav-link">Asist-Top</a></li>
       <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
     </ul>
+</nav>
 </header>
-  <section class="h-50">
+
+<body>
+  
+<section class="h-50">
     <form id="bitregister" accept-charset="UTF-8">
       <div class="container py-1 h-50">
         <div class="row d-flex justify-content-center align-items-center h-50">
@@ -256,8 +263,10 @@ include './generales/header.php';
           </div>
         </div>
       </div>
-    </div>
-  </form>
-</section>  
+      </div>
+    </form>
+  </section>  
+</body>
 
 <script src="../Js/dashboard.js"></script>
+</body>
