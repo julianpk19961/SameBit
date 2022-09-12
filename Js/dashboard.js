@@ -259,7 +259,7 @@ $(document).on('click','.bit-clean',function(){
 });
 
 // Accion: Oprimir el botón enviar
-$(document).on('click', '.bit-submmmit', function(event){
+$(priorit).on('click','.bit-submmmit', function(event){
     // confirmacion
     if(confirm('¿Está seguro de enviar el formulario')){
         
