@@ -2,11 +2,9 @@
 
 include 'config.php';
 
-$name = isset($_POST["name"]) ? $_POST["name"] : '';
-$reference = isset($_POST["reference"]) ? $_POST["reference"] : '';
-$observation = isset($_POST["observation"]) ? $_POST["observation"] : '';
+$PK_UUID = isset($_POST["PK_UUID"]) ? $_POST["PK_UUID"] : '';
 
-$sql = "INSERT INTO medicines (nombre,referencia,observacion) VALUES ( '$name','$reference','$observation') ";
+$sql = "DELETE FROM medicines WHERE PK_UUID =  ";
 
 
 $result = mysqli_query($conn, $sql);
