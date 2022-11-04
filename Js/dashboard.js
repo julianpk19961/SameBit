@@ -300,7 +300,7 @@ $(priorit).on('click','.bit-submmmit', function(event){
                 Observation: $('#Observation0').val()
             };
             
-            // event.preventDefault();
+            // event.preventDefault();postdata
             // console.log (postData);
             
 

@@ -3,7 +3,7 @@
 include 'config.php';
 $searchbox = $_POST['searchbox'];
 
-$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion FROM medicines WHERE nombre LIKE '%$searchbox%' OR referencia LIKE '%$searchbox%' ORDER BY id ASC";
+$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion,z_xOne FROM medicines WHERE nombre LIKE '%$searchbox%' OR referencia LIKE '%$searchbox%' ORDER BY id ASC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -20,7 +20,8 @@ if ($resultCount > 0) {
             'KP_UUID' => $row['KP_UUID'],
             'nombre' => $row['nombre'],
             'referencia' => $row['referencia'],
-            'observacion' => $row['observacion']
+            'observacion' => $row['observacion'],
+            'z_xOne' => $row['z_xOne']
         );
     }
     $jsonstring = json_encode($json);
