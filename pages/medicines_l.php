@@ -41,7 +41,7 @@ include './generales/header.php';
     <div class="d-inline-flex flex-row col-12 mt-2">
         <div class="rows">
             <div class="col-auto mx-1">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-record" data-bs-whatever="@fat">Nuevo</button>
+                <button id="new-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-record" data-bs-whatever="@fat">Nuevo</button>
             </div>
             <!-- {{$rows->withQueryString()->links()}} -->
         </div>
@@ -58,20 +58,39 @@ include './generales/header.php';
 
 <div class="col-xl-12 mt-1 mb-2">
     <div class="table-responsive">
-        <table class="table table-striped mb-1">
+        <table class="table table-striped mb-1" id="">
             <thead>
                 <tr class="table text-light bg-primary">
-                    <th hidden></th>
+                    <th class="text-center"> Estado </th>
                     <th> Nombre </th>
                     <th colspan="2"> Referencia </th>
                     <th colspan="3"> Observación </th>
                     <th class="text-center"> Opciones </th>
-
-                    <!-- <x-layouts.tables.columns :columns="$columns" /> -->
                 </tr>
             </thead>
             <tbody id="dataMedicines">
             </tbody>
+            <div class="medicine_id modal fade" id="modal-delete-" tabindex="-1" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form id="destroyMedicine" method="POST">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="">Eliminar</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input id="modaldel_pk_uuid" hidden value="">
+                                <input id="modaldel_z_xone" hidden value="">
+                                <p>¿Está seguro de eliminar: registro ? <br> Esta acción no se puede revertir</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </table>
     </div>
 
@@ -93,15 +112,16 @@ include './generales/header.php';
                             <input type="text" class="form-control" id="reference" name="reference">
                         </div>
                         <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Observación:</label>
+                            <label for="observation" class="col-form-label">Observación:</label>
                             <textarea class="form-control" name="observation" id="observation" rows="10"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="stored">Guardar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <div id="kardex">
+                    </div>
+                    <div class="save-buttons modal-footer">
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>
