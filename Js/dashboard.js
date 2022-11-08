@@ -151,6 +151,7 @@ function cargar_eps(){
             });
             // Dibujar opciones en eps 
             $('#Eps').html(template);
+            
         }
     });
 }

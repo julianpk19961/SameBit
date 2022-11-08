@@ -18,7 +18,6 @@ $('#searchbox').on('change', function () {
 
 getTable = (searchbox) => {
     template = '';
-    // console.log(searchbox);
     $.ajax({
         // script para verificación de cc existentes
         url: '../config/medicines.php',
@@ -69,12 +68,12 @@ getTable = (searchbox) => {
 $('#new-item').on('click', function (e) {
 
     selector = document.querySelector('.save-buttons').innerHTML = `<button type="submit" class="btn btn-primary" id="stored">Guardar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
-    $('#observation').val(observation).attr('rows','1');
+    $('#observation').val(observation).attr('rows', '1');
     $('#kardex').html('');
 
     $('#name').val('');
     $('#reference').val('');
-    $('#observation').val('').attr('rows','10');
+    $('#observation').val('').attr('rows', '10');
 
 
 
@@ -126,7 +125,6 @@ stored = (postdata) => {
 
     $.post('../config/medicinestored.php', postdata, function (response) {
         if (response.includes('Error')) {
-            // console.log(response);
             return false
         }
         $('#modal-record').modal('hide');
@@ -206,44 +204,143 @@ $(document).on('click', '.show-element', function (e) {
     reference = dataRecord[4].innerHTML;
     observation = dataRecord[5].innerHTML;
 
-    template += `
-    <input hidden>${dataRecord[0].innerHTML}</input>
-    <input hidden>${dataRecord[1].innerHTML}</input>`;
+    let postdata = { pk_uuid: pk_uuid };
 
-    // document.getElementById('name').innerHTML = Med_name;
     $('#name').val(Med_name);
     $('#reference').val(reference);
-    $('#observation').val(observation).attr('rows','1');
-    // $('#observation').attr('rows','1');
-    selector = document.querySelector('.save-buttons').innerHTML = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
+    $('#name').val(Med_name);
+    $('#pk_uuid').val(pk_uuid);
+    selector = document.querySelector('.save-buttons').innerHTML = ``;
 
     template = '';
     template = `
-    <table class="table table-striped mb-1">
-        <thead>
-            <tr class="table text-light align-middle border bg-primary">
-                <th class="text-center"> Estado </th>
-                <th> Fecha </th>
-                <th> Tipo </th>
-                <th> Categoria </th>
-                <th class="text-center"> Saldo Anterior</th>
-                <th class="text-center"> Cantidad </th>
-                <th class="text-center"> Saldo Actual</th>
-            </tr>
-        </thead>
-        <tbody id="dataMedicines">
-
-        </tbody>
-    </table>`;
-
+        <table class="table table-sm table-striped mb-1">
+            <thead>
+                <tr class="table text-light border bg-primary">
+                    <th>Fecha</th>
+                    <th colspan="3">Nombre Paciente-Factura</th>
+                    <th>Clase Movimiento</th>
+                    <th>Cantidad</th>
+                    <th>Saldo Final</th>
+                </tr>
+            </thead>
+            <tbody id="kardexMov"></tbody>
+        </table>
+        <div class="container border p-1 my-1" id="kardexAdd">
+        </div>`;
     $('#kardex').html(template);
+    
+    templatebody = '';
+    templateoption = '<option value="">Seleccion categoría</option>';
+    $.post('../config/getkardexmov.php', postdata, function (response) {
 
+        if (response == 'error') {
+            templatebody += `<tr> <td colspan='9'><strong>Aún no se registran movimientos</strong></td></tr>`
+        } else {
+
+            let data = JSON.parse(response);
+
+            data[0].forEach(row => {
+                templateoption +=
+                    `<option value="${row.KP_UUID}" title="${row.name} - ${row.abbr}">${row.name}</option>`
+            });
+
+            data[1].forEach(row => {
+                templatebody +=
+                    `<tr class="border">
+                <td>${nueva = row.zCrea.split(" ")[0].split("-").reverse().join("-")} </td>
+                <td colspan="3">${row.patient} </td>
+                <td> ${row.category} </td>
+                <td class="text-center"> ${row.quantity} </td>
+                <td colspan="1" class="text-center"> ${row.finalQuantity} </td>
+                </tr>`
+            });
+
+            $('#finalquantity').val(data[2]['SALDO']);
+        }
+
+        $('#kardexMov').html(templatebody);
+
+        templateKardex = `
+        <form id="newkardexmov" clas="row g-4" method="POST">
+            <div class="row p-1">
+                <div class="form-group col-3">
+                    <label for="categorymov">Categoría</label>
+                    <select class="form-select" id="categorymov" aria-label="categorymov">
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="patientmov">Paciente</label>
+                    <input type="text" class="form-control" id="patientmov" placeholder="Persona Retira">
+                </div>
+                <div class="form-group col-3">
+                    <label for="bill">Factura</label>
+                    <input type="text" class="form-control" id="bill" placeholder="Nro Factura">
+                </div>
+                <div class="form-group col-2">
+                    <label for="quantity">Cantidad</label>
+                    <input type="number" class="form-control" id="quantity" placeholder="Cantidad">
+                </div>
+            </div>
+            <div class="m-2 float-end">
+                <button type="submit" class="btn btn-success">+</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </form>`;
+
+        $('#kardexAdd').html(templateKardex);
+        $('#categorymov').html(templateoption);
+
+    });
+
+});
+
+
+$(document).on('submit', '#newkardexmov', (e) => {
+
+    e.preventDefault();
+    let emptyfields = '';
+
+    category = $('#categorymov').val();
+    patient = $('#patientmov').val();
+    bill = $('#bill').val();
+    quantity = $('#quantity').val();
+
+    if (category.length == 0) {
+        emptyfields += 'Categoria, '
+    }if (patient.length == 0 && bill.length == 0) {
+        emptyfields += 'Paciente y Factura, '
+    }if (quantity.length == 0) {
+        emptyfields += 'Cantidad'
+    }
+
+    if (emptyfields) {
+        alert ('Los siguientes campos están vacios: ' + emptyfields );
+        e.preventDefault();
+        return false;
+    }
+
+    pk_uuid = $('#pk_uuid').val();
+    finalquantity = $('#finalquantity').val();
+
+    let postdata = {
+        pk_uuid : pk_uuid,
+        category : category,
+        patient : patient,
+        bill :bill , 
+        quantity:quantity,
+        finalquantity:finalquantity
+
+    };
+
+
+    $.post('../config/newkardexmov.php',postdata,(response)=>{
+        console.log(response)
+    });
 
 });
 
 function getDataCells(table, row) {
-
     let dataRecord = table.rows[row].getElementsByTagName('td');
     return dataRecord;
-
 }

@@ -95,7 +95,7 @@ include './generales/header.php';
     </div>
 
     <div class="modal fade" id="modal-record" tabindex="-1" aria-labelledby="modal-record" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-white text-center bg-primary" id="modal-head">
                     <h5 class="modal-title col">Nuevo Medicamento</h5>
@@ -103,6 +103,9 @@ include './generales/header.php';
                 </div>
                 <form id="medicineStored">
                     <div class="modal-body">
+                        <input type="text" class="form-control" id="pk_uuid" name="pk_uuid" hidden>
+                        <input type="text" class="form-control" id="finalquantity" name="finalquantity" hidden>
+
                         <div class="mb-3">
                             <label for="name" class="col-form-label">Nombre:</label>
                             <input type="text" class="form-control" id="name" name="name">
@@ -113,15 +116,15 @@ include './generales/header.php';
                         </div>
                         <div class="mb-3">
                             <label for="observation" class="col-form-label">Observación:</label>
-                            <textarea class="form-control" name="observation" id="observation" rows="10"></textarea>
+                            <textarea class="form-control" name="   " id="observation" rows="10"></textarea>
                         </div>
-                    </div>
-                    <div id="kardex">
                     </div>
                     <div class="save-buttons modal-footer">
                     </div>
                 </form>
-                
+                <div class="container-sm" id="kardex">
+                    
+                </div>
             </div>
         </div>
     </div>
