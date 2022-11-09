@@ -1,9 +1,8 @@
 <?php
 
 include 'config.php';
-$searchbox = $_POST['searchbox'];
 
-$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion,z_xOne FROM medicines WHERE nombre LIKE '%$searchbox%' OR referencia LIKE '%$searchbox%' ORDER BY id ASC";
+$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion,z_xOne FROM medicines ORDER BY id ASC";
 
 $result = mysqli_query($conn, $sql);
 
