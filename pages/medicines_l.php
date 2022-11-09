@@ -19,7 +19,6 @@ include './generales/header.php';
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="./medicines_l.php">Medicamentos</a></li>
-                    <li><a class="dropdown-item" href="#">Movimientos</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -33,38 +32,24 @@ include './generales/header.php';
 </header>
 
 <div id="tittleModule" class="row border border-end">
-    <h1 class="text-center align-self-center">GESTIÓN - PRODUCTOS </h1>
+    <h1 class="text-center align-self-center">GESTIÓN - MEDICAMENTOS </h1>
 </div>
 
-<div class="row m-1">
-
-    <div class="d-inline-flex flex-row col-12 mt-2">
-        <div class="rows">
-            <div class="col-auto mx-1">
-                <button id="new-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-record" data-bs-whatever="@fat">Nuevo</button>
-            </div>
-            <!-- {{$rows->withQueryString()->links()}} -->
-        </div>
-
-        <div class="col-4 ms-auto">
-            <input type="text" class="form-control" name="searchbox" id="searchbox" placeholder="Busqueda por nombre y código" value="">
-        </div>
-        <div class="col-auto mx-1">
-            <button id="searchbtn" type="submit" class="btn btn-md btn-primary"> Buscar </button>
-        </div>
-    </div>
-
-</div>
 
 <div class="col-xl-12 mt-1 mb-2">
-    <div class="table-responsive">
-        <table class="table table-striped mb-1" id="">
+    <div class="table table-striped table-bordered">
+        <div class="col-auto mx-1">
+            <button id="new-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-record" data-bs-whatever="@fat">Nuevo</button>
+        </div>
+        <table class="table display table-striped mb-1" id="medical_tbl">
             <thead>
                 <tr class="table text-light bg-primary">
+                    <th hidden></th>
+                    <th hidden></th>
                     <th class="text-center"> Estado </th>
                     <th> Nombre </th>
-                    <th colspan="2"> Referencia </th>
-                    <th colspan="3"> Observación </th>
+                    <th> Referencia </th>
+                    <th> Observación </th>
                     <th class="text-center"> Opciones </th>
                 </tr>
             </thead>
@@ -104,7 +89,6 @@ include './generales/header.php';
                 <form id="medicineStored">
                     <div class="modal-body">
                         <input type="text" class="form-control" id="pk_uuid" name="pk_uuid" hidden>
-                        <input type="text" class="form-control" id="finalquantity" name="finalquantity" hidden>
 
                         <div class="mb-3">
                             <label for="name" class="col-form-label">Nombre:</label>
@@ -129,5 +113,4 @@ include './generales/header.php';
         </div>
     </div>
 </div>
-
 <script src="../Js/medicines.js"></script>

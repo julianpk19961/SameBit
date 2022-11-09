@@ -1,23 +1,39 @@
 <?php
 
-include 'config.php';
-$medicine = isset($_POST["pk_uuid"])?$_POST["pk_uuid"]:'';
-$patient = isset($_POST["patient"])?$_POST["patient"]:'';
-$bill = isset($_POST["bill"])?$_POST["bill"]:'';
-$category = isset($_POST["category"])?$_POST["category"]:'';
-$quantity = isset($_POST["quantity"])?$_POST["quantity"]:'';
-$finalquantity = isset($_POST["finalquantity"])?$_POST["finalquantity"]:'';
+use LDAP\Result;
 
+include 'config.php';
+$medicine = isset($_POST["pk_uuid"]) ? $_POST["pk_uuid"] : '';
+$patient = isset($_POST["patient"]) ? $_POST["patient"] : '';
+$bill = isset($_POST["bill"]) ? $_POST["bill"] : '';
+$category = isset($_POST["category"]) ? $_POST["category"] : '';
+$quantity = isset($_POST["quantity"]) ? $_POST["quantity"] : '';
+
+
+
+
+$sql = "SELECT MAX(finalQuantity) AS SALDO FROM kardex WHERE FK_Medicine = '$medicine' AND zCrea IN (SELECT MAX(zCrea) FROM kardex WHERE FK_Medicine = '$medicine');";
+$result = mysqli_query($conn, $sql);
+$result = mysqli_fetch_assoc($result);
+$saldoinicial = $result['SALDO'] == '' ? 0: $result['SALDO'] ;
 
 $sql = "SELECT `type` FROM  movcategories WHERE KP_UUID='$category'";
 $result = mysqli_query($conn, $sql);
 if (!$result) {
     $jsoncategories = ('Query Error' . mysqli_error($conn));
 }
-
 $resultCount = mysqli_num_rows($result);
-$result = mysqli_fetch_array($result);
+$result = mysqli_fetch_assoc($result);
+$type = $result['type'];
+$operator = ($type == 1 ? '+' : '-');
+$total = eval('return ' . $saldoinicial . $operator . $quantity . ';');
 
+$sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity) VALUES ( '$medicine','$patient','$category','$type','$saldoinicial',$quantity,$total) ";
+$result = mysqli_query($conn, $sql);
 
-echo json_encode($result);
-
+if (!$result) {
+    $result = ('Query Error' . mysqli_error($conn));
+} else {
+    $result = 'success';
+}
+echo $result;
