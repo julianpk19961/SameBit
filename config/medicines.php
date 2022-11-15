@@ -2,7 +2,7 @@
 
 include 'config.php';
 
-$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion,z_xOne FROM medicines ORDER BY id ASC";
+$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion,z_xOne FROM medicines ORDER BY nombre  ASC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -14,7 +14,7 @@ $resultCount = mysqli_num_rows($result);
 
 if ($resultCount > 0) {
     $json = array();
-    while ($row = mysqli_fetch_array($result)) {
+    while ( $row = mysqli_fetch_array($result)) {
         $json[] = array(
             'KP_UUID' => $row['KP_UUID'],
             'nombre' => $row['nombre'],

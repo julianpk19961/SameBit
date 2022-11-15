@@ -15,7 +15,8 @@ $quantity = isset($_POST["quantity"]) ? $_POST["quantity"] : '';
 $sql = "SELECT MAX(finalQuantity) AS SALDO FROM kardex WHERE FK_Medicine = '$medicine' AND zCrea IN (SELECT MAX(zCrea) FROM kardex WHERE FK_Medicine = '$medicine');";
 $result = mysqli_query($conn, $sql);
 $result = mysqli_fetch_assoc($result);
-$saldoinicial = $result['SALDO'] == '' ? 0: $result['SALDO'] ;
+$saldoinicial = $result['SALDO'] == '' ? 0 : $result['SALDO'];
+
 
 $sql = "SELECT `type` FROM  movcategories WHERE KP_UUID='$category'";
 $result = mysqli_query($conn, $sql);
@@ -28,12 +29,22 @@ $type = $result['type'];
 $operator = ($type == 1 ? '+' : '-');
 $total = eval('return ' . $saldoinicial . $operator . $quantity . ';');
 
-$sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity) VALUES ( '$medicine','$patient','$category','$type','$saldoinicial',$quantity,$total) ";
-$result = mysqli_query($conn, $sql);
+echo $total;
 
-if (!$result) {
-    $result = ('Query Error' . mysqli_error($conn));
-} else {
-    $result = 'success';
+if ($total < 0) {
+    $result = 'error-la cantidad supera la existencia en el kardex';
 }
+
+if ($total >= 0) {
+    $sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity,bill) VALUES ( '$medicine','$patient','$category','$type',$saldoinicial,$quantity,$total,$bill) ";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        $result = ('Query error' . mysqli_error($conn));
+    } else {
+        $result = 'success';
+    }
+}
+
+
 echo $result;

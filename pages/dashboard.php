@@ -11,7 +11,8 @@ include './generales/header.php';
 
   <nav>
     <ul class="nav nav-pills">
-      <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
+      <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Prioritaria</a></li>
+      <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Farmacia">
           Farmacia
