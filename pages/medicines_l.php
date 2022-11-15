@@ -12,7 +12,8 @@ include './generales/header.php';
 
     <nav>
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Prioritaria</a></li>
+            <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Farmacia">
                     Farmacia
@@ -37,10 +38,10 @@ include './generales/header.php';
 
 
 <div class="col-xl-12 mt-1 mb-2">
-    <div class="table table-striped table-bordered">
-        <div class="col-auto mx-1">
+    <div class="table table-striped table-bordered" id="medicaldiv">
+        <!-- <div class="col-auto mx-1">
             <button id="new-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-record" data-bs-whatever="@fat">Nuevo</button>
-        </div>
+        </div> -->
         <table class="table display table-striped mb-1" id="medical_tbl">
             <thead>
                 <tr class="table text-light bg-primary">
@@ -56,7 +57,7 @@ include './generales/header.php';
             <tbody id="dataMedicines">
             </tbody>
             <div class="medicine_id modal fade" id="modal-delete-" tabindex="-1" aria-labelledby="" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog bg-light rounded-3">
                     <form id="destroyMedicine" method="POST">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -70,7 +71,7 @@ include './generales/header.php';
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-trash2-fill"></i></button>
                             </div>
                         </div>
                     </form>
@@ -103,7 +104,7 @@ include './generales/header.php';
                             <textarea class="form-control" name="   " id="observation" rows="10"></textarea>
                         </div>
                     </div>
-                    <div class="save-buttons modal-footer">
+                    <div class="modal-footer" id="save-buttons">
                     </div>
                 </form>
                 <div class="container-sm" id="kardex">
@@ -113,4 +114,11 @@ include './generales/header.php';
         </div>
     </div>
 </div>
+
 <script src="../Js/medicines.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>

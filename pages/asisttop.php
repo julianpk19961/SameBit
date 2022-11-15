@@ -7,12 +7,22 @@ include './generales/header.php';
       <img src="../img/SameinLogo.png" height="40" class="logo">
     </a>
     <ul class="nav nav-pills">
-    <li class="nav-item"><a href="../pages/dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
-      <li class="nav-item"><a href="../pages/pacients.php" class="nav-link">Pacientes</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Diagnosticos</a></li>
-      <li class="nav-item"><a href="" class="nav-link">Asist-Top</a></li>
-      <li class="nav-item"><a href="http://localhost/samebit/" class="nav-link">Cerrar Sesión</a></li>
-    </ul>
+            <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Prioritaria</a></li>
+            <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Farmacia">
+                    Farmacia
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="./medicines_l.php">Medicamentos</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Reportes</a></li>
+                </ul>
+            </li>
+            <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
+        </ul>
 </header>
 
   <div class="container" id="form">

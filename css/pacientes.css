@@ -1,7 +1,8 @@
-/* * {
-    font-weight: 300;
+/* .form-select {
+    font-weight: 500;
 }; */
 
-.form-select {
-    font-weight: 300;
-};
+/*
+.table>:not(caption)>*>* {
+    background-color: '';
+} */

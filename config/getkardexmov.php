@@ -30,7 +30,7 @@ array_push($responseArray, $jsoncategories);
 
 $resultCount = '';
 
-$sql = "SELECT k.zCrea,mc.`name` AS category,k.FK_Patient AS patient,k.`type`,k.quantity,k.finalQuantity 
+$sql = "SELECT k.zCrea,mc.`name` AS category,k.FK_Patient AS patient,k.`type`,k.quantity,k.finalQuantity ,k.bill 
 FROM kardex AS k 
 INNER JOIN movcategories AS mc ON mc.KP_UUID = k.FK_Category
 WHERE k.FK_Medicine = '$pk_uuid'
@@ -50,6 +50,7 @@ if ($resultCount > 0) {
             'zCrea' => $row['zCrea'],
             'category' => $row['category'],
             'patient' => $row['patient'],
+            'bill' => $row['bill'],
             'type' => $row['type'],
             'quantity' => $row['quantity'],
             'finalQuantity' => $row['finalQuantity']
@@ -63,16 +64,4 @@ if ($resultCount > 0) {
 
 array_push($responseArray, $jsonkardex);
 
-
-// // $resultCount = '';
-// $sql = "SELECT MAX(finalQuantity) AS SALDO FROM kardex WHERE FK_Medicine = '$pk_uuid' AND zCrea IN (SELECT MAX(zCrea) FROM kardex WHERE FK_Medicine = '$pk_uuid');";
-
-// $result = mysqli_query($conn, $sql);
-// $jsonFinalQuantity = mysqli_fetch_array($result);
-
-// array_push($responseArray, $jsonFinalQuantity);
-
 echo json_encode($responseArray);
-
-
-// echo $jsonstring;
