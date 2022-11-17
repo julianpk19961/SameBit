@@ -12,8 +12,8 @@ include './generales/header.php';
 
     <nav>
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="./dashboard.php" class="nav-link " aria-current="page">Samebit</a></li>
-            <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li>
+            <!-- <li class="nav-item"><a href="./dashboard.php" class="nav-link " aria-current="page">Samebit</a></li>
+            <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li> -->
             <li class="nav-item"><a href="./medicines_l.php" class="nav-link active" aria-current="page">Samecomed</a></li>
             <li class="nav-item"><a href="../config/logout.php" class="nav-link link-secondary">Cerrar Sesión</a></li>
         </ul>

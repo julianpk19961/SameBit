@@ -1,5 +1,14 @@
 $(document).ready(function () {
-    getTable();
+    var user = [];
+    var user = JSON.parse(localStorage.getItem('user'));
+
+    if (user == null) {
+        location.href = 'http://192.168.1.22/samebit/pages/login.php';
+        return false;
+    } else {
+        getTable();
+    }
+
 });
 
 
@@ -322,12 +331,26 @@ function pagination(table, row, columns_print, varTitle) {
 }
 
 $("#medicaldiv").on("click", "#new-item", function (e) {
-    selector = document.querySelector('#save-buttons');
-    selector.innerHTML = `<button type="submit" class="btn btn-primary" id="stored">Guardar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
-    $('#observation').val('').attr('rows', '10');
-    $('#medicineStored').trigger('reset');
-    $('#kardex').html('');
-    $('#modal-head h5').html('Nuevo  Medicamento');
+
+    var user = JSON.parse(JSON.parse(localStorage.getItem('user')));
+    if (user.privilegeSet != 'quimico' && user.privilegeSet != 'root') {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Usuario no autorizado para realizar este proceso. ',
+        });
+
+    } else {
+        selector = document.querySelector('#save-buttons');
+        selector.innerHTML = `<button type="submit" class="btn btn-primary" id="stored">Guardar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
+        $('#observation').val('').attr('rows', '10');
+        $('#medicineStored').trigger('reset');
+        $('#kardex').html('');
+        $('#modal-head h5').html('Nuevo  Medicamento');
+    }
+
+
 });
 
 

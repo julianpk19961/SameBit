@@ -1,3 +1,10 @@
+var user = [];
+var user = JSON.parse(localStorage.getItem('user'));
+
+if (user == null) {
+    location.href = 'http://192.168.1.22/samebit/pages/login.php';
+}
+
 //VALIDACIÓN: LA FECHA DEL FORMATO SIEMPRE SE LLENE CON EL VALOR DE LA FECHA ACTUAL
     // Se inactiva campo por propuesta a equipo de trabajo
     // Capturar fecha
