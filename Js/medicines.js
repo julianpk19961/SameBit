@@ -45,9 +45,12 @@ getTable = () => {
                 });
             }
             $('#dataMedicines').html(template);
-            columns_print = [2, 3, 4, 5];
-            varTitle = 'Listado Medicamentos';
-            pagination('#medical_tbl', '15', columns_print, varTitle);
+            if (response != 'error') {
+                columns_print = [2, 3, 4, 5];
+                varTitle = 'Listado Medicamentos';
+                pagination('#medical_tbl', '15', columns_print, varTitle);
+            }
+
         },
     });
 }
@@ -450,10 +453,11 @@ function getkardexRow(postdata) {
             $('#kardexAdd').html(templateKardex);
             $('#categorymov').html(templateoption);
 
-            columns_print = ':visible';
-            varTitle = 'Movimientos-' + $('#name').val();
-            pagination('#kardex_tbl', '8', columns_print, varTitle);
-
+            if (data[1] != 'error') {
+                columns_print = ':visible';
+                varTitle = 'Movimientos-' + $('#name').val();
+                pagination('#kardex_tbl', '8', columns_print, varTitle);
+            }
         };
         return;
     });
