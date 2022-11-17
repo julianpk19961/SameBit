@@ -1,3 +1,11 @@
+
+var user = [];
+var user = JSON.parse(localStorage.getItem('user'));
+
+if (user == null) {
+    location.href = 'http://192.168.1.22/samebit/pages/login.php';
+}
+
 //Ocultar barras de busqueda e historico
 $('#search-patients').hide();
 $('#history-patient').hide();
@@ -138,7 +146,7 @@ function atentionswitch() {
 $(document).ready(atentionswitch);
 
 
-// Lllamado a la funcion de inactivar o activar casillas de atencion depndiendo del contenido de el input aprobado
+// Llamado a la funcion de inactivar o activar casillas de atencion depndiendo del contenido de el input aprobado
 $(document).on('change', '#approved', function () {
     atentionswitch();
 });
