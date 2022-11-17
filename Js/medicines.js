@@ -35,7 +35,7 @@ getTable = () => {
                                 <button class="show-element btn btn-primary btn-sm col-sm-5 text-white">
                                     Ver
                                 </button>
-                                <button class="drop-element btn btn-${(medicine.z_xOne == 1 ? 'danger' : 'warning')} btn-sm col-sm-5 text-white" data-bs-toggle="modal" data-bs-target="#modal-delete-" type="button" ">
+                                <button class="drop-element btn btn-${(medicine.z_xOne == 1 ? 'danger' : 'success')} btn-sm col-sm-5 text-white" data-bs-toggle="modal" data-bs-target="#modal-delete-" type="button" ">
                                 ${(medicine.z_xOne == 1 ? 'Eliminar' : 'Activar')} 
                                 </button>
                             </div>
@@ -270,6 +270,7 @@ function pagination(table, row, columns_print, varTitle) {
                             height: 40
                         });
 
+                        // resize td width
                         doc.content[2].table.widths = Array(doc.content[2].table.body[0].length + 1).join('*').split('');
 
                         tablerows = doc.content[2].table.body;
