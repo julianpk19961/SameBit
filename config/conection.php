@@ -29,14 +29,14 @@ function login()
                 $row = $result->fetch_array(MYSQLI_NUM);
                 $userFullName=$row[0]." ".$row[2];
                 $_SESSION['usuario'] =  $userFullName;
-                // $urlDashboard = "http://localhost/samebit/pages/dashboard.php";
+                // $urlDashboard = "http://192.168.1.22/samebit/pages/dashboard.php";
 
                 // Parametros Sweet Alert
                 $titulo = 'Éxito';
                 $subMensaje = 'Conexión Exitosa';
                 $tipo = 'success';
                 $nombreUsuario = $_SESSION['usuario'];
-                $url = "http://localhost/samebit/pages/dashboard.php";
+                $url = "http://192.168.1.22/samebit/pages/dashboard.php";
 
             }else{
 

@@ -22,14 +22,14 @@ include './generales/header.php';
 <body>
 
   <section id="priorit" class="h-50">
-    <form id="bitregister" accept-charset="UTF-8">
+    <form id="bitregister" accept-charset="UTF-8" method="POST">
       <div class="container py-1 h-50">
         <div class="row d-flex justify-content-center align-items-center h-50">
           <div class="col">
             <div class="card card-registration my-4">
               <div class="row g-0">
-                <div class="col-xl-6">
-                  <div class="card-body p-md-5 text-black">
+                <div class="col-sm-6">
+                  <div class="card-body pt-5 text-black">
                     <h4 class="mb-5 text-uppercase">BIENVENIDO <?php echo $_SESSION['usuario']; ?>,<br> INGRESE LOS DATOS DEL PACIENTE
                       <hr>
                     </h4>
@@ -218,22 +218,23 @@ include './generales/header.php';
 
                     <div class="d-flex justify-content-end pt-3">
                       <button type="button" class="bit-clean btn btn-light btn-lg">Limpiar Formulario</button>
-                      <button type="submit" class="bit-submmmit btn btn-warning btn-lg ms-2">Enviar</button>
+                      <button id="bit-submit" type="submit" class="bit-submit btn btn-warning btn-lg ms-2">Enviar</button>
                     </div>
 
                   </div>
                 </div>
 
-                <div class="col-xl-6">
-                  <div class="card-body p-md-5 text-black">
+                <div class="col-sm-6">
+                  <div class="card-body pt-5 text-black">
                     <!-- Tabla de busquedas -->
                     <div class="row md-12" id="search-patients">
                       <h4 class="mb-5 text-uppercase">PACIENTES REGISTRADOS
                         <hr>
                       </h4>
-                      <table class="table table-bordered">
+                      <table class="table table-bordered" id="table-patients">
                         <thead class="thead-light">
                           <tr>
+                            <th class="table-primary " style="display:none;"></th>
                             <th class="table-primary"> Documento</th>
                             <th class="table-primary"> Paciente </th>
                             <th class="table-primary"> </th>
@@ -275,5 +276,5 @@ include './generales/header.php';
 
 <script src="../Js/dashboard.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
+<script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 </body>
