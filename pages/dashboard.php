@@ -23,7 +23,7 @@ include './generales/header.php';
 
   <section id="priorit" class="h-50">
     <form id="bitregister" accept-charset="UTF-8" method="POST">
-      <div class="container py-1 h-50">
+      <div class="container-fluid py-1 h-50">
         <div class="row d-flex justify-content-center align-items-center h-50">
           <div class="col">
             <div class="card card-registration my-4">
@@ -231,7 +231,7 @@ include './generales/header.php';
                       <h4 class="mb-5 text-uppercase">PACIENTES REGISTRADOS
                         <hr>
                       </h4>
-                      <table class="table table-bordered" id="table-patients">
+                      <table class="table table-striped table-bordered" id="table-patients">
                         <thead class="thead-light">
                           <tr>
                             <th class="table-primary " style="display:none;"></th>

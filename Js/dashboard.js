@@ -62,7 +62,11 @@ $(document).on('blur', '#Dni', function () {
                         $('#search-patients').show();
 
                         $(document).ready(function () {
-                            $('#table-patients').DataTable();
+                            $('#table-patients').DataTable({
+                                destroy: true,
+                                "language": { "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json" },
+                                "lengthMenu": [15, 30, 45, 90, "All"]
+                            });
                         });
 
                     }
