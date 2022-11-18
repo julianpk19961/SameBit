@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 });
 
-
+//Medicina
 getTable = () => {
 
     template = '';
@@ -44,8 +44,8 @@ getTable = () => {
                                 <button class="show-element btn btn-primary btn-sm col-sm-5 text-white">
                                     Ver
                                 </button>
-                                <button class="drop-element btn btn-${(medicine.z_xOne == 1 ? 'danger' : 'success')} btn-sm col-sm-5 text-white" data-bs-toggle="modal" data-bs-target="#modal-delete-" type="button" ">
-                                ${(medicine.z_xOne == 1 ? 'Eliminar' : 'Activar')} 
+                                <button class="drop-element btn btn-${(medicine.nrows == 0 ? 'danger' : medicine.z_xOne == 1 ? 'secondary' : 'success')} btn-sm col-sm-5 text-white" data-bs-toggle="modal" data-bs-target="#modal-delete-" type="button" ">
+                                ${(medicine.nrows == 0 ? 'Eliminar' : medicine.z_xOne == 1 ? 'Inactivar' : 'Activar')} 
                                 </button>
                             </div>
                         </td>
@@ -57,14 +57,15 @@ getTable = () => {
             if (response != 'error') {
                 columns_print = [2, 3, 4, 5];
                 varTitle = 'Listado Medicamentos';
-                pagination('#medical_tbl', '15', columns_print, varTitle);
+                orderBy = [1, 'asc'];
+                pagination('#medical_tbl', '15', columns_print, varTitle, orderBy);
             }
 
         },
     });
 }
 
-
+//Lanzador salvar
 $('#medicineStored').submit(function (e) {
 
     let emptyfields = '';
@@ -93,6 +94,7 @@ $('#medicineStored').submit(function (e) {
 
 });
 
+//Animacion
 $(document).on('mouseover', '#stored', function (e) {
     let emptyfields = '';
     $name = $('#name').val();
@@ -107,6 +109,7 @@ $(document).on('mouseover', '#stored', function (e) {
 
 });
 
+//Guaradr Medicina
 stored = (postdata) => {
 
     $.post('../config/medicinestored.php', postdata, function (response) {
@@ -120,7 +123,19 @@ stored = (postdata) => {
 }
 
 
+// med_status
 $(document).on('click', '.drop-element', function (e) {
+
+    action = e.target.innerText;
+    icon = (action == 'Activar' ? 'bi bi-toggle-on' : action == 'Inactivar' ? 'bi bi-toggle-off' : 'bi bi-trash2-fill');
+    color = 'btn btn-' + (action == 'Activar' ? 'success' : action == 'Inactivar' ? 'secondary' : 'danger');
+
+    document.getElementById('drop-modal-title').innerText = action;
+    document.getElementById('action').innerText = action;
+
+    submitdDropModal = document.getElementById('commit-drop-medicine');
+    submitdDropModal.className = icon;
+    submitdDropModal.parentNode.className = color;
 
     tabla = document.getElementById('dataMedicines');
     row = $(this).closest('tr').index();
@@ -139,6 +154,7 @@ $(document).on('click', '.drop-element', function (e) {
     pk_uuid = dataRecord[0].innerHTML;
     z_xone = dataRecord[1].innerHTML;
     Med_name = dataRecord[3].innerHTML;
+    action = dataRecord[6].innerHTML;
 
     titulo = document.querySelector('.modal-body > p').innerHTML;
     nuevotitulo = titulo.replace('registro', Med_name);
@@ -155,6 +171,7 @@ $('#destroyMedicine').submit((e) => {
         pk_uuid: document.getElementById('modaldel_pk_uuid').innerText,
         z_xone: document.getElementById('modaldel_z_xone').innerText
     };
+
 
     $.post('../config/medicinedown.php', postdata, function (response) {
         data = JSON.parse(response);
@@ -197,6 +214,7 @@ $(document).on('submit', '#newkardexmov', (e) => {
     pk_uuid = $('#pk_uuid').val();
 
     let postdata = {
+
         pk_uuid: pk_uuid,
         category: category,
         patient: patient,
@@ -207,7 +225,6 @@ $(document).on('submit', '#newkardexmov', (e) => {
 
 
     $.post('../config/newkardexmov.php', postdata, (response) => {
-
         if (response.includes('error')) {
 
             Swal.fire({
@@ -219,6 +236,12 @@ $(document).on('submit', '#newkardexmov', (e) => {
             return false;
         }
         $('#newkardexmov').trigger('reset');
+
+        let postdata = {
+            pk_uuid: pk_uuid
+        };
+
+
         getkardexRow(postdata);
 
     });
@@ -231,12 +254,15 @@ function getDataCells(table, row) {
     return dataRecord;
 }
 
-function pagination(table, row, columns_print, varTitle) {
+function pagination(table, row, columns_print, varTitle, orderBy) {
 
     let getTable = $(table);
 
-    getTable.DataTable({
+    var table = getTable.DataTable({
+
+
         destroy: true,
+        "order": [orderBy],
         "language": { "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json" },
         "lengthMenu": [row, 15, 30, 50, 100, "All"],
         "scrollX": false,
@@ -323,10 +349,11 @@ function pagination(table, row, columns_print, varTitle) {
                 .attr('data-bs-target', '#modal-record')
                 .attr('id', 'new-item');
         } else {
-
             tableForm = document.getElementById('kardex').querySelector('.new-item').remove();
         }
     });
+
+
 
 }
 
@@ -385,17 +412,6 @@ $(document).on('click', '.show-element', function (e) {
 
     selector = document.getElementById('save-buttons').innerHTML = "";
 
-    getkardexRow(postdata);
-
-
-
-});
-
-function getkardexRow(postdata) {
-
-
-    $('#pk_uuid').val(postdata.pk_uuid);
-
     template = '';
     template = `
         <table class="table table-lg table-striped mb-1 border align-middle" id="kardex_tbl">
@@ -415,17 +431,60 @@ function getkardexRow(postdata) {
 
     $('#kardex').html(template);
 
+    templateKardex = ``;
+    if (z_xone != 0) {
+        templateKardex = `
+                <form id="newkardexmov" clas="row g-4" method="POST">
+                    <div class="row p-1">
+                        <div class="form-group col-3">
+                            <label for="categorymov">Categoría</label>
+                            <select class="form-select" id="categorymov" aria-label="categorymov">
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="patientmov" title="Persona/Entidad que realiza el movimiento" >Tercero</label>
+                            <input type="text" class="form-control" id="patientmov" placeholder="Ingresar Nombre">
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="bill">Factura</label>
+                            <input type="text" class="form-control" id="bill" placeholder="Nro Factura">
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="quantity">Cantidad</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Cantidad">
+                        </div>
+                    </div>
+                    <div class="m-2 float-end">
+                        <button type="submit" class="btn btn-success">+</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>`;
+    }
+
+    console.log('---POST---');
+    console.log(postdata);
+
+    getkardexRow(postdata);
+    $('#kardexAdd').html(templateKardex);
+
+});
+
+function getkardexRow(postdata) {
+
+    $('#pk_uuid').val(postdata.pk_uuid);
 
     templatebody = '';
     templateoption = '<option value="">Seleccion categoría</option>';
 
     $.post('../config/getkardexmov.php', postdata, function (response) {
 
+
         if (response == 'error') {
             templatebody += `<tr> <td colspan='9'><strong>Aún no se registran movimientos</strong></td></tr>`
         } else {
 
             let data = JSON.parse(response);
+
             data[0].forEach(row => {
                 templateoption += `<option value="${row.KP_UUID}" title="${row.name} - ${row.abbr}">${row.name}</option>`
             });
@@ -433,7 +492,11 @@ function getkardexRow(postdata) {
             if (data[1] == 'error') {
                 templatebody += `<tr> <td colspan='9'><strong>Aún no se registran movimientos</strong></td></tr>`
             } else {
+
+            $('#kardexMov').html(``);
+
                 data[1].forEach(row => {
+
                     templatebody +=
                         `<tr class="border">
                             <td >${nueva = row.zCrea.split(" ")[0].split("-").reverse().join("-") + ' ' + row.zCrea.split(" ")[1]} </td>
@@ -444,43 +507,24 @@ function getkardexRow(postdata) {
                             <td class="text-center"> ${row.finalQuantity} </td>
                         </tr>`
                 });
-            }
-            $('#kardexMov').html(templatebody);
-            templateKardex = `
-            <form id="newkardexmov" clas="row g-4" method="POST">
-                <div class="row p-1">
-                    <div class="form-group col-3">
-                        <label for="categorymov">Categoría</label>
-                        <select class="form-select" id="categorymov" aria-label="categorymov">
-                        </select>
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="patientmov" title="Persona/Entidad que realiza el movimiento" >Tercero</label>
-                        <input type="text" class="form-control" id="patientmov" placeholder="Ingresar Nombre">
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="bill">Factura</label>
-                        <input type="text" class="form-control" id="bill" placeholder="Nro Factura">
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="quantity">Cantidad</label>
-                        <input type="number" class="form-control" id="quantity" placeholder="Cantidad">
-                    </div>
-                </div>
-                <div class="m-2 float-end">
-                    <button type="submit" class="btn btn-success">+</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </form>`;
 
-            $('#kardexAdd').html(templateKardex);
+
+            }
+
+            $('#kardexMov').html(templatebody);
+            console.log($('#kardexMov'));
+
             $('#categorymov').html(templateoption);
 
             if (data[1] != 'error') {
+
                 columns_print = ':visible';
                 varTitle = 'Movimientos-' + $('#name').val();
-                pagination('#kardex_tbl', '8', columns_print, varTitle);
+                orderBy = [0, 'desc'];
+                pagination('#kardex_tbl', '8', columns_print, varTitle, orderBy);
             }
+
+
         };
         return;
     });

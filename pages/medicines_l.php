@@ -49,18 +49,18 @@ include './generales/header.php';
                 <div class="modal-dialog bg-light rounded-3">
                     <form id="destroyMedicine" method="POST">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="">Eliminar</h5>
+                            <div class="modal-header text-center">
+                                <h4 class="modal-title" id="drop-modal-title">Eliminar</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <input id="modaldel_pk_uuid" hidden value="">
                                 <input id="modaldel_z_xone" hidden value="">
-                                <p>¿Está seguro de eliminar: registro ? <br> Esta acción no se puede revertir</p>
+                                <p>¿Está seguro de <span id='action'>eliminar</span>: registro ? <br> Esta acción no se puede revertir</p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-trash2-fill"></i></button>
+                                <button type="submit" class="" data-bs-dismiss="modal"><i id='commit-drop-medicine' class=""></i></button>
                             </div>
                         </div>
                     </form>

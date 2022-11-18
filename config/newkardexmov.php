@@ -36,13 +36,13 @@ if ($total < 0) {
 }
 
 if ($total >= 0) {
-    $sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity,bill) VALUES ( '$medicine','$patient','$category','$type',$saldoinicial,$quantity,$total,$bill) ";
+    $sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity,bill) VALUES ( '$medicine','$patient','$category','$type',$saldoinicial,$quantity,$total,'$bill') ";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
         $result = ('Query error' . mysqli_error($conn));
     } else {
-        $result = 'success';
+        $result = $medicine;
     }
 }
 
