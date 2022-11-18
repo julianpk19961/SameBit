@@ -2,7 +2,13 @@
 
 include 'config.php';
 
-$sql = "SELECT  id,KP_UUID,nombre,referencia,observacion,z_xOne FROM medicines ORDER BY nombre  ASC";
+$sql = "SELECT
+*,
+(SELECT COUNT(*) FROM kardex k WHERE k.FK_Medicine = m.KP_UUID ) AS nrows
+FROM
+medicines m
+ORDER BY
+m.nombre ASC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -14,13 +20,14 @@ $resultCount = mysqli_num_rows($result);
 
 if ($resultCount > 0) {
     $json = array();
-    while ( $row = mysqli_fetch_array($result)) {
+    while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
             'KP_UUID' => $row['KP_UUID'],
             'nombre' => $row['nombre'],
             'referencia' => $row['referencia'],
             'observacion' => $row['observacion'],
-            'z_xOne' => $row['z_xOne']
+            'z_xOne' => $row['z_xOne'],
+            'nrows' => $row['nrows']
         );
     }
     $jsonstring = json_encode($json);
