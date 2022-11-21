@@ -1,6 +1,6 @@
 <?php 
 
-$index ='http://192.168.1.22/samebit/';
+$index ='http://localhost/samebit/';
 $url = '/pages/login.php';
 $urldashboard = $index.'pages/dashboard.php';
 $title = 'Same-Bit';

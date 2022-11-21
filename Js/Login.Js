@@ -24,26 +24,22 @@ $("#login").submit(function (e) {
 
         success: function (response) {
 
-
             // return false;
 
             // Funcion para respuesta
             // Decomponer respuesta
             var data = JSON.parse(response);
 
-
             var Titulo = data.Title;
             var Mensaje = data.Mensaje;
             var Tipo = data.Tipo;
             var nombreusuario = data.nombreusuario;
-            var privilegeSet = data.privilegeSet;
             var url = data.url;
 
             // validaciones de sesión  
             if (Tipo == 'success' && nombreusuario != '') {
                 // Mensaje de confirmación con respuesta obtenida.
 
-                //   Redirección
                 var datastr = JSON.stringify(response);
                 localStorage.setItem('user', datastr);
                 $('#loader').addClass('hidden');
