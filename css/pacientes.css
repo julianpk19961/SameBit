@@ -6,3 +6,8 @@
 .table>:not(caption)>*>* {
     background-color: '';
 } */
+
+
+.modal-body {
+    overflow-x: auto;
+  }

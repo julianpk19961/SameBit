@@ -11,7 +11,16 @@ include './generales/header.php';
 
   <nav>
     <ul class="nav nav-pills">
-      <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Samebit</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Samebit
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="./dashboard.php">Registro Novedades</a></li>
+          <li><a class="dropdown-item" id="reportSamebitModal">Reportes</a></li>
+        </ul>
+
+      </li>
       <!-- <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li>
       <li class="nav-item"><a href="./medicines_l.php" class="nav-link" aria-current="page">Samecomed</a></li> -->
       <li class="nav-item"><a href="../config/logout.php" class="nav-link link-secondary">Cerrar Sesión</a></li>
@@ -272,6 +281,44 @@ include './generales/header.php';
       </div>
     </form>
   </section>
+  <div class="modal fade" id="modal-report" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title fs-5" id="modalTitle">Datos registrados</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-lg table-striped table-responsive">
+            <thead class="table-light">
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Documento</th>
+              <th>Paciente</th>
+              <th>Enviado</th>
+              <th>Ips</th>
+              <th>Eps</th>
+              <th>Rango</th>
+              <th>Diagnostico</th>
+              <th>Estado</th>
+              <th>Cita Asignada</th>
+              <th>Recibe</th>
+            </thead>
+            <tbody id='dataPrioritie'>
+              ...
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 </body>
 
 <script src="../Js/dashboard.js"></script>

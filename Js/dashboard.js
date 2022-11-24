@@ -1,14 +1,23 @@
-
 var user = [];
 var user = JSON.parse(localStorage.getItem('user'));
 
-if (user == null) {
-    location.href = 'http://192.168.1.22/samebit/pages/login.php';
-}
 
-//Ocultar barras de busqueda e historico
-$('#search-patients').hide();
-$('#history-patient').hide();
+
+$(document).ready(function () {
+
+    if (user == null) {
+        location.href = 'http://localhost/samebit/pages/login.php';
+        return false;
+    } else {
+        user = JSON.parse(user);
+    }
+
+    //Ocultar barras de busqueda e historico
+    $('#search-patients').hide();
+    $('#history-patient').hide();
+});
+
+
 
 // Acción para input de número de documento
 $(document).on('blur', '#Dni', function () {
@@ -291,7 +300,7 @@ $(document).on('submit', '#bitregister', function (event) {
                 title: 'Faltan datos',
                 text: 'Campos Obligatorios vacios',
                 timer: 5000
-            })
+            });
             return false;
         }
         else {
@@ -338,4 +347,19 @@ $(document).on('submit', '#bitregister', function (event) {
 
 
     }
+});
+
+$('#reportSamebitModal').on('click', function () {
+
+    if (user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
+        Swal.fire({
+            icon: 'error',
+            title: 'ACCESO RESTRINGIDO',
+            text: 'El usuario no está autorizado',
+            timer: 5000
+        })
+        return false;
+    }
+    $('#modal-report').modal('show');
+
 });
