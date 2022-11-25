@@ -282,36 +282,51 @@ include './generales/header.php';
     </form>
   </section>
   <div class="modal fade" id="modal-report" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header text-center">
           <h1 class="modal-title fs-5" id="modalTitle">Datos registrados</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <table class="table table-lg table-striped table-responsive">
+          <table class="table table-lg table-striped table-responsive" id="recordsSummary">
             <thead class="table-light">
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Documento</th>
-              <th>Paciente</th>
-              <th>Enviado</th>
-              <th>Ips</th>
-              <th>Eps</th>
-              <th>Rango</th>
-              <th>Diagnostico</th>
-              <th>Estado</th>
-              <th>Cita Asignada</th>
-              <th>Recibe</th>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Documento</th>
+                <th>Paciente</th>
+                <th>Enviado</th>
+                <th>Ips</th>
+                <th>Eps</th>
+                <th>Rango</th>
+                <th>Diagnostico</th>
+                <th>Estado</th>
+                <th>Cita</th>
+                <th>Recibe</th>
+              </tr>
             </thead>
-            <tbody id='dataPrioritie'>
-              ...
-            </tbody>
+            <tfoot>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Documento</th>
+                <th>Paciente</th>
+                <th>Enviado</th>
+                <th>Ips</th>
+                <th>Eps</th>
+                <th>Rango</th>
+                <th>Diagnostico</th>
+                <th>Estado</th>
+                <th>Cita</th>
+                <th>Recibe</th>
+              </tr>
+            </tfoot>
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-danger">PDF</button>
         </div>
       </div>
     </div>

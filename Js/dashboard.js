@@ -360,6 +360,41 @@ $('#reportSamebitModal').on('click', function () {
         })
         return false;
     }
+
     $('#modal-report').modal('show');
 
+    $('#recordsSummary').DataTable({
+
+        "ajax": {
+            "method": "GET",
+            "url": '../config/getPriorities.php',
+        },
+        "columns": [
+            { "data": "FECHA_COMENTARIO" },
+            { "data": "HORA_COMENTARIO" },
+            { "data": "CC" },
+            { "data": "PACIENTE" },
+            { "data": "ENVIADO_POR" },
+            { "data": "IPS" },
+            { "data": "EPS" },
+            { "data": "RANGO" },
+            { "data": "DIAGNOSTICO" },
+            { "data": "APROBADO" },
+            { "data": "FECHA_CITA" },
+            { "data": "CREADO_POR" }
+        ],
+        "paging": true,
+        'scrollY': '300px',
+        'scrollCollapse': true,
+        'destroy': true,
+        "deferRender": true,
+        "orderClasses": false,
+        "responsive": true,
+        "lengthMenu": [30, 50, 100, 200], /*"All"*/
+        // "processing": true,
+        "language": {
+            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        }
+
+    });
 });
