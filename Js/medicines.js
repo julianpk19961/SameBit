@@ -252,7 +252,7 @@ function getDataCells(table, row) {
 }
 
 function pagination(table, row, columns_print, varTitle, orderBy, create = false, PDF = true) {
-
+    console.log(table);
     let getTable = $(table);
     btnCreate = ''
     btnPdf = ''
@@ -316,6 +316,16 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
         }
     }
 
+    // agregar atributos a botones
+    $(table).on('init.dt', function () {
+
+        if (table != '#kardex_tbl') {
+            $('.new-item')
+                .attr('data-bs-toggle', 'modal')
+                .attr('data-bs-target', '#modal-record')
+                .attr('id', 'new-item');
+        }
+    });
 
     var table = getTable.DataTable({
 
@@ -348,24 +358,13 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
 
     });
 
-
-    // agregar atributos a botones
-    $(table).on('init.dt', function () {
-
-        if (table != '#kardex_tbl') {
-            $('.new-item')
-                .attr('data-bs-toggle', 'modal')
-                .attr('data-bs-target', '#modal-record')
-                .attr('id', 'new-item');
-        }
-    });
-
 }
 
 $("#medicaldiv").on("click", "#new-item", function (e) {
 
     var user = JSON.parse(JSON.parse(localStorage.getItem('user')));
-    if (user.privilegeSet != 'quimico' && user.privilegeSet != 'root') {
+    // console.log(user.privilegeSet);
+    if (user.privilegeSet != 'quimico' && user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
 
         Swal.fire({
             icon: 'error',
@@ -374,12 +373,14 @@ $("#medicaldiv").on("click", "#new-item", function (e) {
         });
 
     } else {
+
         selector = document.querySelector('#save-buttons');
         selector.innerHTML = `<button type="submit" class="btn btn-primary" id="stored">Guardar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
         $('#observation').val('').attr('rows', '10');
         $('#medicineStored').trigger('reset');
         $('#kardex').html('');
         $('#modal-head h5').html('Nuevo  Medicamento');
+
     }
 
 
@@ -510,7 +511,6 @@ function getkardexRow(postdata) {
             $('#kardexMov').html(templatebody);
             // table = $('#kardex_tbl').DataTable();
 
-            // console.log(templatebody);
 
             $('#categorymov').html(templateoption);
 
