@@ -1,86 +1,68 @@
-
 var user = [];
 var user = JSON.parse(localStorage.getItem('user'));
 
-if (user == null) {
-    location.href = 'http://192.168.1.22/samebit/pages/login.php';
-}
+$(document).ready(function () {
 
-//Ocultar barras de busqueda e historico
-$('#search-patients').hide();
-$('#history-patient').hide();
+    if (user == null) {
+        location.href = 'http://localhost/samebit/pages/login.php';
+        return false;
+    } else {
+        user = JSON.parse(user);
+    }
+
+    //Ocultar barras de busqueda e historico
+    $('#search-patients').hide();
+    $('#history-patient').hide();
+});
+
 
 // Acción para input de número de documento
-$(document).on('blur', '#Dni', function () {
+$(document).on('keyup', '#Dni', function () {
     let dni = $('#Dni').val();
     // La función se activa cuando el tamaño del input cumpla con minimo 5 caracteres
     if (dni.length >= 4) {
-        // Metodo post con ajax para consulta de DNI
-        $.ajax({
-            // script para verificación de cc existentes
-            url: '../config/dniverification.php',
-            type: 'POST',
-            data: { dni },
-            // Funcion para recorrer los resultados y dibujarlos en pantalla o seleccionarlo para ser usado (Cuando solo sea una registro)
-            success: function (response) {
-                // Sin respuesta
-                if (response == 'error') {
-                    $('#search-patients').hide();
+
+        $('#table-patients').DataTable({
+            destroy: true,
+            processing: true,
+            // serverSide: true,
+            ajax: {
+                url: '../config/getPatients.php',
+                type: 'POST',
+                data: { dni },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#table-patients').DataTable({
+                        destroy: true,
+                        "language": {
+                            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                        }
+                    })
                 }
-                else {
-                    // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
-                    let pacients = JSON.parse(response);
-                    let Cantpacients = pacients.length;
-                    // var thedate = Date().getTime();
-                    // confirm (thedate.toString());
-
-                    if (Cantpacients == 1) {
-                        // Cuando solo obtenga un resultado se selecciona automaticamente
-                        pacients.forEach(pacients => {
-                            $('#PK_UUID').val(pacients.PK_UUID);
-                            $('#Dni').val(pacients.dni);
-                            $('#nombre').val(pacients.Name);
-                            $('#apellido').val(pacients.LastName);
-                            $('#documenttype').val(pacients.documentType);
-                            $('#apellido').val(pacients.LastName);
-                            $('#Eps').val(pacients.eps);
-                            $('#EpsClassification').val(pacients.range);
-                        });
-                        // Ocultar el cuadro de selección y mostrar el cuadro del historico
-                        cargar_historico();
-
-                    } else {
-                        // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
-                        let template = '';
-                        pacients.forEach(pacients => {
-                            template +=
-                                `<tr pacientid="${pacients.PK_UUID}">
-                                <td style="display:none;">${pacients.PK_UUID}</td>
-                                <td style="vertical-align:middle;" >${pacients.dni} </td>
-                                <td style="vertical-align:middle;" >${pacients.Name} ${pacients.LastName}</td>
-                                <td >
-                                    <button class="patient-select btn btn-info" style="width:100%; word-wrap: break-word;">Selecionar</button>
-                                </td>
-                                </tr>`
-                        });
-                        // Mostrar el template en la etiqueta pacientes
-                        // Mostrar cuadro de selección y ocultar cuadro de historico
-                        $('#patients').html(template);
-                        $('#history-patient').hide();
-                        $('#search-patients').show();
-
-                        $(document).ready(function () {
-                            $('#table-patients').DataTable({
-                                destroy: true,
-                                "language": { "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json" },
-                                "lengthMenu": [15, 30, 45, 90, "All"]
-                            });
-                        });
-
-                    }
+            },
+            columns: [
+                { data: 0 },
+                { data: 1 },
+                { data: 2 },
+                null,
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    visible: false,
+                    searchable: false,
+                }, {
+                    targets: 3,
+                    data: null,
+                    defaultContent: "<button class='patient-select btn btn-info' style='width:100%; word-wrap: break-word;'>Selecionar</button>"
                 }
+            ],
+            "language": {
+                "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
             }
         });
+        $('#history-patient').hide();
+        $('#search-patients').show();
+
     } else {
         // ocultar barras de selección e historico
         $('#search-patients').hide();
@@ -93,17 +75,16 @@ $(document).on('click', '.patient-select', function () {
 
     if (confirm('¿Está seguro de querer selecionar el paciente')) {
         // Capturar el elemnento padre y posterior tomar el atributo almacenado en el id=pacientid
-        let element = $(this)[0].parentElement.parentElement;
-        let PK_UUID = $(element).attr('pacientid');
+        let row = $(this).closest("tr");
+        let data = $('#table-patients').DataTable().row(row).data();
+        let PK_UUID = data[0];
 
-        // Ajax para solicitar los datos del paciente desde script 
+        if (localStorage.getItem('Error')) {
+            localStorage.removeItem('Error');
+        }
+
         $.post('../config/usepatient.php', { PK_UUID }, function (response) {
-            // Establecer los datos del Json encontrado en los campos indicados.
             const patient = JSON.parse(response);
-            // echo '<pre>';
-            // var_dump(patient);
-            // exit();
-            // return false;
             $('#bitregister').trigger('reset');
             $('#PK_UUID').val(patient.PK_UUID);
             $('#Dni').val(patient.dni);
@@ -121,102 +102,78 @@ $(document).on('click', '.patient-select', function () {
 });
 
 
-// Funcion para habilitar e inhabilitar campos de atencion  dependiedo de la casilla aceptado
 function atentionswitch() {
 
-    // se captura el valor de el input asi como los dos campos que tendran el switch
     let accept = $('#approved').val();
     var AtentionDate = document.getElementById('AtentionDate');
     var AtentionTime = document.getElementById('AtentionTime');
 
     if (accept == 1) {
-        // si el valor es igual a 1 en aprobado, el sistema habilitara los campos
         AtentionDate.disabled = false;
         AtentionTime.disabled = false;
     } else {
-        // si el valor es igual !a 1 en aprobado, el sistema inhabilitara los campos
         AtentionDate.disabled = true;
         AtentionTime.disabled = true;
         document.getElementById('AtentionDate').value = "";
         document.getElementById('AtentionTime').value = "";
-
     }
 };
-//Cuando la página esté cargada ejecutará la función.
 $(document).ready(atentionswitch);
 
 
-// Llamado a la funcion de inactivar o activar casillas de atencion depndiendo del contenido de el input aprobado
 $(document).on('change', '#approved', function () {
     atentionswitch();
 });
 
-// Funcion creada para llamar las eps registradas en la base de datos
 function cargar_eps() {
-    // Ajax para llamado de datos mediante metodo get para llamar eps
     $.ajax({
         url: '../config/calleps.php',
         type: 'GET',
         success: function (response) {
-            // Descomponer datos llamados en opciones de selección 
             let eps = JSON.parse(response);
             let template = '<option value="" title="">Seleccione una opción</option>';
             eps.forEach(eps => {
-                // Recorrer Json 
                 template += `
                     <option value=${eps.pk_uuid}>${eps.name} </option>
                     `
             });
-            // Dibujar opciones en eps 
             $('#Eps').html(template);
 
         }
     });
 }
-//Cuando la página esté cargada ejecutará la función.
 $(document).ready(cargar_eps);
 
-// Funcion creada para llamar las ips registradas en la base de datos
 function cargar_ips() {
-    // Ajax para llamado de datos mediante metodo get para llamar ips
     $.ajax({
         url: '../config/callips.php',
         type: 'GET',
         success: function (response) {
-            // Descomponer datos llamados en opciones de selección 
             let ipslist = JSON.parse(response);
             let template = '<option value="" title="">Seleccione una opción</option>';
             ipslist.forEach(ipslist => {
-                // Recorrer Json 
                 template += `
                     <option value=${ipslist.pk_uuid}>${ipslist.name}</option>
                     `
             });
-            // Dibujar opciones en ips
             $('#Ips').html(template);
         }
     });
 }
-//Cuando la página esté cargada ejecutará la función.
 $(document).ready(cargar_ips);
 
-// Funcion creada para llamar los diagnosticos registrados en la base de datos
 function cargar_diagnosis() {
-    // Ajax para llamado de datos mediante metodo get para llamar diagnosticos
     $.ajax({
         url: '../config/calldiagnosis.php',
         type: 'GET',
         success: function (response) {
-            // Descomponer datos llamados en opciones de selección
             let diagnosis = JSON.parse(response);
             let template = '<option value="" title="">Seleccione una opción</option>';
             diagnosis.forEach(diagnosis => {
-                // Recorrer Json y ajustarlos como opciones de un select
                 template += `
                     <option value=${diagnosis.KP_UUID} title=${diagnosis.Observation}>${diagnosis.Codigo}</option>
                     `
             });
-            // Dibujar opciones en diagnostico
             $('#diagnosis').html(template);
         }
     });
@@ -291,7 +248,7 @@ $(document).on('submit', '#bitregister', function (event) {
                 title: 'Faltan datos',
                 text: 'Campos Obligatorios vacios',
                 timer: 5000
-            })
+            });
             return false;
         }
         else {
@@ -338,4 +295,55 @@ $(document).on('submit', '#bitregister', function (event) {
 
 
     }
+});
+
+$('#reportSamebitModal').on('click', function () {
+    if (user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
+        Swal.fire({
+            icon: 'error',
+            title: 'ACCESO RESTRINGIDO',
+            text: 'El usuario no está autorizado',
+            timer: 5000
+        })
+        return false;
+    }
+
+    $('#modal-report').modal('show');
+
+    $('#recordsSummary').DataTable({
+
+        "ajax": {
+            "method": "GET",
+            "url": '../config/getPriorities.php',
+        },
+        "columns": [
+            { "data": "FECHA_COMENTARIO" },
+            { "data": "HORA_COMENTARIO" },
+            { "data": "CC" },
+            { "data": "PACIENTE" },
+            { "data": "ENVIADO_POR" },
+            { "data": "IPS" },
+            { "data": "EPS" },
+            { "data": "RANGO" },
+            { "data": "DIAGNOSTICO" },
+            { "data": "APROBADO" },
+            { "data": "FECHA_CITA" },
+            { "data": "CREADO_POR" }
+        ],
+        "paging": true,
+        'scrollY': '300px',
+        'scrollX': '300px',
+        'scrollCollapse': true,
+        responsive: true,
+        'destroy': true,
+        "deferRender": true,
+        "orderClasses": false,
+        "lengthMenu": [30, 50, 100, 200], /*"All"*/
+        // "processing": true,
+        "language": {
+            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        }
+
+    });
+
 });

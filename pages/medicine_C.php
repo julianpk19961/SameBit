@@ -14,10 +14,7 @@ include './generales/header.php';
             <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
         </ul>
     </nav>
-
 </header>
-
-
 <form id="medicineStored" action="../pages/medicine_.php" method="POST" class="p-2 form h-100" enctype="multipart/form-data">
     <div class="container bg-light border">
         <div id="tittleModule" class="row border border-end">

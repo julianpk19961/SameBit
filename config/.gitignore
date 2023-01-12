@@ -1,40 +1,3 @@
-test.php
-
-
-
-INSERT INTO medicines (codigo,nombre) VALUES 
-('ALPRAZOLAM 0.25 MG'),
-('ALPRAZOLAM 0.5 MG'),
-('ALPRAZOLAM 0.75 MG'),
-('ALPRAZOLAM 1 MG'),
-('BROMAZEPAM 3 MG'),
-('BROMAZEPAM 6 MG'),
-('CLOBAZAM 10 MG'),
-('CLOBAZAM 20 MG'),
-('CLONAZAPEM 0.5 MG'),
-('CLONAZAPEM 2 MG'),
-('CLONAZAPEM 2.5 MG 20 ML'),
-('CLONAZAPEM 2.5 MG 30 ML'),
-('CLOZAPINA 100 MG'),
-('CLOZAPINA 25 MG'),
-('DIAZEPAM 10 MG - 2 ML'),
-('FENOBARBITAL 100 MG'),
-('FENTANILO CITRATO 0.5 - 10 ML'),
-('LISDEXANFETAMINA 30 MG'),
-('LISDEXANFETAMINA 50 MG'),
-('LISDEXANFETAMINA 70 MG'),
-('LORAZEPAM 1 MG'),
-('LORAZEPAM 2 MG'),
-('METADONA CLORHIDRATO 10 MG'),
-('METADONA CLORHIDRATO 40 MG'),
-('METILFENIDATO 10 MG'),
-('METILFENIDATO 18 MG'),
-('METILFENIDATO 36 MG'),
-('MEXAZOLAM 1 MG'),
-('MIDAZOLAM CLORHIDRATO 15 MG - 3 ML'),
-('MIDAZOLAM CLORHIDRATO 5 MG - 5 ML'),
-('MORFINA CLORHIDRATO 10 MG - ML'),
-('ZOLPIDEM TARTRATO 10 MG');
 
 SELECT p.Name0 as PACIENTE, e.name0 as EPS,b.statuseps ESTADO_EPS, b.FK_Range as RANGO, i.name0 AS IPS, d.codigo  AS DIAGNOSTICO, b.dni AS CC, b.name0 AS NOMBRE, b.lastname AS PELLIDO, b.sentby AS ENVIADO_POR, b.comment0 AS COMENTARIO, b.commentdate AS FECHA_COMENTARIO,b.commenttime AS HORA_COMENTARIO, b.approved APROBADO, b.appointmentdate AS FECHA_CITA, b.appointmenttime HORA_CITA,b.callsnumber AS NUMERO_LLAMADAS,b.createdUser AS CREADO_POR,b.created AS HORA_CREADO,b.updatedUser AS ACTUALIZADO_POR,b.updated AS HORA_ACTUALIZADO, contactype AS TIPO_CONTACTO
 FROM bitpriorities b
@@ -46,3 +9,29 @@ INNER JOIN entities i
 ON b.FK_Ips = i.PK_UUID
 INNER JOIN diagnosis d
 ON b.FK_Diagnosis = d.KP_UUID;
+
+INSERT INTO `kardex`(`FK_Medicine`, `FK_Category`, `Type`, `inicialQuantity`, `quantity`, `finalQuantity`, `z_xOne`, `createUser`, `comment`) 
+VALUES
+('5007a7fd-74e2-11ed-8b9c-6045cb886b24','bc735e4a-5f80-11ed-969b-846993530662',1,0, 1110    ,1110,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb98796-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 1780    ,1780,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb99c56-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 10  ,10,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb99edb-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 134 ,134,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb99fb3-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 60  ,60,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a132-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 530 ,530,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a2c4-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 164 ,164,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a3b0-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 1110    ,1110,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a6fe-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 49  ,49,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a77b-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 13  ,13,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a52d-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 1098    ,1098,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a85c-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 1126    ,1126,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a7f0-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 2074    ,2074,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a970-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 4   ,4,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9a9d4-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 475 ,475,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9aa3c-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 18  ,18,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9aaa2-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 60  ,60,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9c83a-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 740 ,740,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9c8c0-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 1171    ,1171,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9ca42-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 40  ,40,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9ccd2-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 853 ,853,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9cd44-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 20  ,20,1,'devimport','Inventario Inicial Diciembre 2022'),
+('0bb9ceed-5a05-11ed-969b-846993530662','bc735e4a-5f80-11ed-969b-846993530662',1,0, 39  ,39,1,'devimport','Inventario Inicial Diciembre 2022)');

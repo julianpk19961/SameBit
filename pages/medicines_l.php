@@ -28,10 +28,7 @@ include './generales/header.php';
 
 <div class="col-xl-12 mt-1 mb-2">
     <div class="table table-striped table-bordered" id="medicaldiv">
-        <!-- <div class="col-auto mx-1">
-            <button id="new-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-record" data-bs-whatever="@fat">Nuevo</button>
-        </div> -->
-        <table class="table display table-striped mb-1" id="medical_tbl">
+        <table class="table table-bordered table-striped mb-1" id="medical_tbl" style="width:100%">
             <thead>
                 <tr class="table text-light bg-primary">
                     <th hidden></th>
