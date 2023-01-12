@@ -9,7 +9,6 @@ $(document).ready(function () {
     } else {
         getTable();
     }
-
 });
 
 //Medicina
@@ -55,6 +54,7 @@ getTable = () => {
                 });
             }
 
+
             $('#dataMedicines').html(template);
             if (response != 'error') {
                 columns_print = [2, 3, 4, 5];
@@ -63,6 +63,7 @@ getTable = () => {
                 create = true;
                 pagination('#medical_tbl', '15', columns_print, varTitle, orderBy, create);
             }
+
 
         },
     });
@@ -193,6 +194,7 @@ $(document).on('click', '#kardex-store', (e) => {
 
     let emptyfields = '';
 
+    date = $('#datemov').val();
     category = $('#categorymov').val();
     patient = $('#patientmov').val();
     bill = $('#bill').val();
@@ -200,10 +202,16 @@ $(document).on('click', '#kardex-store', (e) => {
 
     if (category.length == 0) {
         emptyfields += 'Categoria, '
-    } if (patient.length == 0 && bill.length == 0) {
+    }
+    if (patient.length == 0 && bill.length == 0) {
         emptyfields += 'Paciente y Factura, '
-    } if (quantity.length == 0) {
+    }
+    if (quantity.length == 0) {
         emptyfields += 'Cantidad'
+    }
+
+    if (date.length == 0) {
+        emptyfields += 'Fecha'
     }
 
     if (emptyfields) {
@@ -211,18 +219,30 @@ $(document).on('click', '#kardex-store', (e) => {
         return false;
     }
 
-    pk_uuid = $('#pk_uuid').val();
+    var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear() + "-" + (month) + "-" + (day);
 
+    if (today < date) {
+
+        alert('La fecha no puede ser superior a la de hoy');
+        return false;
+    }
+
+    pk_uuid = $('#pk_uuid').val();
+    console.log(pk_uuid);
     let postdata = {
 
         pk_uuid: pk_uuid,
+        date: date,
         category: category,
         patient: patient,
         bill: bill,
         quantity: quantity,
 
     };
-
+    console.log(postdata);
     $.post('../config/newkardexmov.php', postdata, (response) => {
 
         if (response.includes('error')) {
@@ -230,11 +250,11 @@ $(document).on('click', '#kardex-store', (e) => {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Las cantidades ingresadas no se pueden procesar: ' + emptyfields,
-                // timer: 5000
-            })
+                text: response.split('-')[1],
+            });
             return false;
-        }
+        };
+        console.log(response);
         $('#newkardexmov').trigger('reset');
 
         let postdata = {
@@ -252,7 +272,6 @@ function getDataCells(table, row) {
 }
 
 function pagination(table, row, columns_print, varTitle, orderBy, create = false, PDF = true) {
-
     let getTable = $(table);
     btnCreate = ''
     btnPdf = ''
@@ -292,6 +311,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
                     height: 40
                 });
 
+
                 // resize td width
                 doc.content[2].table.widths = Array(doc.content[2].table.body[0].length + 1).join('*').split('');
 
@@ -316,6 +336,16 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
         }
     }
 
+    // agregar atributos a botones
+    $(table).on('init.dt', function () {
+
+        if (table != '#kardex_tbl') {
+            $('.new-item')
+                .attr('data-bs-toggle', 'modal')
+                .attr('data-bs-target', '#modal-record')
+                .attr('id', 'new-item');
+        }
+    });
 
     var table = getTable.DataTable({
 
@@ -348,16 +378,9 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
 
     });
 
-
-    // agregar atributos a botones
-    $(table).on('init.dt', function () {
-
-        if (table != '#kardex_tbl') {
-            $('.new-item')
-                .attr('data-bs-toggle', 'modal')
-                .attr('data-bs-target', '#modal-record')
-                .attr('id', 'new-item');
-        }
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
     });
 
 }
@@ -365,7 +388,8 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
 $("#medicaldiv").on("click", "#new-item", function (e) {
 
     var user = JSON.parse(JSON.parse(localStorage.getItem('user')));
-    if (user.privilegeSet != 'quimico' && user.privilegeSet != 'root') {
+    // console.log(user.privilegeSet);
+    if (user.privilegeSet != 'quimico' && user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
 
         Swal.fire({
             icon: 'error',
@@ -374,15 +398,15 @@ $("#medicaldiv").on("click", "#new-item", function (e) {
         });
 
     } else {
+
         selector = document.querySelector('#save-buttons');
         selector.innerHTML = `<button type="submit" class="btn btn-primary" id="stored">Guardar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
         $('#observation').val('').attr('rows', '10');
         $('#medicineStored').trigger('reset');
         $('#kardex').html('');
         $('#modal-head h5').html('Nuevo  Medicamento');
+
     }
-
-
 });
 
 
@@ -414,20 +438,22 @@ $(document).on('click', '.show-element', function (e) {
 
     template = '';
     template = `
-        <table class="table table-lg table-striped mb-1 border align-middle" id="kardex_tbl">
+    <div class="container bg-light border border-primary rounded p-1 my-2" id="kardexAdd"></div>
+        <table class="table table-bordered table-lg table-striped mb-1 border align-middle" id="kardex_tbl" style="width:100%">
             <thead>
-                <tr class="table text-light border bg-primary">
+                <tr class="text-light border bg-primary" id="thead">
                     <th>Fecha</th>
                     <th>Paciente-Factura</th>
                     <th>Clase Movimiento</th>
-                    <th>Entrada</th>
-                    <th>Salida</th>
-                    <th>Saldo Final</th>
+                    <th class="w-25">Entrada</th>
+                    <th class="w-25">Salida</th>
+                    <th class="w-25">Saldo Final</th>
                 </tr>
             </thead>
             <tbody id="kardexMov"></tbody>
         </table>
-        <div class="container bg-light border p-1 my-2" id="kardexAdd"></div>`;
+        <button type="button" class="btn btn-secondary m-1 ms-auto" data-bs-dismiss="modal">Cerrar</button>
+        `;
 
     $('#kardex').html(template);
 
@@ -435,35 +461,54 @@ $(document).on('click', '.show-element', function (e) {
     if (z_xone != 0) {
         templateKardex = `
                 <form id="newkardexmov" clas="row g-4" method="POST">
+                   <strong> <blockquote class="text-center m-1">Agregar movimiento</blockquote></strong>
+                   <hr />
                     <div class="row p-1">
                         <div class="form-group col-3">
-                            <label for="categorymov">Categoría</label>
-                            <select class="form-select" id="categorymov" aria-label="categorymov">
-                            </select>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="patientmov" title="Persona/Entidad que realiza el movimiento" >Tercero</label>
-                            <input type="text" class="form-control" id="patientmov" placeholder="Ingresar Nombre">
+                                <label for="datemov">Fecha</label>
+                                <input type="date" class="form-control form-control-sm" id="datemov" aria-label="datemov" />
                         </div>
                         <div class="form-group col-3">
-                            <label for="bill">Factura</label>
-                            <input type="text" class="form-control" id="bill" placeholder="Nro Factura">
+                            <label for="categorymov">Categoría</label>
+                            <select class="form-select form-select-sm" id="categorymov" aria-label="categorymov">
+                            </select>
                         </div>
-                        <div class="form-group col-2">
+                        
+                        <div class="form-group col-3">
+                            <label for="bill">Factura / Consecutivo</label>
+                            <input type="text" class="form-control form-control-sm" id="bill" placeholder="ingrese consecutivo">
+                        </div>
+                        <div class="form-group col-3">
                             <label for="quantity">Cantidad</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="Cantidad">
+                            <input type="number" class="form-control form-control-sm" id="quantity" placeholder="Cantidad">
+                        </div>
+                        <div class="form-group">
+                            <label for="patientmov" title="Persona/Entidad que realiza el movimiento" >Tercero</label>
+                            <input type="text" class="form-control form-control-sm" id="patientmov" placeholder="Ingresar Nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="notemov" title="Observación del movimiento" >Comentario</label>
+                            <textarea class="form-control form-control-sm" id="notemov" placeholder="Agregar comentario"></textarea>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end pt-1">
+                            <button type="button" class="btn btn-success" title="Enviar Movimiento" id="kardex-store"><i class="bi bi-send-fill"></i></button>
                         </div>
                     </div>
-                    <div class="m-2 float-end">
-                        <button type="button" class="btn btn-success" title="Enviar Movimiento" id="kardex-store"><i class="bi bi-send-fill"></i></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
+                    
                 </form>`;
     }
 
-
     getkardexRow(postdata);
     $('#kardexAdd').html(templateKardex);
+
+    var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+    $('#datemov').val(today);
+    $('#thead').children()[1].css("width", "200px");
+
 
 });
 
@@ -492,15 +537,14 @@ function getkardexRow(postdata) {
             } else {
 
                 data[1].forEach(row => {
-
                     templatebody +=
-                        `<tr class="border">
-                            <td >${nueva = row.zCrea.split(" ")[0].split("-").reverse().join("-") + ' ' + row.zCrea.split(" ")[1]} </td>
-                            <td >${row.patient + (row.bill == null ? '' : '-' + row.bill)}</td>
-                            <td > ${row.category} </td>
-                            <td > ${row.type == 1 ? row.quantity : '0'} </td>
-                            <td > ${row.type == 0 ? row.quantity : '0'} </td>
-                            <td class="text-center"> ${row.finalQuantity} </td>
+                        `<tr class="border h-25">
+                            <td data-sort="${row.zCrea.split(" ")[0]}"> ${nueva = row.zCrea.split(" ")[0].split("-").reverse().join("/") + ' ' + row.zCrea.split(" ")[1]} </td>
+                            <td class="w-100"> ${row.patient + (row.bill == null ? '' : '\n' + row.bill)}</td>
+                            <td> ${row.category} </td>
+                            <td class="w-25 text-end"> ${row.type == 1 ? row.quantity : '0'} </td>
+                            <td class="w-25 text-end"> ${row.type == 0 ? row.quantity : '0'} </td>
+                            <td  class="w-25 text-end"> ${row.finalQuantity} </td>
                         </tr>`
                 });
 
@@ -508,10 +552,6 @@ function getkardexRow(postdata) {
             }
 
             $('#kardexMov').html(templatebody);
-            // table = $('#kardex_tbl').DataTable();
-
-            // console.log(templatebody);
-
             $('#categorymov').html(templateoption);
 
             if (data[1] != 'error') {
@@ -522,6 +562,8 @@ function getkardexRow(postdata) {
                 PDF = false;
                 pagination('#kardex_tbl', '8', columns_print, varTitle, orderBy, PDF);
             }
+
+
 
         };
         return;

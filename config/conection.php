@@ -31,7 +31,7 @@ function login()
             $userFullName = $row[0] . " " . $row[2];
             $privilegeSet = $row[4];
 
-            if ($privilegeSet != 'root' && $privilegeSet != 'prioritaria') {
+            if ($privilegeSet != 'root' && $privilegeSet != 'prioritaria' && $privilegeSet != 'administrador') {
                 $file = 'medicines_l.php';
             } else {
                 $file = 'dashboard.php';
