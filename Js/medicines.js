@@ -199,7 +199,7 @@ $(document).on('click', '#kardex-store', (e) => {
     patient = $('#patientmov').val();
     bill = $('#bill').val();
     quantity = $('#quantity').val();
-
+    comment = $('#notemov').val();
     if (category.length == 0) {
         emptyfields += 'Categoria, '
     }
@@ -240,9 +240,9 @@ $(document).on('click', '#kardex-store', (e) => {
         patient: patient,
         bill: bill,
         quantity: quantity,
+        comment: comment,
 
     };
-    console.log(postdata);
     $.post('../config/newkardexmov.php', postdata, (response) => {
 
         if (response.includes('error')) {
@@ -252,11 +252,11 @@ $(document).on('click', '#kardex-store', (e) => {
                 title: 'Error',
                 text: response.split('-')[1],
             });
+
             return false;
         };
-        console.log(response);
-        $('#newkardexmov').trigger('reset');
 
+        $('#newkardexmov').trigger('reset');
         let postdata = {
             pk_uuid: pk_uuid
         };
@@ -293,7 +293,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
             autoWidth: true,
             text: '<i class="bi bi-filetype-pdf"></i>',
             className: 'bg-danger text-white m-1',
-            exportOptions: { columns: columns_print },
+            exportOptions: { columns: columns_print, order: 'index' },
             title: varTitle,
             pageSize: 'legal',
             messageBottom: 'Reporte generado: ' + new Date().toLocaleDateString('es-CO'),
@@ -444,7 +444,7 @@ $(document).on('click', '.show-element', function (e) {
                 <tr class="text-light border bg-primary" id="thead">
                     <th>Fecha</th>
                     <th>Paciente-Factura</th>
-                    <th>Clase Movimiento</th>
+                    <th>Comentarios</th>
                     <th class="w-25">Entrada</th>
                     <th class="w-25">Salida</th>
                     <th class="w-25">Saldo Final</th>
@@ -540,11 +540,13 @@ function getkardexRow(postdata) {
                     templatebody +=
                         `<tr class="border h-25">
                             <td data-sort="${row.zCrea.split(" ")[0]}"> ${nueva = row.zCrea.split(" ")[0].split("-").reverse().join("/") + ' ' + row.zCrea.split(" ")[1]} </td>
-                            <td class="w-100"> ${row.patient + (row.bill == null ? '' : '\n' + row.bill)}</td>
-                            <td> ${row.category} </td>
+                            <td class="w-100"> ${row.patient}<br>
+                            <small>${row.bill == "" ? '' : 'fra/consec: ' + row.bill}</small>
+                            </td>
+                            <td><small> ${row.comment == null || row.comment == '' ? '' : row.comment} <small> </td>
                             <td class="w-25 text-end"> ${row.type == 1 ? row.quantity : '0'} </td>
                             <td class="w-25 text-end"> ${row.type == 0 ? row.quantity : '0'} </td>
-                            <td  class="w-25 text-end"> ${row.finalQuantity} </td>
+                            <td  class="w-25 text-end text-${row.type == 1 ? 'success' : 'danger'}"> ${row.finalQuantity} </td>
                         </tr>`
                 });
 
