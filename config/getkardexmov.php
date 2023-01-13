@@ -30,11 +30,11 @@ array_push($responseArray, $jsoncategories);
 
 $resultCount = '';
 
-$sql = "SELECT k.zCrea,mc.`name` AS category,k.FK_Patient AS patient,k.`type`,k.quantity,k.finalQuantity ,k.bill 
+$sql = "SELECT k.dateUserCrea,mc.`name` AS category,k.FK_Patient AS patient,k.`type`,k.quantity,k.finalQuantity ,k.bill,k.comment 
 FROM kardex AS k 
 INNER JOIN movcategories AS mc ON mc.KP_UUID = k.FK_Category
 WHERE k.FK_Medicine = '$pk_uuid'
-ORDER BY k.zCrea DESC";
+ORDER BY k.dateUserCrea DESC";
 
 $result = mysqli_query($conn, $sql);
 if (!$result) {
@@ -47,13 +47,15 @@ if ($resultCount > 0) {
     $json = array();
     while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
-            'zCrea' => $row['zCrea'],
+            'zCrea' => $row['dateUserCrea'],
             'category' => $row['category'],
             'patient' => $row['patient'],
             'bill' => $row['bill'],
             'type' => $row['type'],
             'quantity' => $row['quantity'],
-            'finalQuantity' => $row['finalQuantity']
+            'finalQuantity' => $row['finalQuantity'],
+            'comment' => $row['comment'],
+
         );
     }
     // $jsonstring = json_encode($json);
