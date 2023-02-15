@@ -338,6 +338,27 @@ $('#reportSamebitModal').on('click', function () {
         'destroy': true,
         "deferRender": true,
         "orderClasses": false,
+        dom: 'Bfrtip',
+        buttons: [{
+            extend: 'excelHtml5',
+            text: '<i class="bi bi-filetype-xls"></i>',
+            className: 'bg-success text-white',
+            titleAttr: 'Generar Archivo: Excel',
+        }, {
+            extend: 'csvHtml5',
+            text: '<i class="bi bi-filetype-csv"></i>',
+            className: 'bg-info text-white',
+            titleAttr: 'Generar Archivo: CSV',
+        }, {
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            autoWidth: true,
+            text: '<i class="bi bi-filetype-pdf"></i>',
+            className: 'bg-danger text-white',
+            titleAttr: 'Generar Archivo: PDF',
+        }
+        ],
         "lengthMenu": [30, 50, 100, 200], /*"All"*/
         // "processing": true,
         "language": {
