@@ -45,7 +45,7 @@ function login()
             $subMensaje = 'Conexión Exitosa';
             $tipo = 'success';
             $nombreUsuario = $_SESSION['usuario'];
-            $url = "http://localhost/samebit/pages/".$file;
+            $url = "http://192.168.1.22/samebit/pages/".$file;
         } else {
 
             $titulo = 'Error';

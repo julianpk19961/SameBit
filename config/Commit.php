@@ -70,7 +70,7 @@ if ($approved == 1) {
     $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,appointmentdate,appointmenttime,sentby,statuseps,callsnumber,comment0,createdUser,updatedUser,exhibit_nine,exhibit_ten,send_to,observation_out)
         VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved', '$appointmentdate','$appointmenttime','$sentby','$statuseps','$callsnumber','$comment','$username','$username','$exhibitNine','$exhibitTen','$sendTo','$commentOut') ";
 } else {
-    $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,sentby,statuseps,callsnumber,comment0,createdUser,updatedUserexhibit_nine,exhibit_ten,send_to,observation_out )
+    $sql = "INSERT INTO bitpriorities (PK_UUID,FK_Patient,FK_EPS,FK_Ips,FK_Range,FK_Diagnosis,dni,name0,lastname,contactype,commentdate,commenttime,approved,sentby,statuseps,callsnumber,comment0,createdUser,updatedUser,exhibit_nine,exhibit_ten,send_to,observation_out )
         VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved','$sentby','$statuseps','$callsnumber','$comment','$username','$username','$exhibitNine','$exhibitTen','$sendTo','$commentOut') ";
 }
 
