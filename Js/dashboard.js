@@ -255,6 +255,7 @@ $(document).on('submit', '#bitregister', function (event) {
 
             // Capturar datos a enviar
             const postData = {
+
                 pk_uuid: $('#PK_UUID').val(),
                 dni: $('#Dni').val(),
                 documenttype: $('#documenttype').val(),
@@ -273,7 +274,12 @@ $(document).on('submit', '#bitregister', function (event) {
                 diagnosis: $('#diagnosis').val(),
                 CallNumber: $('#CallNumber').val(),
                 SentBy: $('#SentBy').val(),
-                Observation: $('#Observation0').val()
+                ObservationIn: $('#ObservationIn').val(),
+                exhibitNine: $('#exhibitNine').val(),
+                exhibitTen: $('#exhibitTen').val(),
+                sendTo: $('#sendTo').val(),
+                ObservationOut: $('#ObservationOut').val()
+
             };
 
             // event.preventDefault();postdata
@@ -328,16 +334,24 @@ $('#reportSamebitModal').on('click', function () {
             { "data": "DIAGNOSTICO" },
             { "data": "APROBADO" },
             { "data": "FECHA_CITA" },
-            { "data": "CREADO_POR" }
+            { "data": "CREADO_POR" },
+            { "data": "ANEXO_9" },
+            { "data": "ANEXO_10" },
+            { "data": "ENVIADO_A" },
+            { "data": "COMENTARIO_RECEPCION" },
+            { "data": "COMENTARIO_CONTRAREF" },
         ],
         "paging": true,
         'scrollY': '300px',
         'scrollX': '300px',
         'scrollCollapse': true,
+        'processing': true,
+        'serverSide': true,
         responsive: true,
         'destroy': true,
         "deferRender": true,
         "orderClasses": false,
+        "order": [0],
         dom: 'Bfrtip',
         buttons: [{
             extend: 'excelHtml5',
@@ -357,6 +371,10 @@ $('#reportSamebitModal').on('click', function () {
             text: '<i class="bi bi-filetype-pdf"></i>',
             className: 'bg-danger text-white',
             titleAttr: 'Generar Archivo: PDF',
+            exportOptions: {
+                columns: ':visible'
+                // columns: 'th:not(:last-child)'
+            }
         }
         ],
         "lengthMenu": [30, 50, 100, 200], /*"All"*/
@@ -367,4 +385,11 @@ $('#reportSamebitModal').on('click', function () {
 
     });
 
+    hideColums();
 });
+
+
+function hideColums() {
+    table = $('#recordsSummary').DataTable();
+    table.columns([7, 12, 13, 14, 15, 16]).visible(false);
+}

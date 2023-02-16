@@ -14,7 +14,7 @@ include './generales/header.php';
             <h1 class="display-5 fw-bold">BIENVENIDO</h1>
         </div>
         <!-- Login Form -->
-        <form action=""  id="login" method="POST" class="form login">
+        <form action="" id="login" method="POST" class="form login">
             <!-- Mensaje bienvenida -->
             <!-- Parametros de sesion -->
             <!-- Sn -->
@@ -29,7 +29,7 @@ include './generales/header.php';
                 <label for="login__password"><svg class="icon">
                         <use xlink:href="#icon-lock"></use>
                     </svg><span class="hidden">Password</span></label>
-                <input id="login__password" type="password" name="password" class="form__input" placeholder="Contrase&ntilde;a" autocomplete="on" required >
+                <input id="login__password" type="password" name="password" class="form__input" placeholder="Contrase&ntilde;a" autocomplete="on" required>
             </div>
 
             <div class="form__field">
