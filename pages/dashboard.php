@@ -366,7 +366,8 @@ include './generales/header.php';
           <table class="table table-lg table-striped table-responsive" id="recordsSummary">
             <thead class="table-light">
               <tr>
-                <th>Fecha</th>
+                <th hidden>Recepción Correo</th>
+                <th>Respuesta Correo</th>
                 <th>Hora</th>
                 <th>Documento</th>
                 <th>Paciente</th>
@@ -382,12 +383,13 @@ include './generales/header.php';
                 <th hidden>Anexo 10</th>
                 <th hidden>Enviado a</th>
                 <th hidden>Comentario</th>
-                <th hidden>comentario_cr</th>
+                <th hidden>Comentario contrareferencia</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
-                <th>Fecha</th>
+                <th hidden>Recepción Correo</th>
+                <th>Respuesta Correo</th>
                 <th>Hora</th>
                 <th>Documento</th>
                 <th>Paciente</th>
@@ -403,7 +405,8 @@ include './generales/header.php';
                 <th hidden>Anexo 10</th>
                 <th hidden>Enviado a</th>
                 <th hidden>Comentario</th>
-                <th hidden>comentario_cr</th>
+                <th hidden>Comentario contrareferencia</th>
+
               </tr>
             </tfoot>
           </table>

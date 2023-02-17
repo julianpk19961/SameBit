@@ -5,9 +5,9 @@ include 'config.php';
 $sql = "SELECT CONCAT(p.Name0 ,' ',p.lastname0) as PACIENTE, e.name0 as EPS,
 b.statuseps ESTADO_EPS, b.FK_Range as RANGO, i.name0 AS IPS, d.codigo  AS DIAGNOSTICO,
 b.dni AS CC, b.name0 AS NOMBRE, b.lastname AS PELLIDO, b.sentby AS ENVIADO_POR,
-b.comment0 AS COMENTARIO_RECEPCION, b.commentdate AS FECHA_COMENTARIO,b.commenttime AS HORA_COMENTARIO,
+b.comment0 AS COMENTARIO_RECEPCION, b.commentdate AS RESPUESTA_CORREO,b.commenttime AS HORA_COMENTARIO,
 b.approved APROBADO, b.appointmentdate AS FECHA_CITA, b.appointmenttime HORA_CITA,
-b.callsnumber AS NUMERO_LLAMADAS,b.createdUser AS CREADO_POR,b.created AS HORA_CREADO,
+b.callsnumber AS NUMERO_LLAMADAS,b.createdUser AS CREADO_POR,b.created AS RECEPCION_CORREO,
 b.updatedUser AS ACTUALIZADO_POR,b.updated AS HORA_ACTUALIZADO, b.contactype AS TIPO_CONTACTO,
 b.exhibit_nine AS ANEXO_9, b.exhibit_ten AS ANEXO_10, b.send_to AS ENVIADO_A, b.observation_out AS COMENTARIO_CONTRAREF
 

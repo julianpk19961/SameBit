@@ -91,8 +91,8 @@ $(document).on('click', '.patient-select', function () {
             $('#nombre').val(patient.name);
             $('#apellido').val(patient.lastname);
             $('#documenttype').val(patient.documentType);
-            $('#Eps').val(pacients.eps);
-            $('#EpsClassification').val(pacients.range);
+            $('#Eps').val(patient.eps);
+            $('#EpsClassification').val(patient.range);
             $('#search-patients').hide();
             $('#history-patient').show();
 
@@ -281,7 +281,6 @@ $(document).on('submit', '#bitregister', function (event) {
                 ObservationOut: $('#ObservationOut').val()
 
             };
-
             // event.preventDefault();postdata
             // console.log (postData);
 
@@ -323,7 +322,8 @@ $('#reportSamebitModal').on('click', function () {
             "url": '../config/getPriorities.php',
         },
         "columns": [
-            { "data": "FECHA_COMENTARIO" },
+            { "data": "RECEPCION_CORREO" },
+            { "data": "RESPUESTA_CORREO" },
             { "data": "HORA_COMENTARIO" },
             { "data": "CC" },
             { "data": "PACIENTE" },
@@ -340,18 +340,17 @@ $('#reportSamebitModal').on('click', function () {
             { "data": "ENVIADO_A" },
             { "data": "COMENTARIO_RECEPCION" },
             { "data": "COMENTARIO_CONTRAREF" },
+
         ],
         "paging": true,
         'scrollY': '300px',
         'scrollX': '300px',
         'scrollCollapse': true,
-        'processing': true,
-        'serverSide': true,
-        responsive: true,
+        'responsive': true,
         'destroy': true,
         "deferRender": true,
         "orderClasses": false,
-        "order": [0],
+        "order": [1],
         dom: 'Bfrtip',
         buttons: [{
             extend: 'excelHtml5',
@@ -391,5 +390,6 @@ $('#reportSamebitModal').on('click', function () {
 
 function hideColums() {
     table = $('#recordsSummary').DataTable();
-    table.columns([7, 12, 13, 14, 15, 16]).visible(false);
+    table.columns([0, 7, 12, 13, 14, 15, 16]).visible(false);
 }
+
