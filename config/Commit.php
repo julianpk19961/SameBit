@@ -46,6 +46,7 @@ if (empty($PK_UUID)) {
         WHERE Dni = '$dni' ";
 }
 
+
 // Salida por error.
 $result = mysqli_query($conn, $sql);
 if (!$result) {
@@ -74,11 +75,6 @@ if ($approved == 1) {
         VALUES ( UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name','$lastname','$contactype','$commentdate','$commenttime','$approved','$sentby','$statuseps','$callsnumber','$comment','$username','$username','$exhibitNine','$exhibitTen','$sendTo','$commentOut') ";
 }
 
-$exhibitNine = isset($_POST["exhibitNine"]) ? $_POST["exhibitNine"] : 0;
-$exhibitTen = isset($_POST["exhibitTen"]) ? $_POST["exhibitTen"] : 0;
-$sendTo = isset($_POST["sendTo"]) ? $_POST["sendTo"] : '';
-$commentOut = isset($_POST["ObservationOut"]) ? $_POST["ObservationOut"] : '';
-// Inserción de datos a la tabla de bitacora de prioridades.
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
