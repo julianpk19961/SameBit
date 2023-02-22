@@ -43,31 +43,21 @@ include './generales/header.php';
                 <div class="col-sm-7">
                   <div class="card-body pt-5 text-black">
                     <div class="alert alert-light border" role="alert" id="refIn">
-                      <strong class="text-muted">REGISTRAR NOVEDAD</strong>
+                      <strong class="text-muted text-middle">INFORMACIÓN PACIENTE</strong>
                       <hr>
-                      <br>
                       <div class="form-group">
+
                         <div class="row">
+
                           <div class="col-md-6 mb-4">
-                            <!-- NUMERO DNI -->
-                            <div class="form-outline">
-                              <label class="form-label" for="Dni">IDENTIFICACIÓN*</label>
-                              <input required type="number" id="Dni" name="Dni" class="form-control form-control-lg" list='patientslist' />
-                              <datalist id='patientslist' name="patientslist">
-                              </datalist>
-                            </div>
-                          </div>
-                          <div class="col-md-6 mb-4">
-                            <input id="PK_UUID" name="PK_UUID" type="hidden">
+                            <input id="pk_uuid" name="pk_uuid" type="hidden">
                             <!-- TIPO DNI -->
                             <div class="form-outline">
                               <label class="form-label" for="documenttype">TIPO IDENTIFICACIÓN*</label>
-                              <!-- <input type="text" id="form3Example1m" class="form-control form-control-lg" /> -->
                               <Select required type="text" class="form-control form-control-lg" name="documenttype" id="documenttype">
-                                <option disabled selected>Seleccione una opción</option>
                                 <option value='11'>Registro Civil de nacimiento</option>
                                 <option value="12">Tarjeta Identidad</option>
-                                <option value="13">Cedula de ciudadanía</option>
+                                <option value="13" selected>Cedula de ciudadanía</option>
                                 <option value="21">Tarjeta de extranjería</option>
                                 <option value="22">Cédula de extranjería</option>
                                 <option value="31">NIT</option>
@@ -77,6 +67,15 @@ include './generales/header.php';
                               </Select>
                             </div>
                           </div>
+
+                          <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                              <label class="form-label" for="dni">IDENTIFICACIÓN*</label>
+                              <input required type="number" id="dni" name="dni" class="form-control form-control-lg" autofocus />
+                            </div>
+                          </div>
+
+
                           <div class="col-md-6 mb-4">
                             <!-- NOMBRES -->
                             <div class="form-outline">
@@ -94,73 +93,16 @@ include './generales/header.php';
                         </div>
 
                         <div class="row">
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <!-- TIPO DE CONTACTO -->
-                              <label class="form-label" for="contacttype">TIPO CONTACTO*</label>
-                              <Select required type="text" class="form-control form-control-lg" name="contacttype" id="contacttype">
-                                <option disabled selected>Seleccione una opción</option>
-                                <option value='0'>Llamada</option>
-                                <option value="1">Correo</option>
-                              </Select>
 
-                            </div>
-                          </div>
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <!-- FECHA COMENTARIO -->
-                              <label class="form-label" for="CommentDate">FECHA COMENTARIO*</label>
-                              <input required type="date" id="CommentDate" name="CommentDate" class="form-control form-control-lg" />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <!-- HORA COMENTARIO -->
-                              <label class="form-label" for="CommentTime">HORA COMENTARIO*</label>
-                              <input required type="time" id="CommentTime" name="CommentTime" class="form-control form-control-lg" />
-                            </div>
-                          </div>
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <!-- ACEPTACION PACIENTE -->
-                              <label class="form-label" for="approved">APROBADO*</label>
-                              <Select required type="text" class="form-control form-control-lg" name="approved" id="approved">
-                                <option disabled selected>Seleccione una opción</option>
-                                <option value="0">NO</option>
-                                <option value='1'>SI</option>
-                              </Select>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <!-- FECHA ATENCION -->
-                              <label class="form-label" for="AtentionDate">FECHA ATENCIÓN</label>
-                              <input type="date" id="AtentionDate" name="AtentionDate" class="form-control form-control-lg" />
-                            </div>
-                          </div>
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <!-- HORA ATENCION -->
-                              <label class="form-label" for="AtentionTime">HORA ATENCIÓN</label>
-                              <input required type="time" id="AtentionTime" name="AtentionTime" class="form-control form-control-lg" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
                           <div class="col-md-6 mb-4">
                             <!-- IPS -->
                             <div class="form-outline">
-                              <label class="form-label" for="Ips">IPS*</label>
-                              <Select required type="text" class="form-control form-control-lg" name="Ips" id="Ips">
+                              <label class="form-label" for="ips">IPS*</label>
+                              <Select required type="text" class="form-control form-control-lg" name="ips" id="ips">
                               </Select>
                             </div>
                           </div>
+
                           <div class="col-md-6 mb-4">
                             <!-- EPS -->
                             <div class="form-outline">
@@ -169,9 +111,7 @@ include './generales/header.php';
                               </Select>
                             </div>
                           </div>
-                        </div>
 
-                        <div class="row">
                           <div class="col-md-6 mb-4">
                             <!-- Rango EPS -->
                             <div class="form-outline">
@@ -197,43 +137,178 @@ include './generales/header.php';
                               </Select>
                             </div>
                           </div>
-                          <!-- Diagnostico aplicado a paciente -->
                           <div class="col-md-6 mb-4">
                             <div class="form-outline">
-                              <label class="form-label" for="diagnosis">DIAGNÓSTICO*</label>
-                              <Select required type="text" class="form-control form-control-lg" name="diagnosis" id="diagnosis">
+                              <!-- TIPO DE CONTACTO -->
+                              <label class="form-label" for="contacttype">TIPO CONTACTO*</label>
+                              <Select required type="text" class="form-control form-control-lg" name="contacttype" id="contacttype">
+                                <option value='llamada'>Llamada</option>
+                                <option value="correo" selected>Correo</option>
+                              </Select>
+
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                              <!-- ACEPTACION PACIENTE -->
+                              <label class="form-label" for="approved">APROBADO*</label>
+                              <Select required type="text" class="form-control form-control-lg" name="approved" id="approved">
+                                <option disabled selected>Seleccione una opción</option>
+                                <option value="0">NO</option>
+                                <option value='1'>SI</option>
                               </Select>
                             </div>
                           </div>
-                          <!-- Numero de llamadas -->
-                          <div class="col-md-6 mb-4">
-                            <div class="form-outline">
-                              <label class="form-label" for="CallNumber">NÚMERO LLAMADAS</label>
-                              <input type="number" id="CallNumber" name="CallNumber" class="form-control form-control-lg" />
+                          <div class="alert alert-success border" role="alert">
+                            <!-- <div class="alert alert-secondary border"> -->
+                            <strong class="text-muted">REFERENCIA</strong>
+                            <hr>
+                            <div class="row">
+
+                              <div class="col-md-6">
+                                <div class="form-outline">
+                                  <label class="form-label" for="diagnosis">DIAGNÓSTICO*</label>
+                                  <Select required type="text" class="form-control form-control-lg" name="diagnosis" id="diagnosis">
+                                  </Select>
+                                </div>
+                              </div>
+                              <!-- Numero de llamadas -->
+                              <div class="col-md-6">
+                                <div class="form-outline">
+                                  <label class="form-label" for="CallNumber">NUMERO: <span class="switchTitle">CORREO</span>S</label>
+                                  <input type="number" id="CallNumber" name="CallNumber" class="form-control form-control-lg" />
+                                </div>
+                              </div>
+                              <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                  <!-- FECHA CORREO -->
+                                  <label class="form-label" for="check-in-date">FECHA <span class="switchTitle">CORREO</span>*</label>
+                                  <input type="date" id="check-in-date" name="check-in-date" class="date_in form-control form-control-lg" required />
+                                </div>
+                              </div>
+                              <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                  <!-- HORA CORREO -->
+                                  <label class="form-label" for="check-in-time">HORA <span class="switchTitle">CORREO</span>*</label>
+                                  <input type="time" id="check-in-time" name="check-in-time" class="time_in form-control form-control-lg" required />
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                  <!-- FECHA COMENTARIO -->
+                                  <label class="form-label" for="CommentDate">FECHA COMENTARIO*</label>
+                                  <input type="date" id="CommentDate" name="CommentDate" class="date_out form-control form-control-lg" required />
+                                </div>
+                              </div>
+                              <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                  <!-- HORA COMENTARIO -->
+                                  <label class="form-label" for="CommentTime">HORA COMENTARIO*</label>
+                                  <input type="time" id="CommentTime" name="CommentTime" class="time_out form-control form-control-lg" required />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                  <!-- FECHA ATENCION -->
+                                  <label class="form-label" for="AtentionDate">FECHA ATENCIÓN</label>
+                                  <input type="date" id="AtentionDate" name="AtentionDate" class="form-control form-control-lg" />
+                                </div>
+                              </div>
+                              <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                  <!-- HORA ATENCION -->
+                                  <label class="form-label" for="AtentionTime">HORA ATENCIÓN</label>
+                                  <input required type="time" id="AtentionTime" name="AtentionTime" class="form-control form-control-lg" />
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row">
+                              <!-- REMISIÓN  -->
+                              <div class="form-outline mb-2">
+                                <div class="form-outline">
+
+                                  <div class="row">
+                                    <div class="col-md-7 mb-4">
+                                      <div class="form-outline">
+                                        <label class="form-label" for="SentBy">REMITIDO DESDE: *</label>
+                                        <input required type="text" id="SentBy" name="SentBy" class="form-control form-control-lg" />
+                                      </div>
+                                    </div>
+
+                                    <div class="col-md-5 mb-4">
+                                      <div class="form-outline">
+                                        <!-- Estado en la eps -->
+                                        <label class="form-label" for="exhibitNine">¿TIENE DILIGENCIADO EL ANEXO 9?</label>
+                                        <Select class="form-control form-control-lg col-6" type="text" id="exhibitNine" name="exhibitNine" value="false">
+                                          <option disabled="disabled" selected>Seleccione una opción</option>
+                                          <option value='0'>NO</option>
+                                          <option value='1'>SI</option>
+                                        </Select>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="row">
+                              <div class="form-outline mb-2">
+                                <div class="form-outline">
+                                  <label class="form-label" for="ObservationIn">OBSERVACIÓN*</label>
+                                  <input required type="textarea" id="ObservationIn" name="ObservationIn" class="form-control form-control-lg" />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          <!-- REMISIÓN  -->
-                          <div class="form-outline mb-2">
-                            <div class="form-outline">
-
-                              <div class="row">
-                                <div class="col-md-8 mb-4">
+                          <div class="alert alert-info border" role="alert" id="refOut">
+                            <strong class="text-muted">CONTRA-REFERENCIA</strong>
+                            <hr>
+                            <div class="form-group">
+                              <br>
+                              <div class="form-outline">
+                                <div>
                                   <div class="form-outline">
-                                    <label class="form-label col-8" for="SentBy">REMITIDO DESDE: *</label>
-                                    <input required type="text" id="SentBy" name="SentBy" class="form-control form-control-lg" />
+                                    <div class="row">
+
+                                      <div class="col-md-7 mb-4">
+                                        <div class="form-outline">
+                                          <!-- Estado en la eps -->
+                                          <label class="form-label" for="sendTo">REMITIDO A: *</label>
+                                          <input required type="text" id="sendTo" name="sendTo" class="form-control form-control-lg" />
+                                        </div>
+                                      </div>
+
+                                      <div class="col-md-5 mb-4">
+                                        <div class="form-outline">
+                                          <!-- Estado en la eps -->
+                                          <label class="form-label" for="exhibitTen">¿TIENE DILIGENCIADO EL ANEXO 10?</label>
+                                          <Select class="form-control form-control-lg col-6" type="text" id="exhibitTen" name="exhibitTen" value="false">
+                                            <option disabled="disabled" selected>Seleccione una opción</option>
+                                            <option value='0'>NO</option>
+                                            <option value='1'>SI</option>
+                                          </Select>
+                                        </div>
+                                      </div>
+
+                                    </div>
                                   </div>
                                 </div>
-
-                                <div class="col-md-4 mb-4">
-                                  <div class="form-outline">
-                                    <!-- Estado en la eps -->
-                                    <label class="form-label" for="exhibitNine">¿TIENE DILIGENCIADO EL ANEXO 9?</label>
-                                    <Select class="form-control form-control-lg col-6" type="text" id="exhibitNine" name="exhibitNine" value="false">
-                                      <option disabled="disabled" selected>Seleccione una opción</option>
-                                      <option value='0'>NO</option>
-                                      <option value='1'>SI</option>
-                                    </Select>
-                                  </div>
+                              </div>
+                              <div class="form-outline mb-2">
+                                <div class="form-outline">
+                                  <label class="form-label" for="ObservationOut">OBSERVACIÓN*</label>
+                                  <input required type="textarea" id="ObservationOut" name="ObservationOut" class="form-control form-control-lg" />
                                 </div>
                               </div>
 
@@ -241,109 +316,64 @@ include './generales/header.php';
                           </div>
                         </div>
 
-                        <!-- Observaciones -->
-                        <div class="row">
-                          <div class="form-outline mb-2">
-                            <div class="form-outline">
-                              <label class="form-label" for="ObservationIn">OBSERVACIÓN*</label>
-                              <input required type="textarea" id="ObservationIn" name="ObservationIn" class="form-control form-control-lg" />
-                            </div>
-                          </div>
-                        </div>
+                        <!-- Contra referencia -->
                       </div>
-                    </div>
 
-                    <!-- Contra referencia -->
-                    <div class="alert alert-info border" role="alert" id="refOut">
-                      <strong class="text-muted">CONTRA REFERENCIA</strong>
-                      <hr>
-                      <div class="form-group">
-                        <br>
-                        <div class="form-outline">
-                          <div>
-                            <div class="form-outline">
-                              <div class="row">
-
-                                <div class="col-md-7 mb-4">
-                                  <div class="form-outline">
-                                    <!-- Estado en la eps -->
-                                    <label class="form-label" for="sendTo">REMITIDO A: *</label>
-                                    <input required type="text" id="sendTo" name="sendTo" class="form-control form-control-lg" />
-                                  </div>
-                                </div>
-
-                                <div class="col-md-5 mb-4">
-                                  <div class="form-outline">
-                                    <!-- Estado en la eps -->
-                                    <label class="form-label" for="exhibitTen">¿TIENE DILIGENCIADO EL ANEXO 10?</label>
-                                    <Select class="form-control form-control-lg col-6" type="text" id="exhibitTen" name="exhibitTen" value="false">
-                                      <option disabled="disabled" selected>Seleccione una opción</option>
-                                      <option value='0'>NO</option>
-                                      <option value='1'>SI</option>
-                                    </Select>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-outline mb-2">
-                          <div class="form-outline">
-                            <label class="form-label" for="ObservationOut">OBSERVACIÓN*</label>
-                            <input required type="textarea" id="ObservationOut" name="ObservationOut" class="form-control form-control-lg" />
-                          </div>
-                        </div>
-
+                      <div class="d-flex justify-content-end pt-3">
+                        <button type="button" class="bit-clean btn btn-light btn-lg">Limpiar Formulario</button>
+                        <button id="bit-submit" type="submit" class="bit-submit btn btn-warning btn-lg ms-2">Enviar</button>
                       </div>
+
                     </div>
-
-
-                    <div class="d-flex justify-content-end pt-3">
-                      <button type="button" class="bit-clean btn btn-light btn-lg">Limpiar Formulario</button>
-                      <button id="bit-submit" type="submit" class="bit-submit btn btn-warning btn-lg ms-2">Enviar</button>
-                    </div>
-
                   </div>
-                </div>
 
+
+                </div>
                 <div class="col-sm-5">
                   <div class="card-body pt-5 text-black">
                     <!-- Tabla de busquedas -->
-                    <div class="row md-12" id="search-patients">
-                      <h4 class="mb-5 text-uppercase">PACIENTES REGISTRADOS
-                        <hr>
-                      </h4>
-                      <table class="table table-striped table-bordered w-100" id="table-patients">
-                        <thead class="thead-light">
-                          <tr>
-                            <th class="table-primary">KP_UUID</th>
-                            <th class="table-primary">Documento</th>
-                            <th class="table-primary">Paciente </th>
-                            <th class="table-primary"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="patients">
-                        </tbody>
-                      </table>
+                    <div class="row md-12 border rounded-2" id="search-patients">
+                      <div class="container">
+                        <h4 class="text-uppercase text-center text-muted mt-2">PACIENTES REGISTRADOS
+                          <hr>
+                        </h4>
+                        <div class="m-1">
+                          <table class="table table-striped table-bordered w-100" id="table-patients">
+                            <thead class="thead-light">
+                              <tr>
+                                <th class="table-primary" hidden>KP_UUID</th>
+                                <th class="table-primary">Documento</th>
+                                <th class="table-primary">Paciente </th>
+                                <th class="table-primary"></th>
+                              </tr>
+                            </thead>
+                            <tbody id="patients">
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                     <!-- Tabla de historico -->
-                    <div class="row md-12" id="history-patient">
-                      <h4 class="mb-5 text-uppercase">HISTORICO DEL PACIENTE
+                    <div class="row md-12 border rounded-2" id="history-patient">
+                      <h4 class="text-uppercase text-center text-muted mt-2">HISTORIAL - PRIORITARIA
                         <hr>
                       </h4>
-                      <table class="table table-bordered">
-                        <thead class="thead-light">
-                          <tr>
-                            <th class="table-primary"> Fecha</th>
-                            <th class="table-primary"> Hora </th>
-                            <th class="table-primary"> Atiende </th>
-                            <th class="table-primary"> Observación </th>
-                          </tr>
-                        </thead>
-                        <tbody id="patienshistory">
-                        </tbody>
-                      </table>
+                      <hr>
+                      <div class="m-1">
+
+                        <table class="table table-bordered" id="prioritarie-history">
+                          <thead class="thead-light">
+                            <tr>
+                              <th class="table-primary"> Fecha</th>
+                              <th class="table-primary"> Hora </th>
+                              <th class="table-primary"> Atiende </th>
+                              <th class="table-primary"> Observación </th>
+                            </tr>
+                          </thead>
+                          <tbody id="patienshistory">
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -351,7 +381,6 @@ include './generales/header.php';
             </div>
           </div>
         </div>
-      </div>
       </div>
     </form>
   </section>
