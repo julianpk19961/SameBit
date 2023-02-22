@@ -17,40 +17,35 @@ $(document).ready(function () {
 
 
 // Acción para input de número de documento
-$(document).on('keyup', '#Dni', function () {
-    let dni = $('#Dni').val();
-    // La función se activa cuando el tamaño del input cumpla con minimo 5 caracteres
+$(document).on('keyup', '#dni', function () {
+    let dni = $('#dni').val();
+    // La función se activa cuando el tamaño del input cumpla con minimo 4 caracteres
     if (dni.length >= 4) {
 
-        $('#table-patients').DataTable({
-            destroy: true,
-            processing: true,
-            // serverSide: true,
-            ajax: {
-                url: '../config/getPatients.php',
-                type: 'POST',
-                data: { dni },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    $('#table-patients').DataTable({
-                        destroy: true,
-                        "language": {
-                            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-                        }
-                    })
-                }
+        table = $('#table-patients');
+
+        table.DataTable({
+
+            "ajax": {
+                "method": 'POST',
+                "data": { dni },
+                "url": '../config/getPatients.php',
             },
-            columns: [
-                { data: 0 },
-                { data: 1 },
-                { data: 2 },
+            "columns": [
+                { 'data': 'UUID' },
+                { 'data': 'PACIENTE' },
+                { 'data': 'DOC_NUMBER' },
                 null,
             ],
+            "paging": true,
+            "scrollCollapse": true,
+            "responsive": true,
+            "destroy": true,
+            "deferRender": true,
+            "order": [2]
+            ,
             columnDefs: [
                 {
-                    targets: 0,
-                    visible: false,
-                    searchable: false,
-                }, {
                     targets: 3,
                     data: null,
                     defaultContent: "<button class='patient-select btn btn-info' style='width:100%; word-wrap: break-word;'>Selecionar</button>"
@@ -60,6 +55,11 @@ $(document).on('keyup', '#Dni', function () {
                 "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
             }
         });
+
+        table_id = 'table-patients';
+        cols_positions = [0];
+        hideColums(table_id, cols_positions);
+
         $('#history-patient').hide();
         $('#search-patients').show();
 
@@ -77,27 +77,30 @@ $(document).on('click', '.patient-select', function () {
         // Capturar el elemnento padre y posterior tomar el atributo almacenado en el id=pacientid
         let row = $(this).closest("tr");
         let data = $('#table-patients').DataTable().row(row).data();
-        let PK_UUID = data[0];
+        let pk_uuid = data['UUID'];
 
         if (localStorage.getItem('Error')) {
             localStorage.removeItem('Error');
         }
 
-        $.post('../config/usepatient.php', { PK_UUID }, function (response) {
+        $.post('../config/usepatient.php', { pk_uuid }, function (response) {
+
             const patient = JSON.parse(response);
+            console.log(patient);
             $('#bitregister').trigger('reset');
-            $('#PK_UUID').val(patient.PK_UUID);
-            $('#Dni').val(patient.dni);
+            $('#pk_uuid').val(patient.pk_uuid);
+            $('#dni').val(patient.dni);
             $('#nombre').val(patient.name);
             $('#apellido').val(patient.lastname);
             $('#documenttype').val(patient.documentType);
             $('#Eps').val(patient.eps);
+            $('#ips').val(patient.ips);
             $('#EpsClassification').val(patient.range);
             $('#search-patients').hide();
             $('#history-patient').show();
 
+            cargar_historico(patient.dni);
         });
-        cargar_historico();
     }
 });
 
@@ -156,7 +159,7 @@ function cargar_ips() {
                     <option value=${ipslist.pk_uuid}>${ipslist.name}</option>
                     `
             });
-            $('#Ips').html(template);
+            $('#ips').html(template);
         }
     });
 }
@@ -182,9 +185,7 @@ function cargar_diagnosis() {
 $(document).ready(cargar_diagnosis);
 
 // Función para cargar el historico
-function cargar_historico() {
-    // Establezco el valor de la CC
-    let dni = $('#Dni').val();
+function cargar_historico(dni) {
 
     $.ajax({
         url: '../config/callhistory.php',
@@ -240,8 +241,9 @@ $(document).on('submit', '#bitregister', function (event) {
     if (confirm('¿Está seguro de enviar el formulario')) {
 
         //Validar campos vacios
-        if ($('#documenttype').val() == '' || $('#Dni').val() == '' || $('#nombre').val() == '' || $('#apellido').val() == '' || $('#contacttype').val() == '' || $('#CommentDate').val() == '' || $('#CommentTime').val() == '' || $('#Eps').val() == '' || $('#Ips').val() == '' || $('#SentBy').val() == '' || $('#EpsStatus').val() == '' || $('#EpsClassification').val() == ''
-        ) {
+        if ($('#documenttype').val() == '' || $('#dni').val() == '' || $('#nombre').val() == '' || $('#apellido').val() == '' ||
+            $('#contacttype').val() == '' || $('#CommentDate').val() == '' || $('#CommentTime').val() == '' || $('#Eps').val() == '' ||
+            $('#ips').val() == '' || $('#SentBy').val() == '' || $('#EpsStatus').val() == '' || $('#EpsClassification').val() == '') {
             // Error por campos vacios.
             Swal.fire({
                 icon: 'error',
@@ -256,19 +258,21 @@ $(document).on('submit', '#bitregister', function (event) {
             // Capturar datos a enviar
             const postData = {
 
-                pk_uuid: $('#PK_UUID').val(),
-                dni: $('#Dni').val(),
+                pk_uuid: $('#pk_uuid').val(),
+                dni: $('#dni').val(),
                 documenttype: $('#documenttype').val(),
                 name: $('#nombre').val(),
                 lastname: $('#apellido').val(),
                 contacttype: $('#contacttype').val(),
                 CommentDate: $('#CommentDate').val(),
                 CommentTime: $('#CommentTime').val(),
+                checkInDate: $('#check-in-date').val(),
+                checkInTime: $('#check-in-time').val(),
                 approved: $('#approved').val(),
                 AtentionDate: $('#AtentionDate').val(),
                 AtentionTime: $('#AtentionTime').val(),
                 Eps: $('#Eps').val(),
-                Ips: $('#Ips').val(),
+                ips: $('#ips').val(),
                 EpsStatus: $('#EpsStatus').val(),
                 EpsClassification: $('#EpsClassification').val(),
                 diagnosis: $('#diagnosis').val(),
@@ -281,18 +285,16 @@ $(document).on('submit', '#bitregister', function (event) {
                 ObservationOut: $('#ObservationOut').val()
 
             };
-            // event.preventDefault();postdata
-            // console.log (postData);
+
+            event.preventDefault();
 
 
             $.post('../config/commit.php', postData, function (response) {
 
-                // console.log (response);
-
                 // Error por campos vacios.
-                $('#bitregister').trigger('reset');
-                $('#search-patients').hide();
-                $('#history-patient').hide();
+                // $('#bitregister').trigger('reset');
+                // $('#search-patients').hide();
+                // $('#history-patient').hide();
 
 
             });
@@ -384,12 +386,78 @@ $('#reportSamebitModal').on('click', function () {
 
     });
 
-    hideColums();
+    table_id = 'recordsSummary';
+    cols_positions = [0, 7, 12, 13, 14, 15, 16];
+    hideColums(table_id, cols_positions);
+});
+
+$('#contacttype').on('change', (e) => {
+    let value = e.target.value;
+    $('.switchTitle').html(value.toUpperCase());
+
+});
+
+function hideColums(table_id, cols_positions) {
+    table = $('#' + table_id).DataTable();
+    table.columns([cols_positions]).visible(false);
+}
+
+
+
+$('input[type="date"] , input[type="time"]').on('change', (e) => {
+
+    let fieldTrigger = e.target;
+    let id = fieldTrigger.className.split(' ')[0];
+    let fieldName = id.split('_')[0];
+    let deppendField = id.split('_')[1] == 'in' ? 'out' : 'in';
+    let getField = $('.' + fieldName + '_' + deppendField);
+
+    var in_val = deppendField == 'in' ? getField.val() : fieldTrigger.value;
+    var out_val = deppendField == 'out' ? getField.val() : fieldTrigger.value;
+
+    if (in_val.length === 0 || in_val.length === 0) {
+        return false;
+    }
+
+    if (in_val > out_val && out_val.length > 0) {
+
+
+        data = {
+            'icon': 'error',
+            'title': 'Fecha no valida',
+            'text': 'La fecha ingresada no es valida,\nNo puede ser inferior a: ' + in_val,
+            'time': '3000',
+
+        };
+
+        console.log(data);
+
+        showCustomDialog(data);
+
+        // alert('El valor ingresado no puede ser inferior al inicial.');
+    }
+
+
+
+
 });
 
 
-function hideColums() {
-    table = $('#recordsSummary').DataTable();
-    table.columns([0, 7, 12, 13, 14, 15, 16]).visible(false);
-}
+function showCustomDialog(data = '') {
 
+    if (data.length == 0) {
+        alert('parametros vacios');
+        return false;
+    }
+
+    console.log(data);
+
+    Swal.fire({
+        icon: data.icon,
+        title: data.title == '' ? data.icon : data.title,
+        text: data.text,
+        timer: data.time
+    });
+
+    return false;
+}

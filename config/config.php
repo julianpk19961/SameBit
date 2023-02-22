@@ -19,6 +19,3 @@ $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
     printf("Error cargando el conjunto de caracteres utf8: %\n", $conexion->error);
     exit();
   }
-
-
-?>

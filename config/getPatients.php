@@ -1,9 +1,16 @@
 <?php
 
 include 'config.php';
+
 $Dni = $_POST['dni'];
 
-$sql = "SELECT  KP_UUID,Name0,LastName0,Dni,documentType,FK_Eps,FK_Range FROM patients WHERE Dni LIKE '$Dni%' ORDER BY Dni DESC";
+$sql = "SELECT  KP_UUID AS UUID, CONCAT(Name0,' ',LastName0) as PACIENTE,Name0 as NOMBRE,LastName0 as APELLIDO,
+dni as DOC_NUMBER,documentType as DOC_TYPE,FK_Eps as EPS,FK_Range as CLASIFICACION 
+
+FROM patients 
+WHERE dni LIKE '$Dni%' 
+ORDER BY dni DESC";
+
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
@@ -14,24 +21,22 @@ $resultCount = mysqli_num_rows($result);
 
 if ($resultCount > 0) {
 
-    while ($data = $result->fetch_object()) {
-        $data_array[] = array(
-            $data->KP_UUID,
-            $data->Dni,
-            $data->Name0 . ' ' . $data->LastName0,
-            '',
-        );
-    }
+    while ($data = mysqli_fetch_assoc($result)) {
 
-    $new_array = array('data' => $data_array);
-    $jsonstring = json_encode($new_array);
+        //en caso de tener problemas con la ñ y carácteres latam
+        // $array['data'][] = array_map("utf8_encode",$data);
+        $array['data'][] = $data;
+
+        //   $data_array[] = array(
+        //     $data->KP_UUID,
+        //     $data->Dni,
+        //     $data->Name0 . ' ' . $data->LastName0,
+        //     '',
+        // );
+    }
 } else {
-    $jsonstring = 'error';
+    $array['data'] = ['error' => 'no se encontraron registros'];
 }
 
-echo $jsonstring;
-// ,
-//             $data->LastName0,
-//             $data->documentType,
-//             $data->FK_Eps,
-//             $data->FK_Range
+echo json_encode($array);
+mysqli_close($conn);
