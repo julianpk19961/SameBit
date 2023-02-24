@@ -18,8 +18,8 @@ $documenttype = isset($_POST["documenttype"]) ? $_POST["documenttype"] : '';
 $name = isset($_POST["name"]) ? $_POST["name"] : '';
 $lastname = isset($_POST["lastname"]) ? $_POST["lastname"] : '';
 $contactype = isset($_POST["contacttype"]) ? $_POST["contacttype"] : '';
-$commentdate = isset($_POST["CommentDate"]) ? $_POST["CommentDate"] : '';
-$commenttime = isset($_POST["CommentTime"]) ? $_POST["CommentTime"] : '';
+$commentDate = isset($_POST["CommentDate"]) ? $_POST["CommentDate"] : '';
+$commentTime = isset($_POST["CommentTime"]) ? $_POST["CommentTime"] : '';
 
 $checkInDate = isset($_POST["checkInDate"]) ? $_POST["checkInDate"] : '';
 $checkInTime = isset($_POST["checkInTime"]) ? $_POST["checkInTime"] : '';
@@ -39,9 +39,13 @@ $commentOut = isset($_POST["ObservationOut"]) ? $_POST["ObservationOut"] : '';
 
 $username = $_SESSION['usuario'];
 
+$checkIn =  Date(strtotime($checkInDate . ' ' . $checkInTime));
+$checkOut = new DateTime(strtotime($commentDate . ' ' . $commentTime));
 
-$days_diff = date_diff($checkInDate, $commentdate);
-echo $days_diff;
+echo $checkIn;
+echo '<br>';
+echo $checkOut;
+// echo strtotime($checkOut);
 return false;
 
 // Crear-Actualizar registros.
@@ -83,7 +87,7 @@ $cols = "PK_UUID, FK_Patient, FK_EPS, FK_Ips, FK_Range, FK_Diagnosis, dni, name0
     ($approved == 0 ? "" : ",appointmentdate,appointmenttime");
 
 $values = "UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name',
-    '$lastname','$contactype','$commentdate','$commenttime','$approved','$sentby','$statuseps','$callsnumber',
+    '$lastname','$contactype','$commentDate','$commentTime','$approved','$sentby','$statuseps','$callsnumber',
     '$comment','$username','$username','$exhibitNine','$exhibitTen','$sendTo','$commentOut'" .
     ($approved == 0 ? "" : ",'$appointmentdate','$appointmenttime'");
 
