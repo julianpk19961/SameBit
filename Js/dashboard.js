@@ -74,7 +74,7 @@ $(document).on('keyup', '#dni', function () {
 $(document).on('click', '.patient-select', function () {
 
     if (confirm('¿Está seguro de querer selecionar el paciente')) {
-        // Capturar el elemnento padre y posterior tomar el atributo almacenado en el id=pacientid
+        // Capturar el elemnento padre y posterior tomar el atributo almacenado en el inputClass=pacientid
         let row = $(this).closest("tr");
         let data = $('#table-patients').DataTable().row(row).data();
         let pk_uuid = data['UUID'];
@@ -406,39 +406,76 @@ function hideColums(table_id, cols_positions) {
 
 $('input[type="date"] , input[type="time"]').on('change', (e) => {
 
-    let fieldTrigger = e.target;
-    let id = fieldTrigger.className.split(' ')[0];
-    let fieldName = id.split('_')[0];
-    let deppendField = id.split('_')[1] == 'in' ? 'out' : 'in';
-    let getField = $('.' + fieldName + '_' + deppendField);
+    debugger;
+    let inputClass = (e.target.className).split(' ')[0];
 
-    var in_val = deppendField == 'in' ? getField.val() : fieldTrigger.value;
-    var out_val = deppendField == 'out' ? getField.val() : fieldTrigger.value;
-
-    if (in_val.length === 0 || in_val.length === 0) {
+    if (!inputClass.match('_in|_out')) {
         return false;
     }
 
-    if (in_val > out_val && out_val.length > 0) {
+    let fieldName = inputClass.split('_')[0];
+
+    let inFields = $(`${fieldName}`);
 
 
-        data = {
-            'icon': 'error',
-            'title': 'Fecha no valida',
-            'text': 'La fecha ingresada no es valida,\nNo puede ser inferior a: ' + in_val,
-            'time': '3000',
+    let current_type = e.target.type,
+        another_type = current_type == 'date' ? 'time' : 'date';
+
+
+
+    let deppendField = inputClass.match('in') ? 'out' : 'in',
+        fyelType = e.target.type,
+        getField = $(`input.${fieldName}_${deppendField}[type="${fyelType}"]`);
+
+    if (getField.length > 1 || getField.length === 0) {
+        return false;
+    }
+
+    let fieldTrigger = $(`input.${inputClass}[type="${fyelType}"]`),
+        in_field = deppendField == 'in' ? getField : fieldTrigger,
+        out_field = deppendField == 'out' ? getField : fieldTrigger;
+
+    if (fieldTrigger.length > 1 || fieldTrigger.length === 0) {
+        return false;
+    }
+
+    var in_val = in_field.val();
+    var out_val = out_field.val();
+
+    console.log(in_val);
+    console.log(out_val);
+
+    if (!in_val || !out_val) {
+        return false;
+    }
+
+    if (in_val > out_val) {
+        if (fyelType === 'time') {
+
+            let date_in = $(`input.${fieldName}_in[type="date"]`),
+                date_out = $(`input.${fieldName}_out[type="date"]`)
+
+
+
+            if (date_in.val().length === 0 || date_out.val().lenght === 0) {
+                return false;
+            };
+
 
         };
 
-        console.log(data);
+        data = {
 
+            'icon': 'error',
+            'title': 'Valor no valido',
+            'text': 'El valor ingresado no puede ser inferior al valor inicial: ' + in_val,
+            'time': '5000',
+        };
+
+        out_field.val('');
+        in_field.focus();
         showCustomDialog(data);
-
-        // alert('El valor ingresado no puede ser inferior al inicial.');
     }
-
-
-
 
 });
 

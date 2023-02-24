@@ -168,7 +168,7 @@ include './generales/header.php';
                               <div class="col-md-6">
                                 <div class="form-outline">
                                   <label class="form-label" for="diagnosis">DIAGNÓSTICO*</label>
-                                  <Select required type="text" class="form-control form-control-lg" name="diagnosis" id="diagnosis">
+                                  <Select type="text" class="form-control form-control-lg" name="diagnosis" id="diagnosis" required>
                                   </Select>
                                 </div>
                               </div>
@@ -183,14 +183,14 @@ include './generales/header.php';
                                 <div class="form-outline">
                                   <!-- FECHA CORREO -->
                                   <label class="form-label" for="check-in-date">FECHA <span class="switchTitle">CORREO</span>*</label>
-                                  <input type="date" id="check-in-date" name="check-in-date" class="date_in form-control form-control-lg" required />
+                                  <input type="date" id="check-in-date" name="check-in-date" class="dateTime_in form-control form-control-lg" required />
                                 </div>
                               </div>
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                   <!-- HORA CORREO -->
                                   <label class="form-label" for="check-in-time">HORA <span class="switchTitle">CORREO</span>*</label>
-                                  <input type="time" id="check-in-time" name="check-in-time" class="time_in form-control form-control-lg" required />
+                                  <input type="time" id="check-in-time" name="check-in-time" class="dateTime_in form-control form-control-lg" required />
                                 </div>
                               </div>
 
@@ -201,14 +201,14 @@ include './generales/header.php';
                                 <div class="form-outline">
                                   <!-- FECHA COMENTARIO -->
                                   <label class="form-label" for="CommentDate">FECHA COMENTARIO*</label>
-                                  <input type="date" id="CommentDate" name="CommentDate" class="date_out form-control form-control-lg" required />
+                                  <input type="date" id="CommentDate" name="CommentDate" class="dateTime_out form-control form-control-lg" required />
                                 </div>
                               </div>
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                   <!-- HORA COMENTARIO -->
                                   <label class="form-label" for="CommentTime">HORA COMENTARIO*</label>
-                                  <input type="time" id="CommentTime" name="CommentTime" class="time_out form-control form-control-lg" required />
+                                  <input type="time" id="CommentTime" name="CommentTime" class="dateTime_out form-control form-control-lg" required />
                                 </div>
                               </div>
                             </div>
@@ -271,7 +271,7 @@ include './generales/header.php';
                               </div>
                             </div>
                           </div>
-                          <div class="alert alert-info border" role="alert" id="refOut">
+                          <div class="alert alert-warning border" role="alert" id="refOut">
                             <strong class="text-muted">CONTRA-REFERENCIA</strong>
                             <hr>
                             <div class="form-group">
@@ -321,7 +321,7 @@ include './generales/header.php';
 
                       <div class="d-flex justify-content-end pt-3">
                         <button type="button" class="bit-clean btn btn-light btn-lg">Limpiar Formulario</button>
-                        <button id="bit-submit" type="submit" class="bit-submit btn btn-warning btn-lg ms-2">Enviar</button>
+                        <button id="bit-submit" type="submit" class="bit-submit btn btn-success btn-lg ms-2">Enviar</button>
                       </div>
 
                     </div>
