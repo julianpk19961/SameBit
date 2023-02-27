@@ -282,7 +282,6 @@ $(document).on('submit', '#bitregister', function (event) {
 
             $.post('../config/commit.php', postData, function (response) {
 
-                console.log(response);
                 $('#bitregister').trigger('reset');
                 $('#search-patients').hide();
                 $('#history-patient').hide();
