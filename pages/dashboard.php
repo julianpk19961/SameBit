@@ -181,7 +181,7 @@ include './generales/header.php';
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                   <!-- DATOS COMUNICACION-->
-                                  <label class="form-label" for="check-in-date">FECHA SOLICITUD</label>
+                                  <label class="form-label" for="check-in-date">FECHA SOLICITUD* </label>
                                   <input type="datetime-local" id="check-in-date" name="check-in-date" class="comunication_in form-control form-control-lg" required />
                                 </div>
                               </div>
@@ -355,59 +355,136 @@ include './generales/header.php';
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <table class="table table-lg table-striped table-responsive" id="recordsSummary">
-            <thead class="table-light">
-              <tr>
-                <th hidden>Recepción Correo</th>
-                <th>Respuesta Correo</th>
-                <th>Hora</th>
-                <th>Documento</th>
-                <th>Paciente</th>
-                <th>Enviado</th>
-                <th>Ips</th>
-                <th>Eps</th>
-                <th hidden>Rango</th>
-                <th>Diagnostico</th>
-                <th>Estado</th>
-                <th>Cita</th>
-                <th>Recibe</th>
-                <th hidden>Anexo 9</th>
-                <th hidden>Anexo 10</th>
-                <th hidden>Enviado a</th>
-                <th hidden>Comentario</th>
-                <th hidden>Comentario contrareferencia</th>
-              </tr>
-            </thead>
-            <tfoot>
-              <tr>
-                <th hidden>Recepción Correo</th>
-                <th>Respuesta Correo</th>
-                <th>Hora</th>
-                <th>Documento</th>
-                <th>Paciente</th>
-                <th>Enviado</th>
-                <th>Ips</th>
-                <th>Eps</th>
-                <th hidden>Rango</th>
-                <th>Diagnostico</th>
-                <th>Estado</th>
-                <th>Cita</th>
-                <th>Recibe</th>
-                <th hidden>Anexo 9</th>
-                <th hidden>Anexo 10</th>
-                <th hidden>Enviado a</th>
-                <th hidden>Comentario</th>
-                <th hidden>Comentario contrareferencia</th>
 
-              </tr>
-            </tfoot>
-          </table>
+          <form action="" method="post" class="p-1">
+
+            <div class="row">
+
+              <div class="col-6">
+                <label for="checkin-start"></label>
+                <div class="row">
+                  <div class="col-6">
+                    <labe for="dni-request">Identificación Paciente</labe>
+                    <input type="text" name="dni-request" id="dni-request" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+                  <div class="col-6">
+                    <label for="user-request">Usuario Prioritaria</label>
+                    <input type="text" name="user-request" id="user-request" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <label for="checkin-start">
+                  <h6><sub>Fecha Solicitúd</sub></h6>
+                </label>
+                <div class="row">
+
+                  <div class="col-6">
+                    <labe for="checkin-start">Desde</labe>
+                    <input type="datetime-local" name="checkin-start" id="checkin-start" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+
+                  <div class="col-6">
+                    <label for="checkin-end">Hasta</label>
+                    <input type="datetime-local" name="checkin-end" id="checkin-end" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-6">
+                <label for="checkOut-start">
+                  <h6><sub>Fecha Comentario</sub></h6>
+                </label>
+                <div class="row">
+                  <div class="col-6">
+                    <labe for="checkOut-start">Desde</labe>
+                    <input type="datetime-local" name="checkOut-start" id="checkOut-start" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+                  <div class="col-6">
+                    <label for="checkOut-end">Hasta</label>
+                    <input type="datetime-local" name="checkOut-end" id="checkOut-end" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <label for="appointment-start">
+                  <h6><sub>Fecha Atención</sub></h6>
+                </label>
+                <div class="row">
+                  <div class="col-6">
+                    <labe for="appointment-start">Desde</labe>
+                    <input type="datetime-local" name="appointment-start" id="appointment-start" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+                  <div class="col-6">
+                    <label for="appointment-end">Hasta</label>
+                    <input type="datetime-local" name="appointment-end" id="appointment-end" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-sm btn-success m-1 float-end">Buscar</button>
+
+          </form>
+          <hr class="w-100">
+          <!-- --FIN DEL FORMULARIO -->
+          <div class="container-fluid">
+            <table class="table table-lg table-striped table-responsive" id="recordsSummary">
+              <thead class="table-light">
+                <tr>
+                  <th hidden>Recepción Correo</th>
+                  <th>Respuesta Correo</th>
+                  <th>Hora</th>
+                  <th>Documento</th>
+                  <th>Paciente</th>
+                  <th>Enviado</th>
+                  <th>Ips</th>
+                  <th>Eps</th>
+                  <th hidden>Rango</th>
+                  <th>Diagnostico</th>
+                  <th>Estado</th>
+                  <th>Cita</th>
+                  <th>Recibe</th>
+                  <th hidden>Anexo 9</th>
+                  <th hidden>Anexo 10</th>
+                  <th hidden>Enviado a</th>
+                  <th hidden>Comentario</th>
+                  <th hidden>Comentario contrareferencia</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th hidden>Recepción Correo</th>
+                  <th>Respuesta Correo</th>
+                  <th>Hora</th>
+                  <th>Documento</th>
+                  <th>Paciente</th>
+                  <th>Enviado</th>
+                  <th>Ips</th>
+                  <th>Eps</th>
+                  <th hidden>Rango</th>
+                  <th>Diagnostico</th>
+                  <th>Estado</th>
+                  <th>Cita</th>
+                  <th>Recibe</th>
+                  <th hidden>Anexo 9</th>
+                  <th hidden>Anexo 10</th>
+                  <th hidden>Enviado a</th>
+                  <th hidden>Comentario</th>
+                  <th hidden>Comentario contrareferencia</th>
+
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        </div>
+
       </div>
     </div>
+  </div>
+  </div>
   </div>
 
 
