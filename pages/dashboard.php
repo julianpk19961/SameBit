@@ -164,7 +164,6 @@ include './generales/header.php';
                             <strong class="text-muted">REFERENCIA</strong>
                             <hr>
                             <div class="row">
-
                               <div class="col-md-6">
                                 <div class="form-outline">
                                   <label class="form-label" for="diagnosis">DIAGNÓSTICO*</label>
@@ -181,34 +180,16 @@ include './generales/header.php';
                               </div>
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                  <!-- FECHA CORREO -->
-                                  <label class="form-label" for="check-in-date">FECHA <span class="switchTitle">CORREO</span>*</label>
-                                  <input type="date" id="check-in-date" name="check-in-date" class="dateTime_in form-control form-control-lg" required />
+                                  <!-- DATOS COMUNICACION-->
+                                  <label class="form-label" for="check-in-date">FECHA SOLICITUD</label>
+                                  <input type="datetime-local" id="check-in-date" name="check-in-date" class="comunication_in form-control form-control-lg" required />
                                 </div>
                               </div>
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                  <!-- HORA CORREO -->
-                                  <label class="form-label" for="check-in-time">HORA <span class="switchTitle">CORREO</span>*</label>
-                                  <input type="time" id="check-in-time" name="check-in-time" class="dateTime_in form-control form-control-lg" required />
-                                </div>
-                              </div>
-
-                            </div>
-
-                            <div class="row">
-                              <div class="col-md-6 mb-4">
-                                <div class="form-outline">
-                                  <!-- FECHA COMENTARIO -->
+                                  <!-- DATOS DE ATENCIÓN -->
                                   <label class="form-label" for="CommentDate">FECHA COMENTARIO*</label>
-                                  <input type="date" id="CommentDate" name="CommentDate" class="dateTime_out form-control form-control-lg" required />
-                                </div>
-                              </div>
-                              <div class="col-md-6 mb-4">
-                                <div class="form-outline">
-                                  <!-- HORA COMENTARIO -->
-                                  <label class="form-label" for="CommentTime">HORA COMENTARIO*</label>
-                                  <input type="time" id="CommentTime" name="CommentTime" class="dateTime_out form-control form-control-lg" required />
+                                  <input type="datetime-local" id="CommentDate" name="CommentDate" class="comunication_out form-control form-control-lg" required />
                                 </div>
                               </div>
                             </div>
@@ -217,58 +198,40 @@ include './generales/header.php';
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                   <!-- FECHA ATENCION -->
-                                  <label class="form-label" for="AtentionDate">FECHA ATENCIÓN</label>
-                                  <input type="date" id="AtentionDate" name="AtentionDate" class="form-control form-control-lg" />
+                                  <label class="form-label" for="attention-date">FECHA ATENCIÓN</label>
+                                  <input type="datetime-local" id="attention-date" name="attention-date" class="comunication_out form-control form-control-lg" />
                                 </div>
                               </div>
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                  <!-- HORA ATENCION -->
-                                  <label class="form-label" for="AtentionTime">HORA ATENCIÓN</label>
-                                  <input required type="time" id="AtentionTime" name="AtentionTime" class="form-control form-control-lg" />
+                                  <!-- Estado en la eps -->
+                                  <label class="form-label" for="exhibitNine">¿TIENE DILIGENCIADO EL ANEXO 9?</label>
+                                  <Select class="form-control form-control-lg col-6" type="text" id="exhibitNine" name="exhibitNine" value="false">
+                                    <option disabled="disabled" selected>Seleccione una opción</option>
+                                    <option value='0'>NO</option>
+                                    <option value='1'>SI</option>
+                                  </Select>
                                 </div>
                               </div>
-                            </div>
 
 
-                            <div class="row">
                               <!-- REMISIÓN  -->
-                              <div class="form-outline mb-2">
-                                <div class="form-outline">
-
-                                  <div class="row">
-                                    <div class="col-md-7 mb-4">
-                                      <div class="form-outline">
-                                        <label class="form-label" for="SentBy">REMITIDO DESDE: *</label>
-                                        <input required type="text" id="SentBy" name="SentBy" class="form-control form-control-lg" />
-                                      </div>
-                                    </div>
-
-                                    <div class="col-md-5 mb-4">
-                                      <div class="form-outline">
-                                        <!-- Estado en la eps -->
-                                        <label class="form-label" for="exhibitNine">¿TIENE DILIGENCIADO EL ANEXO 9?</label>
-                                        <Select class="form-control form-control-lg col-6" type="text" id="exhibitNine" name="exhibitNine" value="false">
-                                          <option disabled="disabled" selected>Seleccione una opción</option>
-                                          <option value='0'>NO</option>
-                                          <option value='1'>SI</option>
-                                        </Select>
-                                      </div>
-                                    </div>
+                              <div class="form-outline">
+                                <div class="row">
+                                  <div class="form-outline">
+                                    <label class="form-label" for="SentBy">REMITIDO DESDE: *</label>
+                                    <input required type="text" id="SentBy" name="SentBy" class="form-control form-control-lg" />
                                   </div>
-
+                                </div>
+                                <div class="form-outline mb-2">
+                                  <div class="form-outline">
+                                    <label class="form-label" for="ObservationIn">OBSERVACIÓN*</label>
+                                    <input required type="textarea" id="ObservationIn" name="ObservationIn" class="form-control form-control-lg" />
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <!-- Observaciones -->
-                            <div class="row">
-                              <div class="form-outline mb-2">
-                                <div class="form-outline">
-                                  <label class="form-label" for="ObservationIn">OBSERVACIÓN*</label>
-                                  <input required type="textarea" id="ObservationIn" name="ObservationIn" class="form-control form-control-lg" />
-                                </div>
-                              </div>
+                              <!-- Observaciones -->
                             </div>
                           </div>
                           <div class="alert alert-warning border" role="alert" id="refOut">
