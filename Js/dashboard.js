@@ -74,7 +74,7 @@ $(document).on('keyup', '#dni', function () {
 $(document).on('click', '.patient-select', function () {
 
     if (confirm('¿Está seguro de querer selecionar el paciente')) {
-        // Capturar el elemnento padre y posterior tomar el atributo almacenado en el inputClass=pacientid
+        // Capturar el elemnento padre y posterior tomar el atributo almacenado en el triggerClass=pacientid
         let row = $(this).closest("tr");
         let data = $('#table-patients').DataTable().row(row).data();
         let pk_uuid = data['UUID'];
@@ -86,7 +86,6 @@ $(document).on('click', '.patient-select', function () {
         $.post('../config/usepatient.php', { pk_uuid }, function (response) {
 
             const patient = JSON.parse(response);
-            console.log(patient);
             $('#bitregister').trigger('reset');
             $('#pk_uuid').val(patient.pk_uuid);
             $('#dni').val(patient.dni);
@@ -107,20 +106,16 @@ $(document).on('click', '.patient-select', function () {
 
 function atentionswitch() {
 
-    let accept = $('#approved').val();
-    var AtentionDate = document.getElementById('AtentionDate');
-    var AtentionTime = document.getElementById('AtentionTime');
-
-    if (accept == 1) {
-        AtentionDate.disabled = false;
-        AtentionTime.disabled = false;
-    } else {
-        AtentionDate.disabled = true;
-        AtentionTime.disabled = true;
-        document.getElementById('AtentionDate').value = "";
-        document.getElementById('AtentionTime').value = "";
+    if ($('#approved').val() != 1) {
+        $('#attention-date').val('');
+        $('#attention-date').prop("disabled", true);
+        return false;
     }
+
+    $('#attention-date').prop("disabled", false);
+
 };
+
 $(document).ready(atentionswitch);
 
 
@@ -264,13 +259,10 @@ $(document).on('submit', '#bitregister', function (event) {
                 name: $('#nombre').val(),
                 lastname: $('#apellido').val(),
                 contacttype: $('#contacttype').val(),
-                CommentDate: $('#CommentDate').val(),
-                CommentTime: $('#CommentTime').val(),
                 checkInDate: $('#check-in-date').val(),
-                checkInTime: $('#check-in-time').val(),
+                commentDate: $('#CommentDate').val(),
                 approved: $('#approved').val(),
-                AtentionDate: $('#AtentionDate').val(),
-                AtentionTime: $('#AtentionTime').val(),
+                AtentionDate: $('#attention-date').val(),
                 Eps: $('#Eps').val(),
                 ips: $('#ips').val(),
                 EpsStatus: $('#EpsStatus').val(),
@@ -288,13 +280,12 @@ $(document).on('submit', '#bitregister', function (event) {
 
             event.preventDefault();
 
-
             $.post('../config/commit.php', postData, function (response) {
 
-                // Error por campos vacios.
-                // $('#bitregister').trigger('reset');
-                // $('#search-patients').hide();
-                // $('#history-patient').hide();
+                console.log(response);
+                $('#bitregister').trigger('reset');
+                $('#search-patients').hide();
+                $('#history-patient').hide();
 
 
             });
@@ -404,68 +395,53 @@ function hideColums(table_id, cols_positions) {
 
 
 
-$('input[type="date"] , input[type="time"]').on('change', (e) => {
+$('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('change', (e) => {
 
-    debugger;
-    let inputClass = (e.target.className).split(' ')[0];
+    const pullTrigger = e.target,
+        triggerClass = (pullTrigger.className).split(' ')[0];
 
-    if (!inputClass.match('_in|_out')) {
+    if (!triggerClass.match('_in|_out')) {
         return false;
     }
 
-    let fieldName = inputClass.split('_')[0];
+    let triggerType = pullTrigger.type,
+        triggerClassId = triggerClass.split('_')[0],
+        compareInput = triggerClass.match('in') ? 'out' : 'in',
+        triggerCall = !pullTrigger.id ? `input.${triggerClass}[type="${triggerType}"]` : `#${pullTrigger.id}`,
+        fieldTrigger = $(triggerCall),
+        fieldCompare = $(`input.${triggerClassId}_${compareInput}[type="${triggerType}"]`);
 
-    let inFields = $(`${fieldName}`);
-
-
-    let current_type = e.target.type,
-        another_type = current_type == 'date' ? 'time' : 'date';
-
-
-
-    let deppendField = inputClass.match('in') ? 'out' : 'in',
-        fyelType = e.target.type,
-        getField = $(`input.${fieldName}_${deppendField}[type="${fyelType}"]`);
-
-    if (getField.length > 1 || getField.length === 0) {
+    if (fieldTrigger.length === 0 || fieldCompare.length === 0) {
         return false;
     }
 
-    let fieldTrigger = $(`input.${inputClass}[type="${fyelType}"]`),
-        in_field = deppendField == 'in' ? getField : fieldTrigger,
-        out_field = deppendField == 'out' ? getField : fieldTrigger;
-
-    if (fieldTrigger.length > 1 || fieldTrigger.length === 0) {
+    if ((fieldTrigger.length > 0 && !fieldTrigger[0].id) || (fieldCompare.length > 0 && !fieldCompare[0].id)) {
         return false;
     }
 
-    var in_val = in_field.val();
-    var out_val = out_field.val();
+    if (fieldTrigger.length > 1 || fieldCompare.length > 1) {
 
-    console.log(in_val);
-    console.log(out_val);
+        if (fieldTrigger.length > 1) {
+            fieldTrigger = $(`#${fieldTrigger[0].id}`);
+        }
+
+        if (fieldCompare.length > 1) {
+            fieldCompare = $(`#${fieldCompare[0].id}`);
+        }
+    }
+
+    let in_field = compareInput == 'in' ? fieldCompare : fieldTrigger,
+        out_field = compareInput == 'out' ? fieldCompare : fieldTrigger;
+
+    var in_val = in_field.val(), out_val = out_field.val();
 
     if (!in_val || !out_val) {
         return false;
     }
 
-    if (in_val > out_val) {
-        if (fyelType === 'time') {
-
-            let date_in = $(`input.${fieldName}_in[type="date"]`),
-                date_out = $(`input.${fieldName}_out[type="date"]`)
-
-
-
-            if (date_in.val().length === 0 || date_out.val().lenght === 0) {
-                return false;
-            };
-
-
-        };
+    if (in_val >= out_val) {
 
         data = {
-
             'icon': 'error',
             'title': 'Valor no valido',
             'text': 'El valor ingresado no puede ser inferior al valor inicial: ' + in_val,
@@ -486,8 +462,6 @@ function showCustomDialog(data = '') {
         alert('parametros vacios');
         return false;
     }
-
-    console.log(data);
 
     Swal.fire({
         icon: data.icon,

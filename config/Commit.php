@@ -18,35 +18,37 @@ $documenttype = isset($_POST["documenttype"]) ? $_POST["documenttype"] : '';
 $name = isset($_POST["name"]) ? $_POST["name"] : '';
 $lastname = isset($_POST["lastname"]) ? $_POST["lastname"] : '';
 $contactype = isset($_POST["contacttype"]) ? $_POST["contacttype"] : '';
-$commentDate = isset($_POST["CommentDate"]) ? $_POST["CommentDate"] : '';
-$commentTime = isset($_POST["CommentTime"]) ? $_POST["CommentTime"] : '';
-
-$checkInDate = isset($_POST["checkInDate"]) ? $_POST["checkInDate"] : '';
-$checkInTime = isset($_POST["checkInTime"]) ? $_POST["checkInTime"] : '';
-
 $approved = isset($_POST["approved"]) ? $_POST["approved"] : '';
-$appointmentdate = isset($_POST["AtentionDate"]) ? $_POST["AtentionDate"] : 'NULL';
-$appointmenttime = isset($_POST["AtentionTime"]) ? $_POST["AtentionTime"] : '';
 $comment = isset($_POST["ObservationIn"]) ? $_POST["ObservationIn"] : '';
 $sentby = isset($_POST["SentBy"]) ? $_POST["SentBy"] : '';
 $statuseps = isset($_POST["EpsStatus"]) ? $_POST["EpsStatus"] : '';
 $callsnumber = isset($_POST["CallNumber"]) ? $_POST["CallNumber"] : '';
-
 $exhibitNine = isset($_POST["exhibitNine"]) ? $_POST["exhibitNine"] : 0;
 $exhibitTen = isset($_POST["exhibitTen"]) ? $_POST["exhibitTen"] : 0;
 $sendTo = isset($_POST["sendTo"]) ? $_POST["sendTo"] : '';
 $commentOut = isset($_POST["ObservationOut"]) ? $_POST["ObservationOut"] : '';
 
+$checkInDateTime = isset($_POST["checkInDate"]) ? new DateTime($_POST["checkInDate"]) : '';
+$checkOutDateTime = isset($_POST["commentDate"]) ? new DateTime($_POST["commentDate"]) : '';
+$attetionDateTime = isset($_POST["AtentionDate"]) ? new DateTime($_POST["AtentionDate"]) : '';
+
+$checkInDate = $checkInDateTime->format('Y-m-d');
+$checkInTime = $checkInDateTime->format('H:i:s');
+$commentDate = $checkOutDateTime->format('Y-m-d');
+$commentTime = $checkOutDateTime->format('H:i:s');
+$appointmentdate = $attetionDateTime->format('Y-m-d');
+$appointmenttime = $attetionDateTime->format('H:i:s');
+
+$comunicationDiff = $checkOutDateTime->diff($checkInDateTime);
+$attetionDiff = $attetionDateTime->diff($checkInDateTime);
+
+$responseDayDiff = $comunicationDiff->format('%a');
+$responseTimeDiff = $comunicationDiff->format('%h:%i');
+
+$attetionDayDiff = $attetionDiff->format('%a');
+$attetionTimeDiff = $attetionDiff->format('%h:%i');
+
 $username = $_SESSION['usuario'];
-
-$checkIn =  Date(strtotime($checkInDate . ' ' . $checkInTime));
-$checkOut = new DateTime(strtotime($commentDate . ' ' . $commentTime));
-
-echo $checkIn;
-echo '<br>';
-echo $checkOut;
-// echo strtotime($checkOut);
-return false;
 
 // Crear-Actualizar registros.
 if (empty($PK_UUID)) {
@@ -79,17 +81,15 @@ while ($row = mysqli_fetch_array($result)) {
     $PK_UUID = $row['KP_UUID'];
 }
 
-
-
 $cols = "PK_UUID, FK_Patient, FK_EPS, FK_Ips, FK_Range, FK_Diagnosis, dni, name0,
-    lastname, contactype, commentdate, commenttime, approved, sentby, statuseps, callsnumber,
-    comment0, createdUser, updatedUser, exhibit_nine, exhibit_ten, send_to, observation_out" .
-    ($approved == 0 ? "" : ",appointmentdate,appointmenttime");
+    lastname, contactype, approved, sentby, statuseps, callsnumber, comment0, createdUser, 
+    updatedUser, exhibit_nine, exhibit_ten, send_to, observation_out,checkIn_date,checkIn_time,commentdate,
+    commenttime,response_days,response_time" . ($approved == 0 ? "" : ",appointmentdate,appointmenttime,attention_days,attention_time");
 
 $values = "UUID(),'$PK_UUID','$FK_EPS','$FK_Ips','$FK_Range','$FK_Diagnosis','$dni','$name',
-    '$lastname','$contactype','$commentDate','$commentTime','$approved','$sentby','$statuseps','$callsnumber',
-    '$comment','$username','$username','$exhibitNine','$exhibitTen','$sendTo','$commentOut'" .
-    ($approved == 0 ? "" : ",'$appointmentdate','$appointmenttime'");
+    '$lastname','$contactype','$approved','$sentby','$statuseps','$callsnumber','$comment','$username',
+    '$username','$exhibitNine','$exhibitTen','$sendTo','$commentOut','$checkInDate','$checkInTime','$commentDate',
+    '$commentTime',$responseDayDiff,'$responseTimeDiff'" . ($approved == 0 ? "" : ",'$appointmentdate','$appointmenttime','$attetionDayDiff','$attetionTimeDiff'");
 
 $sql = "INSERT INTO bitpriorities($cols) VALUES ($values)";
 
@@ -99,5 +99,4 @@ if (!$result) {
     // Error.
     die('Query Error' . mysqli_error($conn));
 }
-
 mysqli_close($conn);
