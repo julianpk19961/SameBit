@@ -295,6 +295,7 @@ $(document).on('submit', '#bitregister', function (event) {
 });
 
 $('#reportSamebitModal').on('click', function () {
+
     if (user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
         Swal.fire({
             icon: 'error',
@@ -304,15 +305,141 @@ $('#reportSamebitModal').on('click', function () {
         })
         return false;
     }
+    let defaultDate = new Date();
+    showReportCard(defaultDate);
+});
+
+$('#contacttype').on('change', (e) => {
+    let value = e.target.value;
+    $('.switchTitle').html(value.toUpperCase());
+
+});
+
+function hideColums(table_id, cols_positions) {
+    table = $('#' + table_id).DataTable();
+    table.columns([cols_positions]).visible(false);
+}
+
+$('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('change', (e) => {
+
+    const pullTrigger = e.target,
+        triggerClass = (pullTrigger.className).split(' ')[0];
+
+    if (!triggerClass.match('_in|_out')) {
+        return false;
+    }
+
+    let triggerType = pullTrigger.type,
+        triggerClassId = triggerClass.split('_')[0],
+        compareInput = triggerClass.match('in') ? 'out' : 'in',
+        triggerCall = !pullTrigger.id ? `input.${triggerClass}[type="${triggerType}"]` : `#${pullTrigger.id}`,
+        fieldTrigger = $(triggerCall),
+        fieldCompare = $(`input.${triggerClassId}_${compareInput}[type="${triggerType}"]`);
+
+    if (fieldTrigger.length === 0 || fieldCompare.length === 0) {
+        return false;
+    }
+
+    if ((fieldTrigger.length > 0 && !fieldTrigger[0].id) || (fieldCompare.length > 0 && !fieldCompare[0].id)) {
+        return false;
+    }
+
+    if (fieldTrigger.length > 1 || fieldCompare.length > 1) {
+
+        if (fieldTrigger.length > 1) {
+            fieldTrigger = $(`#${fieldTrigger[0].id}`);
+        }
+
+        if (fieldCompare.length > 1) {
+            fieldCompare = $(`#${fieldCompare[0].id}`);
+        }
+    }
+
+    let in_field = compareInput == 'in' ? fieldCompare : fieldTrigger,
+        out_field = compareInput == 'out' ? fieldCompare : fieldTrigger;
+
+    var in_val = in_field.val(), out_val = out_field.val();
+
+    if (!in_val || !out_val) {
+        return false;
+    }
+
+    if (in_val >= out_val) {
+
+        data = {
+            'icon': 'error',
+            'title': 'Valor no valido',
+            'text': 'El valor ingresado no puede ser inferior al valor inicial: ' + in_val,
+            'time': '5000',
+        };
+
+        out_field.val('');
+        in_field.focus();
+        showCustomDialog(data);
+    }
+
+});
+
+function showCustomDialog(data = '') {
+
+    if (data.length == 0) {
+        alert('parametros vacios');
+        return false;
+    }
+
+    Swal.fire({
+        icon: data.icon,
+        title: data.title == '' ? data.icon : data.title,
+        text: data.text,
+        timer: data.time
+    });
+
+    return false;
+}
+
+function generateDate(date = new Date(), h = 0, m = 0, s = 0, ss = 0) {
+    console.log(date);
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), h, m, s, ss));
+}
+
+function showReportCard(defaultDate = '') {
 
     $('#modal-report').modal('show');
 
+    if (defaultDate) {
+
+        let startDate = generateDate(undefined),
+            endDate = generateDate(undefined, 23, 59, 59, 59);
+
+        let checkIn_start = startDate.toJSON().slice(0, 19),
+            checkIn_end = endDate.toJSON().slice(0, 19);
+
+        $('#checkin-start').val(checkIn_start);
+        $('#checkin-end').val(checkIn_end);
+    }
+
+    checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
+    checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
+
+    const postData = {
+        dni: $('#dni-request').val(),
+        user: $('#user-request').val(),
+        checkinStart: checkInStartToJson,
+        checkinEnd: checkInEndToJson,
+        checkOutStart: $('#checkOut-start').val(),
+        checkOutEnd: $('#checkOut-end').val(),
+        appointmentStart: checkInEndToJson,
+        appointmentEnd: $('#appointment-end').val(),
+    };
+    console.log(postData);
     $('#recordsSummary').DataTable({
 
         "ajax": {
-            "method": "GET",
+            "method": "POST",
             "url": '../config/getPriorities.php',
+            "data": postData
         },
+
         "columns": [
             { "data": "RECEPCION_CORREO" },
             { "data": "RESPUESTA_CORREO" },
@@ -379,95 +506,4 @@ $('#reportSamebitModal').on('click', function () {
     table_id = 'recordsSummary';
     cols_positions = [0, 7, 12, 13, 14, 15, 16];
     hideColums(table_id, cols_positions);
-});
-
-$('#contacttype').on('change', (e) => {
-    let value = e.target.value;
-    $('.switchTitle').html(value.toUpperCase());
-
-});
-
-function hideColums(table_id, cols_positions) {
-    table = $('#' + table_id).DataTable();
-    table.columns([cols_positions]).visible(false);
-}
-
-
-
-$('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('change', (e) => {
-
-    const pullTrigger = e.target,
-        triggerClass = (pullTrigger.className).split(' ')[0];
-
-    if (!triggerClass.match('_in|_out')) {
-        return false;
-    }
-
-    let triggerType = pullTrigger.type,
-        triggerClassId = triggerClass.split('_')[0],
-        compareInput = triggerClass.match('in') ? 'out' : 'in',
-        triggerCall = !pullTrigger.id ? `input.${triggerClass}[type="${triggerType}"]` : `#${pullTrigger.id}`,
-        fieldTrigger = $(triggerCall),
-        fieldCompare = $(`input.${triggerClassId}_${compareInput}[type="${triggerType}"]`);
-
-    if (fieldTrigger.length === 0 || fieldCompare.length === 0) {
-        return false;
-    }
-
-    if ((fieldTrigger.length > 0 && !fieldTrigger[0].id) || (fieldCompare.length > 0 && !fieldCompare[0].id)) {
-        return false;
-    }
-
-    if (fieldTrigger.length > 1 || fieldCompare.length > 1) {
-
-        if (fieldTrigger.length > 1) {
-            fieldTrigger = $(`#${fieldTrigger[0].id}`);
-        }
-
-        if (fieldCompare.length > 1) {
-            fieldCompare = $(`#${fieldCompare[0].id}`);
-        }
-    }
-
-    let in_field = compareInput == 'in' ? fieldCompare : fieldTrigger,
-        out_field = compareInput == 'out' ? fieldCompare : fieldTrigger;
-
-    var in_val = in_field.val(), out_val = out_field.val();
-
-    if (!in_val || !out_val) {
-        return false;
-    }
-
-    if (in_val >= out_val) {
-
-        data = {
-            'icon': 'error',
-            'title': 'Valor no valido',
-            'text': 'El valor ingresado no puede ser inferior al valor inicial: ' + in_val,
-            'time': '5000',
-        };
-
-        out_field.val('');
-        in_field.focus();
-        showCustomDialog(data);
-    }
-
-});
-
-
-function showCustomDialog(data = '') {
-
-    if (data.length == 0) {
-        alert('parametros vacios');
-        return false;
-    }
-
-    Swal.fire({
-        icon: data.icon,
-        title: data.title == '' ? data.icon : data.title,
-        text: data.text,
-        timer: data.time
-    });
-
-    return false;
 }

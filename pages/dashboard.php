@@ -361,7 +361,9 @@ include './generales/header.php';
             <div class="row">
 
               <div class="col-6">
-                <label for="checkin-start"></label>
+                <label for="checkin-start">
+                  <h6><sub>Datos Generales</sub></h6>
+                </label>
                 <div class="row">
                   <div class="col-6">
                     <labe for="dni-request">Identificación Paciente</labe>
