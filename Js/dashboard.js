@@ -140,6 +140,7 @@ function cargar_eps() {
         }
     });
 }
+
 $(document).ready(cargar_eps);
 
 function cargar_ips() {
@@ -305,6 +306,8 @@ $('#reportSamebitModal').on('click', function () {
         })
         return false;
     }
+    $('#modal-report').modal('show');
+
     let defaultDate = new Date();
     showReportCard(defaultDate);
 });
@@ -398,13 +401,11 @@ function showCustomDialog(data = '') {
 }
 
 function generateDate(date = new Date(), h = 0, m = 0, s = 0, ss = 0) {
-    console.log(date);
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), h, m, s, ss));
 }
 
 function showReportCard(defaultDate = '') {
 
-    $('#modal-report').modal('show');
 
     if (defaultDate) {
 
@@ -428,7 +429,7 @@ function showReportCard(defaultDate = '') {
         checkinEnd: checkInEndToJson,
         checkOutStart: $('#checkOut-start').val(),
         checkOutEnd: $('#checkOut-end').val(),
-        appointmentStart: checkInEndToJson,
+        appointmentStart: $('#appointment-start').val(),
         appointmentEnd: $('#appointment-end').val(),
     };
     console.log(postData);
@@ -444,7 +445,7 @@ function showReportCard(defaultDate = '') {
             { "data": "RECEPCION_CORREO" },
             { "data": "RESPUESTA_CORREO" },
             { "data": "HORA_COMENTARIO" },
-            { "data": "CC" },
+            { "data": "DOCUMENTO" },
             { "data": "PACIENTE" },
             { "data": "ENVIADO_POR" },
             { "data": "IPS" },
@@ -453,12 +454,13 @@ function showReportCard(defaultDate = '') {
             { "data": "DIAGNOSTICO" },
             { "data": "APROBADO" },
             { "data": "FECHA_CITA" },
-            { "data": "CREADO_POR" },
             { "data": "ANEXO_9" },
             { "data": "ANEXO_10" },
             { "data": "ENVIADO_A" },
             { "data": "COMENTARIO_RECEPCION" },
             { "data": "COMENTARIO_CONTRAREF" },
+            { "data": "CREADO_POR" },
+
 
         ],
         "paging": true,

@@ -16,35 +16,52 @@ $appointmentEnd = isset($_POST["appointmentEnd"]) ? $_POST["appointmentEnd"] : '
 if ($checkinStart) {
 
     $checkinStart = date("Y-m-d H:i:s", strtotime($checkinStart));
-
     if ($checkinEnd) {
         $checkinEnd = date("Y-m-d H:i:s", strtotime($checkinEnd));
     }
 
-    $checkInDateWhere = !$checkinEnd ?
-        "checkIn_date = $checkinStart" :
+    $where = !$checkinEnd ?
+        "checkIn_date = '$checkinStart'" :
         "CONCAT(checkIn_date,' ',checkIn_time) BETWEEN '$checkinStart' AND '$checkinEnd'";
 }
 
-if ($checkOutStart and !$checkinEnd) {
+
+
+if ($checkOutStart) {
+
     $checkOutStart = date("Y-m-d H:i:s", strtotime($checkOutStart));
-    // $checkinEnd = date_time_set($checkOutStart, 23, 45, 49);
+    if ($checkOutEnd) {
+        $checkOutEnd = date("Y-m-d H:i:s", strtotime($checkOutEnd));
+    }
+
+    $where = !isset($where) ?: $where .= " AND ";
+    $where .= !$checkOutEnd ?
+        "commentdate = '$checkOutStart'" :
+        "CONTACT (commentdate,' ',commenttime) BETWEEN '$checkOutStart' AND '$checkOutStart'";
 }
+
 
 if ($appointmentStart) {
-    $appointmentStart = date("Y-m-d H:i:s", strtotime($appointmentStart));
-    // $chappointmentEndckinEnd = date_time_set($appointmentStart, 23, 45, 49);
 
+    $appointmentStart = date("Y-m-d H:i:s", strtotime($appointmentStart));
+    if ($appointmentEnd) {
+        $appointmentEnd = date("Y-m-d H:i:s", strtotime($appointmentEnd));
+    }
+
+    $where = !isset($where) ?: $where .= " AND ";
+    $where .= !$appointmentEnd ?
+        "appointmenttime ='$appointmentStart'" :
+        "CONCAT (appointmentdate,' ',appointmenttime) BETWEEN '$appointmentStart' AND '$appointmentEnd'";
 }
 
-$sql = "SELECT CONCAT(p.Name0 ,' ',p.lastname0) as PACIENTE, e.name0 as EPS,
-b.statuseps ESTADO_EPS, b.FK_Range as RANGO, i.name0 AS IPS, d.codigo  AS DIAGNOSTICO,
-b.dni AS CC, b.name0 AS NOMBRE, b.lastname AS PELLIDO, b.sentby AS ENVIADO_POR,
-b.comment0 AS COMENTARIO_RECEPCION, b.commentdate AS RESPUESTA_CORREO,b.commenttime AS HORA_COMENTARIO,
-b.approved APROBADO, b.appointmentdate AS FECHA_CITA, b.appointmenttime HORA_CITA,
-b.callsnumber AS NUMERO_LLAMADAS,b.createdUser AS CREADO_POR,b.created AS RECEPCION_CORREO,
-b.updatedUser AS ACTUALIZADO_POR,b.updated AS HORA_ACTUALIZADO, b.contactype AS TIPO_CONTACTO,
-b.exhibit_nine AS ANEXO_9, b.exhibit_ten AS ANEXO_10, b.send_to AS ENVIADO_A, b.observation_out AS COMENTARIO_CONTRAREF
+
+$sql = "SELECT 
+b.created AS RECEPCION_CORREO, b.commentdate AS RESPUESTA_CORREO, b.commenttime AS HORA_COMENTARIO, b.dni AS DOCUMENTO, 
+CONCAT(p.Name0 ,' ', p.lastname0) AS PACIENTE, b.sentby AS ENVIADO_POR, i.name0 AS IPS, e.name0 as EPS, b.FK_Range as RANGO, 
+b.statuseps AS ESTADO_EPS, d.codigo  AS DIAGNOSTICO, b.approved AS APROBADO, b.appointmentdate AS FECHA_CITA, b.exhibit_nine AS ANEXO_9, 
+b.exhibit_ten AS ANEXO_10, b.send_to AS ENVIADO_A, b.comment0 AS COMENTARIO_RECEPCION, b.observation_out AS COMENTARIO_CONTRAREF,
+b.createdUser AS CREADO_POR, b.appointmenttime HORA_CITA, b.callsnumber AS NUMERO_LLAMADAS, b.updatedUser AS ACTUALIZADO_POR, b.updated AS HORA_ACTUALIZADO, 
+b.contactype AS TIPO_CONTACTO
 
 FROM bitpriorities b
 INNER JOIN patients p
@@ -56,29 +73,31 @@ ON b.FK_Ips = i.PK_UUID
 INNER JOIN diagnosis d
 ON b.FK_Diagnosis = d.KP_UUID
 
-WHERE $checkInDateWhere
+WHERE $where
 ";
 
-$data['data'] = [
-    'dni' => $dni,
-    'user' => $user,
-    'checkinStart' => $checkinStart,
-    'checkinEnd' => $checkinEnd,
-    'checkInDateWhere' => $checkInDateWhere,
-    'checkOutStart' => $checkOutStart,
-    'checkOutEnd' => $checkOutEnd,
-    'appointmentStart' => $appointmentStart,
-    'appointmentEnd' => $appointmentEnd,
-    'sql' => $sql,
-];
-echo print_r($data);
-return false;
+// $data['data'] = [
+//     'dni' => $dni,
+//     'user' => $user,
+//     'checkinStart' => $checkinStart,
+//     'checkinEnd' => $checkinEnd,
+//     'checkInDateWhere' => $checkInDateWhere,
+//     'checkOutStart' => $checkOutStart,
+//     'checkOutEnd' => $checkOutEnd,
+//     'appointmentStart' => $appointmentStart,
+//     'appointmentEnd' => $appointmentEnd,
+//     'sql' => $sql,
+// ];
+// echo print_r($data);
+// return false;
 
 $result = mysqli_query($conn, $sql);
+
 
 if (!$result) {
     die('Query Error' . mysqli_error($conn));
 } else {
+
     while ($data = mysqli_fetch_assoc($result)) {
         //en caso de tener problemas con la ñ y carácteres latam
         // $array['data'][] = array_map("utf8_encode",$data);
