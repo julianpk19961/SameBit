@@ -427,7 +427,7 @@ include './generales/header.php';
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn btn-sm btn-success m-1 float-end">Buscar</button>
+            <button type="submit" class="btn btn-sm btn-success m-1 float-end" onclick="showReportCard()">Buscar</button>
 
           </form>
           <hr class="w-100">
