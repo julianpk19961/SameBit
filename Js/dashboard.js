@@ -422,6 +422,9 @@ function showReportCard(defaultDate = '') {
     checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
     checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
 
+    // test = + $('#dni-request').val();
+    // console.log($('#dni-request').val());
+
     const postData = {
         dni: $('#dni-request').val(),
         user: $('#user-request').val(),
@@ -432,13 +435,13 @@ function showReportCard(defaultDate = '') {
         appointmentStart: $('#appointment-start').val(),
         appointmentEnd: $('#appointment-end').val(),
     };
-    console.log(postData);
+    0
     $('#recordsSummary').DataTable({
 
         "ajax": {
-            "method": "POST",
+            "type": "POST",
             "url": '../config/getPriorities.php',
-            "data": postData
+            "data": postData,
         },
 
         "columns": [
