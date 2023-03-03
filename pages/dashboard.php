@@ -365,8 +365,8 @@ include './generales/header.php';
                   <h6><sub>Datos Generales</sub></h6>
                 </label>
                 <div class="row">
-                  <div class="col-6">
-                    <labe for="dni-request">Identificación Paciente</labe>
+                  <div class="col-6" title="Puede buscar al paciente por núemero de documento o nombre">
+                    <labe for="dni-request">Paciente</labe>
                     <input type="text" name="dni-request" id="dni-request" class="form-control col-6" placeholder="" aria-describedby="helpId">
                   </div>
                   <div class="col-6">
@@ -448,12 +448,12 @@ include './generales/header.php';
                   <th>Diagnostico</th>
                   <th>Estado</th>
                   <th>Cita</th>
-                  <th>Recibe</th>
                   <th hidden>Anexo 9</th>
                   <th hidden>Anexo 10</th>
                   <th hidden>Enviado a</th>
                   <th hidden>Comentario</th>
                   <th hidden>Comentario contrareferencia</th>
+                  <th hidden>Creado por</th>
                 </tr>
               </thead>
               <tfoot>
@@ -470,13 +470,12 @@ include './generales/header.php';
                   <th>Diagnostico</th>
                   <th>Estado</th>
                   <th>Cita</th>
-                  <th>Recibe</th>
                   <th hidden>Anexo 9</th>
                   <th hidden>Anexo 10</th>
                   <th hidden>Enviado a</th>
                   <th hidden>Comentario</th>
                   <th hidden>Comentario contrareferencia</th>
-
+                  <th hidden>Creado por</th>
                 </tr>
               </tfoot>
             </table>
