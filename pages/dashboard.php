@@ -198,7 +198,7 @@ include './generales/header.php';
                               <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                   <!-- FECHA ATENCION -->
-                                  <label class="form-label" for="attention-date">FECHA ATENCIÓN</label>
+                                  <label class="form-label" for="attention-date">FECHA CITA</label>
                                   <input type="datetime-local" id="attention-date" name="attention-date" class="comunication_out form-control form-control-lg" />
                                 </div>
                               </div>
@@ -351,12 +351,12 @@ include './generales/header.php';
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header text-center">
-          <h1 class="modal-title fs-5" id="modalTitle">Datos registrados</h1>
+          <h1 class="modal-title fs-5" id="modalTitle">DATOS REGISTRADOS</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
 
-          <form action="" method="post" class="p-1">
+          <form action="" method="post" class="p-1" id="getInformation">
 
             <div class="row">
 
@@ -371,7 +371,14 @@ include './generales/header.php';
                   </div>
                   <div class="col-6">
                     <label for="user-request">Usuario Prioritaria</label>
-                    <input type="text" name="user-request" id="user-request" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                    <select type="text" name="user-request" id="user-request" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                      <option value="" selected></option>
+                      <option value="Andrés Toro">ANDRES TORO</option>
+                      <option value="Alejandro Osma">ALEJANDRO OSMA</option>
+                      <option value="Julián Villa">JULIAN VILLA</option>
+                      <option value="Julian Rodriguez">JULIAN RODRIGUEZ</option>
+                      <option value="XIOMARA LOPERA">XIOMARA LOPERA</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -384,12 +391,12 @@ include './generales/header.php';
 
                   <div class="col-6">
                     <labe for="checkin-start">Desde</labe>
-                    <input type="datetime-local" name="checkin-start" id="checkin-start" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                    <input type="datetime-local" name="checkin-start" id="checkin-start" class="form-control col-6" placeholder="" step="any">
                   </div>
 
                   <div class="col-6">
                     <label for="checkin-end">Hasta</label>
-                    <input type="datetime-local" name="checkin-end" id="checkin-end" class="form-control col-6" placeholder="" aria-describedby="helpId">
+                    <input type="datetime-local" name="checkin-end" id="checkin-end" class="form-control col-6" placeholder="" step="any">
                   </div>
 
                 </div>
@@ -413,7 +420,7 @@ include './generales/header.php';
 
               <div class="col-6">
                 <label for="appointment-start">
-                  <h6><sub>Fecha Atención</sub></h6>
+                  <h6><sub>Fecha Cita</sub></h6>
                 </label>
                 <div class="row">
                   <div class="col-6">
@@ -426,8 +433,18 @@ include './generales/header.php';
                   </div>
                 </div>
               </div>
+
+              <div class="row-inline m-1">
+                <div>
+                  <button type="button" class="btn btn-sm btn-success m-1 float-end" onclick="showReportCard()">Buscar</button>
+                </div>
+
+                <div>
+                  <button type="button" class="btn btn-sm btn-secondary m-1 float-end" id="cleanRequest">Limpiar</button>
+                </div>
+              </div>
             </div>
-            <button type="submit" class="btn btn-sm btn-success m-1 float-end" onclick="showReportCard()">Buscar</button>
+
 
           </form>
           <hr class="w-100">
@@ -436,46 +453,58 @@ include './generales/header.php';
             <table class="table table-lg table-striped table-responsive" id="recordsSummary">
               <thead class="table-light">
                 <tr>
-                  <th hidden>Recepción Correo</th>
-                  <th>Respuesta Correo</th>
-                  <th>Hora</th>
+                  <th>Recepción</th>
+                  <th>Hora Recepcion</th>
+                  <th>Respuesta</th>
+                  <th>Hora Respuesta</th>
                   <th>Documento</th>
                   <th>Paciente</th>
                   <th>Enviado</th>
                   <th>Ips</th>
                   <th>Eps</th>
-                  <th hidden>Rango</th>
+                  <th>Rango</th>
                   <th>Diagnostico</th>
-                  <th>Estado</th>
-                  <th>Cita</th>
-                  <th hidden>Anexo 9</th>
-                  <th hidden>Anexo 10</th>
-                  <th hidden>Enviado a</th>
-                  <th hidden>Comentario</th>
-                  <th hidden>Comentario contrareferencia</th>
-                  <th hidden>Creado por</th>
+                  <th>Aprobado</th>
+                  <th>Fecha Cita</th>
+                  <th>Hora Cita</th>
+                  <th>Anexo 9</th>
+                  <th>Anexo 10</th>
+                  <th>Enviado a</th>
+                  <th>Comentario</th>
+                  <th>Comentario contrareferencia</th>
+                  <th>Usuario Registra</th>
+                  <th>dias hasta la respuesta</th>
+                  <th>tiempo hasta la respuesta (sumar con los dias)</th>
+                  <th>dias hasta la cita</th>
+                  <th>tiempo hasta la cita (sumar con los dias)</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
-                  <th hidden>Recepción Correo</th>
-                  <th>Respuesta Correo</th>
-                  <th>Hora</th>
+                  <th>Recepción </th>
+                  <th>Hora Recepcion</th>
+                  <th>Respuesta </th>
+                  <th>Hora Respuesta</th>
                   <th>Documento</th>
                   <th>Paciente</th>
                   <th>Enviado</th>
                   <th>Ips</th>
                   <th>Eps</th>
-                  <th hidden>Rango</th>
+                  <th>Rango</th>
                   <th>Diagnostico</th>
-                  <th>Estado</th>
-                  <th>Cita</th>
-                  <th hidden>Anexo 9</th>
-                  <th hidden>Anexo 10</th>
-                  <th hidden>Enviado a</th>
-                  <th hidden>Comentario</th>
-                  <th hidden>Comentario contrareferencia</th>
-                  <th hidden>Creado por</th>
+                  <th>Aprobado</th>
+                  <th>Fecha Cita</th>
+                  <th>Hora Cita</th>
+                  <th>Anexo 9</th>
+                  <th>Anexo 10</th>
+                  <th>Enviado a</th>
+                  <th>Comentario</th>
+                  <th>Comentario contrareferencia</th>
+                  <th>Usuario Registra</th>
+                  <th>dias hasta la respuesta</th>
+                  <th>tiempo hasta la respuesta (sumar con los dias)</th>
+                  <th>dias hasta la cita</th>
+                  <th>tiempo hasta la cita (sumar con los dias)</th>
                 </tr>
               </tfoot>
             </table>
