@@ -1,20 +1,338 @@
 var user = [];
 var user = JSON.parse(localStorage.getItem('user'));
 
-$(document).ready(function () {
 
-    if (user == null) {
-        location.href = 'http://localhost/samebit/pages/login.php';
+function showCustomDialog(data = '') {
+
+    if (data.length == 0) {
+        alert('parametros vacios');
         return false;
-    } else {
-        user = JSON.parse(user);
     }
 
-    //Ocultar barras de busqueda e historico
-    $('#search-patients').hide();
-    $('#history-patient').hide();
-});
+    Swal.fire({
+        icon: data.icon,
+        title: data.title == '' ? data.icon : data.title,
+        text: data.text,
+        timer: data.time
+    });
 
+    return false;
+}
+
+function generateDate(date = new Date(), h = 0, m = 0, s = 0, ss = 0) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), h, m, s, ss));
+}
+
+function showReportCard(defaultDate = '') {
+
+
+    if (defaultDate) {
+
+        let startDate = generateDate(undefined),
+            endDate = generateDate(undefined, 23, 59, 59, 59);
+
+        let checkIn_start = startDate.toJSON().slice(0, 19),
+            checkIn_end = endDate.toJSON().slice(0, 19);
+
+        $('#checkin-start').val(checkIn_start);
+        $('#checkin-end').val(checkIn_end);
+    }
+
+    checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
+    checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
+
+    const postData = {
+        dni: $('#dni-request').val(),
+        user: $('#user-request').val(),
+        checkinStart: checkInStartToJson,
+        checkinEnd: checkInEndToJson,
+        checkOutStart: $('#checkOut-start').val(),
+        checkOutEnd: $('#checkOut-end').val(),
+        appointmentStart: $('#appointment-start').val(),
+        appointmentEnd: $('#appointment-end').val(),
+    };
+
+    $('#recordsSummary').DataTable({
+
+        "ajax": {
+            "type": "POST",
+            "url": '../config/getPriorities.php',
+            "data": postData,
+        },
+
+        "columns": [
+            { "data": "RECEPCION_CORREO" },
+            { "data": "HORA_RECEPCION" },
+            { "data": "RESPUESTA_CORREO" },
+            { "data": "HORA_RESPUESTA" },
+            { "data": "DOCUMENTO" },
+            { "data": "PACIENTE" },
+            { "data": "ENVIADO_POR" },
+            { "data": "IPS" },
+            { "data": "EPS" },
+            {
+                "data": "RANGO",
+                "render": function (data, type) {
+
+                    if (type === 'display') {
+
+                        let response_data = '';
+                        switch (data) {
+                            case "0":
+                                response_data = 'A';
+                                break;
+                            case "1":
+                                response_data = 'B';
+                                break;
+                            case "2":
+                                response_data = 'C';
+                                break;
+                            case "3":
+                                response_data = 'Sisben';
+                                break;
+                            default:
+                                break;
+                        }
+                        return `${response_data}`;
+                    }
+
+                    return data;
+                }
+            },
+            { "data": "DIAGNOSTICO" },
+            {
+                "data": "APROBADO",
+                "render": function (data, type) {
+
+                    if (type === 'display') {
+
+                        let response_data = '';
+                        switch (data) {
+                            case "1":
+                                response_data = 'Sí';
+                                break;
+                            case "0":
+                                response_data = 'No';
+                                break;
+                            default:
+                                break;
+                        }
+                        return `${response_data}`;
+                    }
+
+                    return data;
+                }
+            },
+            { "data": "FECHA_CITA" },
+            { "data": "HORA_CITA" },
+            {
+                "data": "ANEXO_9",
+                "render": function (data, type) {
+
+                    if (type === 'display') {
+
+                        let response_data = '';
+                        switch (data) {
+                            case "1":
+                                response_data = 'Sí';
+                                break;
+                            case "0":
+                                response_data = 'No';
+                                break;
+                            default:
+                                break;
+                        }
+                        return `${response_data}`;
+                    }
+
+                    return data;
+                }
+            },
+            {
+                "data": "ANEXO_10",
+                "render": function (data, type) {
+
+                    if (type === 'display') {
+
+                        let response_data = '';
+                        switch (data) {
+                            case "1":
+                                response_data = 'Sí';
+                                break;
+                            case "0":
+                                response_data = 'No';
+                                break;
+                            default:
+                                break;
+                        }
+                        return `${response_data}`;
+                    }
+
+                    return data;
+                }
+            },
+            { "data": "ENVIADO_A" },
+            { "data": "COMENTARIO_RECEPCION" },
+            { "data": "COMENTARIO_CONTRAREF" },
+            { "data": "CREADO_POR" },
+            { "data": "DIAS_RESPUESTA" },
+            { "data": "HORAS_RESPUESTA" },
+            { "data": "DIAS_CITA" },
+            { "data": "HORAS_CITA" }
+        ],
+        "paging": true,
+        'scrollY': '300px',
+        'scrollX': '300px',
+        'scrollCollapse': true,
+        'responsive': true,
+        'destroy': true,
+        "deferRender": true,
+        "orderClasses": false,
+        "order": [2],
+        dom: 'Bfrtip',
+        buttons: [{
+            extend: 'excelHtml5',
+            text: '<i class="bi bi-filetype-xls"></i>',
+            className: 'bg-success text-white',
+            titleAttr: 'Generar Archivo: Excel',
+        }, {
+            extend: 'csvHtml5',
+            text: '<i class="bi bi-filetype-csv"></i>',
+            className: 'bg-info text-white',
+            titleAttr: 'Generar Archivo: CSV',
+        }, {
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            autoWidth: true,
+            text: '<i class="bi bi-filetype-pdf"></i>',
+            className: 'bg-danger text-white',
+            titleAttr: 'Generar Archivo: PDF',
+            exportOptions: {
+                columns: ':visible'
+                // columns: 'th:not(:last-child)'
+            }
+        }
+        ],
+        "lengthMenu": [30, 50, 100, 200], /*"All"*/
+        "serverSide": true,
+        "language": {
+            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        }
+
+    });
+
+    table_id = 'recordsSummary';
+    cols_positions = [0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23];
+    hideColums(table_id, cols_positions);
+
+
+}
+
+function atentionswitch() {
+
+    if ($('#approved').val() != 1) {
+        $('#attention-date').val('');
+        $('#attention-date').prop("disabled", true);
+        return false;
+    }
+
+    $('#attention-date').prop("disabled", false);
+
+};
+
+
+function cargar_ips() {
+    $.ajax({
+        url: '../config/callips.php',
+        type: 'GET',
+        success: function (response) {
+            let ipslist = JSON.parse(response);
+            let template = '<option value="" title="">Seleccione una opción</option>';
+            ipslist.forEach(ipslist => {
+                template += `
+                    <option value=${ipslist.pk_uuid}>${ipslist.name}</option>
+                    `
+            });
+            $('#ips').html(template);
+        }
+    });
+}
+
+function cargar_eps() {
+    $.ajax({
+        url: '../config/calleps.php',
+        type: 'GET',
+        success: function (response) {
+            let eps = JSON.parse(response);
+            let template = '<option value="" title="">Seleccione una opción</option>';
+            eps.forEach(eps => {
+                template += `
+                    <option value=${eps.pk_uuid}>${eps.name} </option>
+                    `
+            });
+            $('#Eps').html(template);
+
+        }
+    });
+}
+
+function cargar_diagnosis() {
+    $.ajax({
+        url: '../config/calldiagnosis.php',
+        type: 'GET',
+        success: function (response) {
+            let diagnosis = JSON.parse(response);
+            let template = '<option value="" title="">Seleccione una opción</option>';
+            diagnosis.forEach(diagnosis => {
+                template += `
+                    <option value=${diagnosis.KP_UUID} title=${diagnosis.Observation}>${diagnosis.Codigo}</option>
+                    `
+            });
+            $('#diagnosis').html(template);
+        }
+    });
+}
+
+// Función para cargar el historico
+function cargar_historico(dni) {
+
+    $.ajax({
+        url: '../config/callhistory.php',
+        type: 'POST',
+        data: { dni },
+        success: function (response) {
+            // Sin respuesta
+            if (response == 'error') {
+                //Ocultar tablas por error.
+                $('#history-patient').hide();
+                $('#search-patients').hide();
+
+            }
+            else {
+
+                // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
+                let history = JSON.parse(response);
+                // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
+                let template = '';
+                history.forEach(history => {
+                    template +=
+                        `<tr>
+                        <td style="vertical-align:middle;">${history.commentdate} </td>
+                        <td style="vertical-align:middle;">${history.commenttime} </td>
+                        <td style="vertical-align:middle;">${history.createdUser}</td>
+                        <td style="vertical-align:middle;">${history.comment0}</td>
+                        </tr>`
+                });
+                // Mostrar el template en la etiqueta pacientes
+                // Mostrar cuadro de selección y ocultar cuadro de historico
+                $('#patienshistory').html(template);
+                $('#search-patients').hide();
+                $('#history-patient').show();
+            }
+        }
+    });
+}
 
 // Acción para input de número de documento
 $(document).on('keyup', '#dni', function () {
@@ -104,121 +422,29 @@ $(document).on('click', '.patient-select', function () {
 });
 
 
-function atentionswitch() {
+$(document).ready(function () {
 
-    if ($('#approved').val() != 1) {
-        $('#attention-date').val('');
-        $('#attention-date').prop("disabled", true);
+    if (user == null) {
+        location.href = 'http://localhost/samebit/pages/login.php';
         return false;
+    } else {
+        user = JSON.parse(user);
     }
 
-    $('#attention-date').prop("disabled", false);
+    cargar_ips();
+    cargar_eps();
+    atentionswitch();
+    cargar_diagnosis();
 
-};
+    //Ocultar barras de busqueda e historico
+    $('#search-patients').hide();
+    $('#history-patient').hide();
 
-$(document).ready(atentionswitch);
-
+});
 
 $(document).on('change', '#approved', function () {
     atentionswitch();
 });
-
-function cargar_eps() {
-    $.ajax({
-        url: '../config/calleps.php',
-        type: 'GET',
-        success: function (response) {
-            let eps = JSON.parse(response);
-            let template = '<option value="" title="">Seleccione una opción</option>';
-            eps.forEach(eps => {
-                template += `
-                    <option value=${eps.pk_uuid}>${eps.name} </option>
-                    `
-            });
-            $('#Eps').html(template);
-
-        }
-    });
-}
-
-$(document).ready(cargar_eps);
-
-function cargar_ips() {
-    $.ajax({
-        url: '../config/callips.php',
-        type: 'GET',
-        success: function (response) {
-            let ipslist = JSON.parse(response);
-            let template = '<option value="" title="">Seleccione una opción</option>';
-            ipslist.forEach(ipslist => {
-                template += `
-                    <option value=${ipslist.pk_uuid}>${ipslist.name}</option>
-                    `
-            });
-            $('#ips').html(template);
-        }
-    });
-}
-$(document).ready(cargar_ips);
-
-function cargar_diagnosis() {
-    $.ajax({
-        url: '../config/calldiagnosis.php',
-        type: 'GET',
-        success: function (response) {
-            let diagnosis = JSON.parse(response);
-            let template = '<option value="" title="">Seleccione una opción</option>';
-            diagnosis.forEach(diagnosis => {
-                template += `
-                    <option value=${diagnosis.KP_UUID} title=${diagnosis.Observation}>${diagnosis.Codigo}</option>
-                    `
-            });
-            $('#diagnosis').html(template);
-        }
-    });
-}
-//Cuando la página esté cargada ejecutará la función.
-$(document).ready(cargar_diagnosis);
-
-// Función para cargar el historico
-function cargar_historico(dni) {
-
-    $.ajax({
-        url: '../config/callhistory.php',
-        type: 'POST',
-        data: { dni },
-        success: function (response) {
-            // Sin respuesta
-            if (response == 'error') {
-                //Ocultar tablas por error.
-                $('#history-patient').hide();
-                $('#search-patients').hide();
-
-            }
-            else {
-
-                // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
-                let history = JSON.parse(response);
-                // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
-                let template = '';
-                history.forEach(history => {
-                    template +=
-                        `<tr>
-                        <td style="vertical-align:middle;">${history.commentdate} </td>
-                        <td style="vertical-align:middle;">${history.commenttime} </td>
-                        <td style="vertical-align:middle;">${history.createdUser}</td>
-                        <td style="vertical-align:middle;">${history.comment0}</td>
-                        </tr>`
-                });
-                // Mostrar el template en la etiqueta pacientes
-                // Mostrar cuadro de selección y ocultar cuadro de historico
-                $('#patienshistory').html(template);
-                $('#search-patients').hide();
-                $('#history-patient').show();
-            }
-        }
-    });
-}
 
 // Acción: clic en el botón de limpiar formulario
 $(document).on('click', '.bit-clean', function () {
@@ -307,7 +533,7 @@ $('#reportSamebitModal').on('click', function () {
         return false;
     }
     $('#modal-report').modal('show');
-
+    $('#getInformation').trigger('reset');
     let defaultDate = new Date();
     showReportCard(defaultDate);
 });
@@ -317,11 +543,6 @@ $('#contacttype').on('change', (e) => {
     $('.switchTitle').html(value.toUpperCase());
 
 });
-
-function hideColums(table_id, cols_positions) {
-    table = $('#' + table_id).DataTable();
-    table.columns([cols_positions]).visible(false);
-}
 
 $('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('change', (e) => {
 
@@ -383,132 +604,25 @@ $('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('c
 
 });
 
-function showCustomDialog(data = '') {
-
-    if (data.length == 0) {
-        alert('parametros vacios');
-        return false;
-    }
-
+$('#cleanRequest').on('click', (e) => {
     Swal.fire({
-        icon: data.icon,
-        title: data.title == '' ? data.icon : data.title,
-        text: data.text,
-        timer: data.time
-    });
-
-    return false;
-}
-
-function generateDate(date = new Date(), h = 0, m = 0, s = 0, ss = 0) {
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), h, m, s, ss));
-}
-
-function showReportCard(defaultDate = '') {
-
-
-    if (defaultDate) {
-
-        let startDate = generateDate(undefined),
-            endDate = generateDate(undefined, 23, 59, 59, 59);
-
-        let checkIn_start = startDate.toJSON().slice(0, 19),
-            checkIn_end = endDate.toJSON().slice(0, 19);
-
-        $('#checkin-start').val(checkIn_start);
-        $('#checkin-end').val(checkIn_end);
-    }
-
-    checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
-    checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
-
-    // test = + $('#dni-request').val();
-    // console.log($('#dni-request').val());
-
-    const postData = {
-        dni: $('#dni-request').val(),
-        user: $('#user-request').val(),
-        checkinStart: checkInStartToJson,
-        checkinEnd: checkInEndToJson,
-        checkOutStart: $('#checkOut-start').val(),
-        checkOutEnd: $('#checkOut-end').val(),
-        appointmentStart: $('#appointment-start').val(),
-        appointmentEnd: $('#appointment-end').val(),
-    };
-    0
-    $('#recordsSummary').DataTable({
-
-        "ajax": {
-            "type": "POST",
-            "url": '../config/getPriorities.php',
-            "data": postData,
-        },
-
-        "columns": [
-            { "data": "RECEPCION_CORREO" },
-            { "data": "RESPUESTA_CORREO" },
-            { "data": "HORA_COMENTARIO" },
-            { "data": "DOCUMENTO" },
-            { "data": "PACIENTE" },
-            { "data": "ENVIADO_POR" },
-            { "data": "IPS" },
-            { "data": "EPS" },
-            { "data": "RANGO" },
-            { "data": "DIAGNOSTICO" },
-            { "data": "APROBADO" },
-            { "data": "FECHA_CITA" },
-            { "data": "ANEXO_9" },
-            { "data": "ANEXO_10" },
-            { "data": "ENVIADO_A" },
-            { "data": "COMENTARIO_RECEPCION" },
-            { "data": "COMENTARIO_CONTRAREF" },
-            { "data": "CREADO_POR" },
-
-
-        ],
-        "paging": true,
-        'scrollY': '300px',
-        'scrollX': '300px',
-        'scrollCollapse': true,
-        'responsive': true,
-        'destroy': true,
-        "deferRender": true,
-        "orderClasses": false,
-        "order": [1],
-        dom: 'Bfrtip',
-        buttons: [{
-            extend: 'excelHtml5',
-            text: '<i class="bi bi-filetype-xls"></i>',
-            className: 'bg-success text-white',
-            titleAttr: 'Generar Archivo: Excel',
-        }, {
-            extend: 'csvHtml5',
-            text: '<i class="bi bi-filetype-csv"></i>',
-            className: 'bg-info text-white',
-            titleAttr: 'Generar Archivo: CSV',
-        }, {
-            extend: 'pdfHtml5',
-            orientation: 'landscape',
-            pageSize: 'LEGAL',
-            autoWidth: true,
-            text: '<i class="bi bi-filetype-pdf"></i>',
-            className: 'bg-danger text-white',
-            titleAttr: 'Generar Archivo: PDF',
-            exportOptions: {
-                columns: ':visible'
-                // columns: 'th:not(:last-child)'
-            }
+        icon: 'warning',
+        title: 'Atención',
+        text: '¿Está seguro de reiniciar el formularío',
+        showCancelButton: true,
+        cancelButtonText: 'No',
+        showConfirmButton: true,
+        confirmButtonText: 'Limpiar',
+        dangermode: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#getInformation').trigger('reset');
         }
-        ],
-        "lengthMenu": [30, 50, 100, 200], /*"All"*/
-        // "processing": true,
-        "language": {
-            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-        }
-
     });
+});
 
-    table_id = 'recordsSummary';
-    cols_positions = [0, 7, 12, 13, 14, 15, 16];
-    hideColums(table_id, cols_positions);
+function hideColums(table_id, cols_positions) {
+    table = $('#' + table_id);
+    table = table.DataTable();
+    table.columns(cols_positions).visible(false);
 }
