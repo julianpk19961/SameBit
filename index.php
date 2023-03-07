@@ -1,4 +1,4 @@
-<?php 
+  <?php 
 include './config/setup.php';
 
 if($_SESSION["id"]){
