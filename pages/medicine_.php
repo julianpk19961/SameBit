@@ -35,7 +35,7 @@ include './generales/header.php';
 <form id="medicineStored" action="" method="POST" class="p-2 form h-100" enctype="multipart/form-data">
     <div class="container bg-light border">
         <div id="tittleModule" class="row border border-end">
-            <h1 class="text-center align-self-center">DATOS MEDICAMENTO</h1>
+            <h1 class="text-center align-self-center">DATOS MEDICAMENTOS</h1>
         </div>
         <div class="row g-12">
             <div class="col-md-12 col-lg-12">

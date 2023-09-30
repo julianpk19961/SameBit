@@ -1,0 +1,35 @@
+<?php
+
+include 'config.php';
+$pk_uuid = $_POST['pk_uuid'];
+// $responseArray = array();
+
+$sql = "SELECT k.dateUserCrea,mc.`name` AS category,k.FK_Patient AS patient,k.`type`,k.quantity,k.finalQuantity ,k.bill,k.comment 
+FROM kardex AS k 
+INNER JOIN movcategories AS mc ON mc.KP_UUID = k.FK_Category
+WHERE k.FK_Medicine = '$pk_uuid'
+ORDER BY k.dateUserCrea DESC
+LIMIT 1";
+
+$result = mysqli_query($conn, $sql);
+if (!$result) {
+    $jsonstring = ('Query Error' . mysqli_error($conn));
+}
+
+$resultCount = mysqli_num_rows($result);
+
+if ($resultCount > 0) {
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'finalQuantity' => $row['finalQuantity']
+        );
+    }
+    // $jsonstring = json_encode($json);
+    $jsonkardex = $json;
+} else {
+    $jsonkardex = 'error';
+}
+
+// array_push($responseArray, $jsonkardex);
+echo json_encode($jsonkardex);

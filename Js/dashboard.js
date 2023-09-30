@@ -24,22 +24,29 @@ function generateDate(date = new Date(), h = 0, m = 0, s = 0, ss = 0) {
 }
 
 function showReportCard(defaultDate = '') {
-
+    let checkInStartToJson, checkInEndToJson;
 
     if (defaultDate) {
 
-        let startDate = generateDate(undefined),
-            endDate = generateDate(undefined, 23, 59, 59, 59);
+        let startDate = generateDate(defaultDate),
+            endDate = generateDate(defaultDate, 23, 59, 59, 59);
+
 
         let checkIn_start = startDate.toJSON().slice(0, 19),
             checkIn_end = endDate.toJSON().slice(0, 19);
 
-        $('#checkin-start').val(checkIn_start);
-        $('#checkin-end').val(checkIn_end);
+        $('#checkOut-start').val(checkIn_start);
+        $('#checkOut-end').val(checkIn_end);
     }
 
-    checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
-    checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
+
+    if ($('#checkin-start').length) {
+        checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
+    }
+    if ($('#checkin-end').length) {
+        checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
+    }
+
 
     const postData = {
         dni: $('#dni-request').val(),
@@ -59,7 +66,6 @@ function showReportCard(defaultDate = '') {
             "url": '../config/getPriorities.php',
             "data": postData,
         },
-
         "columns": [
             { "data": "RECEPCION_CORREO" },
             { "data": "HORA_RECEPCION" },
@@ -172,22 +178,40 @@ function showReportCard(defaultDate = '') {
                 }
             },
             { "data": "ENVIADO_A" },
-            { "data": "COMENTARIO_RECEPCION" },
-            { "data": "COMENTARIO_CONTRAREF" },
+            {
+                "data": "COMENTARIO_RECEPCION",
+                "render": function (data, type, row) {
+                    if (type === 'display' && data && data.length > 50) {
+                        return data.substr(0, 50) + '...';
+                    }
+                    return data;
+                }
+            },
+            {
+                "data": "COMENTARIO_CONTRAREF",
+                "render": function (data, type, row) {
+                    if (type === 'display' && data && data.length > 50) {
+                        return data.substr(0, 50) + '...';
+                    }
+                    return data;
+                }
+            },
             { "data": "CREADO_POR" },
             { "data": "DIAS_RESPUESTA" },
             { "data": "HORAS_RESPUESTA" },
             { "data": "DIAS_CITA" },
             { "data": "HORAS_CITA" }
         ],
+        "destroy": true,
         "paging": true,
-        'scrollY': '300px',
-        'scrollX': '300px',
-        'scrollCollapse': true,
-        'responsive': true,
-        'destroy': true,
+        "serverSide": false,
+        "scrollY": '300px',
+        "scrollX": '300px',
+        "scrollCollapse": true,
+        "responsive": true,
         "deferRender": true,
         "orderClasses": false,
+        "processing": true,
         "order": [2],
         dom: 'Bfrtip',
         buttons: [{
@@ -195,11 +219,17 @@ function showReportCard(defaultDate = '') {
             text: '<i class="bi bi-filetype-xls"></i>',
             className: 'bg-success text-white',
             titleAttr: 'Generar Archivo: Excel',
+            exportOptions: {
+                orthogonal: 'export' // Mantener el contenido completo en el archivo Excel
+            }
         }, {
             extend: 'csvHtml5',
             text: '<i class="bi bi-filetype-csv"></i>',
             className: 'bg-info text-white',
             titleAttr: 'Generar Archivo: CSV',
+            exportOptions: {
+                orthogonal: 'export' // Mantener el contenido completo en el archivo Excel
+            }
         }, {
             extend: 'pdfHtml5',
             orientation: 'landscape',
@@ -209,22 +239,29 @@ function showReportCard(defaultDate = '') {
             className: 'bg-danger text-white',
             titleAttr: 'Generar Archivo: PDF',
             exportOptions: {
-                columns: ':visible'
+                columns: ':visible',
+                orthogonal: 'export' // Mantener el contenido completo en el archivo PDF
                 // columns: 'th:not(:last-child)'
             }
         }
         ],
         "lengthMenu": [30, 50, 100, 200], /*"All"*/
-        "serverSide": true,
         "language": {
             "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        },
+        "initComplete": function () {
+
+            var table_id = $('#recordsSummary').DataTable();
+            var cols_positions = [0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23];
+            hideColums(table_id, cols_positions);
+
         }
+        // , "drawCallback": function () {
+        //     var table = $('#recordsSummary').DataTable();
+        //     table.fnAdjustColumnSizing();
 
+        // }
     });
-
-    table_id = 'recordsSummary';
-    cols_positions = [0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23];
-    hideColums(table_id, cols_positions);
 
 
 }
@@ -512,7 +549,7 @@ $(document).on('submit', '#bitregister', function (event) {
                 $('#bitregister').trigger('reset');
                 $('#search-patients').hide();
                 $('#history-patient').hide();
-
+                $('#pk_uuid').val('');
 
             });
         }
@@ -532,6 +569,12 @@ $('#reportSamebitModal').on('click', function () {
         })
         return false;
     }
+
+    // if (user.privilegeSet != 'root') {
+    //     showCustomDialog('Esta función está en mantenimiento, volverémos pronto')
+    //     return false;
+    // }
+
     $('#modal-report').modal('show');
     $('#getInformation').trigger('reset');
     let defaultDate = new Date();

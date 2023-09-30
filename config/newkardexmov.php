@@ -3,19 +3,24 @@
 include 'config.php';
 date_default_timezone_set('America/Bogota');
 
-$medicine = isset($_POST["pk_uuid"]) ? $_POST["pk_uuid"] : '';
-$date = isset($_POST["date"]) ? $_POST["date"] : '';
-$patient = isset($_POST["patient"]) ? $_POST["patient"] : '';
-$bill = isset($_POST["bill"]) ? $_POST["bill"] : '';
-$category = isset($_POST["category"]) ? $_POST["category"] : '';
-$quantity = isset($_POST["quantity"]) ? $_POST["quantity"] : '';
-$comment = isset($_POST["comment"]) ? $_POST["comment"] : '';
+function sanitizeInput($conn, $input)
+{
+    return mysqli_real_escape_string($conn, $input);
+}
+
+$medicine = isset($_POST["pk_uuid"]) ? sanitizeInput($conn, $_POST["pk_uuid"]) : '';
+$date = isset($_POST["date"]) ? sanitizeInput($conn, $_POST["date"]) : '';
+$patient = isset($_POST["patient"]) ? sanitizeInput($conn, $_POST["patient"]) : '';
+$bill = isset($_POST["bill"]) ? sanitizeInput($conn, $_POST["bill"]) : '';
+$category = isset($_POST["category"]) ? sanitizeInput($conn, $_POST["category"]) : '';
+$quantity = isset($_POST["quantity"]) ? sanitizeInput($conn, $_POST["quantity"]) : '';
+$comment = isset($_POST["comment"]) ? sanitizeInput($conn, $_POST["comment"]) : '';
 
 
-$sql = "SELECT MAX(dateUserCrea) AS LASTDATE FROM kardex WHERE FK_Medicine = '$medicine'";
+$sql = "SELECT MAX(dateUserCrea) AS last_date FROM kardex WHERE FK_Medicine = '$medicine'";
 $result = mysqli_query($conn, $sql);
 $result = mysqli_fetch_assoc($result);
-$lastTimeStamp = $result['LASTDATE'] == '' ? 0 : $result['LASTDATE'];
+$lastTimeStamp = $result['last_date'] == '' ? 0 : $result['last_date'];
 $lastDate_date = explode(' ', $lastTimeStamp)[0];
 
 if ($lastDate_date > $date) {
@@ -64,16 +69,26 @@ if (!$result) {
 $resultCount = mysqli_num_rows($result);
 $result = mysqli_fetch_assoc($result);
 $type = $result['type'];
-$operator = ($type == 1 ? '+' : '-');
-$total = eval('return ' . $saldoinicial . $operator . $quantity . ';');
+if ($type != 2) {
 
-if ($total < 0) {
-    $result = 'error-la cantidad supera la existencia en el kardex';
+    $operator = ($type == 1 ? '+' : '-');
+    $total = eval('return ' . $saldoinicial . $operator . $quantity . ';');
+
+    if ($total < 0) {
+        $result = 'error-la cantidad supera la existencia en el kardex';
+    }
+} else {
+
+    $total = $quantity;
+    $patient = 'SAMEIN - VISITA SSSA';
+    // $bill = '000';
 }
 
 
+
 if ($total >= 0) {
-    $sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity,bill,dateUserCrea,comment) VALUES ( '$medicine','$patient','$category','$type',$saldoinicial,$quantity,$total,'$bill','$date','$comment') ";
+    $sql = "INSERT INTO kardex (FK_Medicine,FK_Patient,FK_Category,`Type`,inicialQuantity,quantity,finalQuantity,bill,dateUserCrea,comment) 
+    VALUES ( '$medicine','$patient','$category','$type',$saldoinicial,$quantity,$total,'$bill','$date','$comment') ";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {

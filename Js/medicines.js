@@ -200,11 +200,16 @@ $(document).on('click', '#kardex-store', (e) => {
     bill = $('#bill').val();
     quantity = $('#quantity').val();
     comment = $('#notemov').val();
+
     if (category.length == 0) {
         emptyfields += 'Categoria, '
     }
-    if (patient.length == 0 && bill.length == 0) {
-        emptyfields += 'Paciente y Factura, '
+    if (patient.length == 0 && bill.length == 0  ) {
+
+        selectedOptionText = $('#categorymov option:selected').text();
+        if (!selectedOptionText.indexOf('SSSA')){
+            emptyfields += 'Paciente y Factura, '
+        }
     }
     if (quantity.length == 0) {
         emptyfields += 'Cantidad'
@@ -231,7 +236,7 @@ $(document).on('click', '#kardex-store', (e) => {
     }
 
     pk_uuid = $('#pk_uuid').val();
-    console.log(pk_uuid);
+    // console.log(pk_uuid);
     let postdata = {
 
         pk_uuid: pk_uuid,
@@ -275,6 +280,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
     let getTable = $(table);
     btnCreate = ''
     btnPdf = ''
+    btnExcel = ''
 
     if (create == true) {
 
@@ -285,7 +291,24 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
         }
     }
 
+
+
     if (PDF == true) {
+
+
+        btnExcel = {
+            destroy: true,
+            extend: 'excelHtml5',
+            autoWidth: true,
+            text: '<i class="bi bi-file-excel"></i>',
+            className: 'bg-success text-white m-1',
+            exportOptions: { columns: columns_print, order: 'index' },
+            title: varTitle,
+            messageBottom: 'Reporte generado: ' + new Date().toLocaleDateString('es-CO'),
+            customize: function (xlsx) {
+                // personaliza el archivo de Excel aquí si es necesario
+            }
+        }
 
         btnPdf = {
             destroy: true,
@@ -336,6 +359,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
         }
     }
 
+
     // agregar atributos a botones
     $(table).on('init.dt', function () {
 
@@ -358,7 +382,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
         dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
             '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
             '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-        dom: 'Blfrtip',
+        dom: 'Bfrtip',
         buttons: {
 
             dom: {
@@ -367,7 +391,9 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
                 }
             },
             buttons: [
-                btnCreate, btnPdf
+                btnCreate,
+                btnPdf,
+                btnExcel
             ],
             columnDefs: [{
                 targets: -1,
@@ -507,8 +533,8 @@ $(document).on('click', '.show-element', function (e) {
     var today = now.getFullYear() + "-" + (month) + "-" + (day);
 
     $('#datemov').val(today);
-    $('#thead').children()[1].css("width", "200px");
-
+    // $('#thead').children()[1].css("width", "200px");
+    $('#thead').children().eq(1).css("width", "200px");
 
 });
 
@@ -571,3 +597,41 @@ function getkardexRow(postdata) {
         return;
     });
 };
+
+$(document).on('change', '#categorymov', function () {
+    //  texto.indexOf(palabra) !== -1
+    console.log('hi');
+    selectedOptionText = $('#categorymov option:selected').text();
+   
+
+    if (selectedOptionText.indexOf('SSSA') !== -1) {
+
+        var pk_uuid = $('#pk_uuid').val();
+        // console.log('in');
+        $.post('../config/getLastKardex.php', { pk_uuid: pk_uuid }, function (response) {
+
+            if (response == 'error') {
+                console.log('No data');
+            } else {
+
+                let data = JSON.parse(response);
+                $.each(data[0], function (key, value) {
+                    if (key === 'finalQuantity') {
+                        $('#quantity').val(value ? value : 0);
+                        $('#quantity').prop('disabled', true);
+                    }
+                });
+
+            };
+            return;
+        });
+
+    } else {
+
+        if ($('#quantity').prop('disabled')) {
+            $('#quantity').prop('disabled', false);
+            $('#quantity').val('');
+          }
+    }
+
+});
