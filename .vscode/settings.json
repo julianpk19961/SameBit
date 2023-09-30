@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "Change to date"
+        "Change to date",
+        "fix bug"
     ]
 }
