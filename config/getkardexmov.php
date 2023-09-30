@@ -4,7 +4,6 @@ include 'config.php';
 $pk_uuid = $_POST['pk_uuid'];
 $responseArray = array();
 
-
 $sql = "SELECT KP_UUID,abbr,`name` FROM  movcategories";
 $result = mysqli_query($conn, $sql);
 if (!$result) {

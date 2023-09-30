@@ -22,7 +22,7 @@ include './generales/header.php';
 </header>
 
 <div id="tittleModule" class="row border border-end">
-    <h1 class="text-center align-self-center">GESTIÓN - MEDICAMENTOS </h1>
+    <h1 class="text-center align-self-center">GESTIÓN - MEDICAMENTOS</h1>
 </div>
 
 
@@ -42,6 +42,7 @@ include './generales/header.php';
             </thead>
             <tbody id="dataMedicines">
             </tbody>
+            
             <div class="medicine_id modal fade" id="modal-delete-" tabindex="-1" aria-labelledby="" aria-hidden="true">
                 <div class="modal-dialog bg-light rounded-3">
                     <form id="destroyMedicine" method="POST">

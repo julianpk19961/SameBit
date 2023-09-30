@@ -347,7 +347,7 @@ include './generales/header.php';
       </div>
     </form>
   </section>
-  <div class="modal fade" id="modal-report" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal-report" tabindex="-1" aria-labelledby="modalReport" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header text-center">
@@ -449,8 +449,8 @@ include './generales/header.php';
           </form>
           <hr class="w-100">
           <!-- --FIN DEL FORMULARIO -->
-          <div class="container-fluid">
-            <table class="table table-lg table-striped table-responsive" id="recordsSummary">
+          <div class="container-fluid w-100">
+            <table class="table table-lg table-striped table-responsive w-100" id="recordsSummary">
               <thead class="table-light">
                 <tr>
                   <th>Recepción</th>
@@ -479,7 +479,7 @@ include './generales/header.php';
                   <th>tiempo hasta la cita (sumar con los dias)</th>
                 </tr>
               </thead>
-              <tfoot>
+              <!-- <tfoot>
                 <tr>
                   <th>Recepción </th>
                   <th>Hora Recepcion</th>
@@ -506,7 +506,7 @@ include './generales/header.php';
                   <th>dias hasta la cita</th>
                   <th>tiempo hasta la cita (sumar con los dias)</th>
                 </tr>
-              </tfoot>
+              </tfoot> -->
             </table>
           </div>
         </div>
@@ -517,18 +517,14 @@ include './generales/header.php';
   </div>
   </div>
 
-
-
-</body>
-
-<script src="../Js/dashboard.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.print.min.js"></script>
+  <script src="../Js/dashboard.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.print.min.js"></script>
 </body>
