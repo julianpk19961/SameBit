@@ -230,20 +230,21 @@ function showReportCard(defaultDate = '') {
             exportOptions: {
                 orthogonal: 'export' // Mantener el contenido completo en el archivo Excel
             }
-        }, {
-            extend: 'pdfHtml5',
-            orientation: 'landscape',
-            pageSize: 'LEGAL',
-            autoWidth: true,
-            text: '<i class="bi bi-filetype-pdf"></i>',
-            className: 'bg-danger text-white',
-            titleAttr: 'Generar Archivo: PDF',
-            exportOptions: {
-                columns: ':visible',
-                orthogonal: 'export' // Mantener el contenido completo en el archivo PDF
-                // columns: 'th:not(:last-child)'
-            }
-        }
+        } //, 
+        // {
+        //     extend: 'pdfHtml5',
+        //     orientation: 'landscape',
+        //     pageSize: 'LEGAL',
+        //     autoWidth: true,
+        //     text: '<i class="bi bi-filetype-pdf"></i>',
+        //     className: 'bg-danger text-white',
+        //     titleAttr: 'Generar Archivo: PDF',
+        //     exportOptions: {
+        //         columns: ':visible',
+        //         orthogonal: 'export' // Mantener el contenido completo en el archivo PDF
+        //         // columns: 'th:not(:last-child)'
+        //     }
+        // }
         ],
         "lengthMenu": [30, 50, 100, 200], /*"All"*/
         "language": {
