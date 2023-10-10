@@ -1,15 +1,21 @@
 <?php
+//Activar en caso de necesitar detectar errores.
 
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+//Librerias y archivo de conección
 include 'config.php';
 include 'phpMail.php';
-
+include '../PHPExcel/Classes/PHPExcel.php';
+//Configuración de zona horaria.
 date_default_timezone_set('America/Bogota');
 
+//Fecha consulta Sql - Formato Año-mes-dia
+$dateQuery = date('Y-m-d', strtotime('-1 days'));
+// $dateQuery = date('2023-10-08');
 
-$ini =  date('Y-m-d 00:00:00');
-$end =  date('Y-m-d 23:59:59');
-
-$sql = "SELECT b.PK_UUID FROM bitpriorities b WHERE TIMESTAMP(b.commentdate, b.commenttime) BETWEEN '$ini' AND '$end'";
+$sql = "SELECT b.PK_UUID FROM bitpriorities b WHERE TIMESTAMP(b.commentdate, b.commenttime) BETWEEN '$dateQuery 00:00:00' AND '$dateQuery 23:59:59'";
 
 $headers_result = mysqli_query($conn, $sql);
 if ($headers_result === false) {
@@ -65,36 +71,56 @@ if ($headers_result === false) {
     $body_result = mysqli_query($conn, $sql);
 
     if ($body_result) {
-        $data_body = array();
 
-        $fulltimeMail = date_create(date('Y-m-d H:i:s'));
-        $dateMail = $fulltimeMail->format('Y-m-d');
-        $timeMail = $fulltimeMail->format('H:i:s');
+        // Datos de información para correo eléctronico.
+        $dateMail = date('Y-m-d');
+        $timeMail = date('H:i:s');
 
-        $filename = "../documentos/$dateMail.csv";
-        $file = fopen($filename, "w");
+        //Definir el nombre del archivo basado en la fecha.
+        // se hace de esta forma por la versión de php.
+        $dateFileName = date_create($dateQuery) < date_create($dateMail) ? $dateQuery : $dateMail;
+        $txtDateEmail = date_create($dateQuery) < date_create($dateMail) ? $dateQuery : 'de hoy';
 
-        $columns = array_keys(mysqli_fetch_assoc($body_result));
-        fputcsv($file, $columns);
 
-        #columnas
-        while ($row = mysqli_fetch_assoc($body_result)) {
-            $data_body[] = $row;
+        try {
+
+            $filename = "../documentos/$dateFileName.xlsx";
+
+            // Creación Objeto
+            $file = new PHPExcel();
+            $file->getActiveSheet()->setTitle("Reporte-Prioritaria-$dateFileName");
+
+            // Definir en la línea A1 el nombre de las columnas.
+            $columns = array_keys(mysqli_fetch_assoc($body_result));
+            $file->getActiveSheet()->fromArray($columns, null, 'A1');
+            // Moverme a la línea número 2
+            $rowNumber = 2;
+
+            //Recorrer el resultado para insertar sus valores en el documento desde la columna A
+            while ($row = mysqli_fetch_assoc($body_result)) {
+                $file->getActiveSheet()->fromArray($row, null, 'A' . $rowNumber);
+                $rowNumber++;
+            }
+
+
+            // Creción de documento: Formatos permitidos además de Excel5,Excel2007,PDF,HTML,CSV,Tab-Delimited-Text: 
+            $fileStore = PHPExcel_IOFactory::createWriter($file, 'Excel2007');
+            // Guardar el documento
+            $fileStore->save($dateFileName);
+        } catch (Exception $e) {
+            echo 'Error: ', $e->getMessage(), PHP_EOL;
         }
 
-        foreach ($data_body as $row) {
-            fputcsv($file, $row);
-        }
-
-        fclose($file);
-
-        $body = "Buen día Dr/Dres,\nEste correo electrónico se envió el $dateMail a las $timeMail\n\nSe adjunta reporte de prioritaria correspondiente a los registros ingresados por los APH el día de hoy. \n\n\nSamebit";
+        $body = "Buen día Dr/Dres,\nEste correo electrónico se envió el $dateMail a las $timeMail\n\nSe adjunta reporte de prioritaria correspondiente a los registros ingresados por los APH el día $txtDateEmail. \n\n\nSamebit";
         $correoHandler = new CorreoHandler();
         $correoHandler->enviarCorreo(
-            'julianrodriguez19961@gmail.com',
-            'Reporte de prioritaria',
+            'direccionmedica@samein.com.co',
+            "Reporte de prioritaria $dateQuery",
             "$body",
-            ['path' => $filename, 'name' => "$dateMail"]
+            [
+                'path' => $dateFileName,
+                'name' => "$dateFileName.xlsx"
+            ]
         );
     }
 }
