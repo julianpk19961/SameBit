@@ -16,13 +16,7 @@
 - **Kardex**: Registro de movimientos y auditoría
 - **Observaciones**: Notas asociadas a medicamentos
 
-### 📋 Registro de Tratamientos
-- **TOP (Treatment Outcome Profile)**: Perfil de resultados de tratamiento
-- **Etapas de tratamiento**: Ingreso, Egreso, En tratamiento, Seguimiento
-- **Monitoreo de drogas**: Registro de consumo y cumplimiento
-- **Visualización gráfica**: Análisis de progreso con gráficos
-
-### 📊 Reportes y Auditoría
+###  Reportes y Auditoría
 - **Reportes avanzados**: Filtrado por fecha, usuario, paciente
 - **Prioridades del día**: Vista de citas y diagnósticos pendientes
 - **Exportación**: Generación de reportes en Excel y PDF
@@ -144,14 +138,13 @@ SameBit/
 - Validación segura en backend
 
 ### 2️⃣ **Panel de Control - Dashboard** (`pages/dashboard.php`)
-Una vez autenticado, verás 4 opciones principales:
+Una vez autenticado, verás 3 opciones principales:
 
 | Opción | Descripción | Enlace |
 |--------|-----------|--------|
 | 📞 **Registro de Llamadas** | Registra nuevas llamadas y novedades de pacientes | Formulario en dashboard |
 | 💊 **Medicamentos** | Gestión de medicamentos, kardex y inventario | `pages/medicines_l.php` |
 | 📊 **Reportes** | Visualiza reportes, citas y prioridades | Dashboard (tabla) |
-| 📋 **Tratamiento (TOP)** | Seguimiento de resultados de tratamiento | `pages/asisttop.php` |
 
 ### 3️⃣ **Registro de Pacientes/Llamadas**
 1. Click en **"Registro de Llamadas"** en el Dashboard
@@ -176,12 +169,6 @@ Desde el Dashboard:
 - 📅 Filtrar por fecha, usuario, paciente
 - 📊 Visualizar citas y diagnósticos
 - ⬇️ Exportar a Excel/PDF
-
-### 6️⃣ **Tratamiento (TOP)** (`pages/asisttop.php`)
-Perfil de resultados de tratamiento:
-- 📝 Registrar consumo de drogas
-- 📈 Seguimiento por etapas (Ingreso, Egreso, En tratamiento, Seguimiento)
-- 📊 Ver gráficos de progreso
 
 ### 🔙 **Navegación**
 - **Desde cualquier módulo**: Hay links en la barra superior para acceder a otros módulos
