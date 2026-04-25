@@ -60,18 +60,6 @@ include './generales/header.php';
         </div>
       </div>
     </div>
-
-    <!-- Card 4: Tratamiento (TOP) -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;">
-        <div class="card-body text-center">
-          <div class="display-4 text-primary mb-3">📋</div>
-          <h5 class="card-title fw-bold">Tratamiento</h5>
-          <p class="card-text text-muted small">TOP - Seguimiento de resultados</p>
-          <a href="./asisttop.php" class="btn btn-primary btn-sm mt-3 w-100">Ir →</a>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
