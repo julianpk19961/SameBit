@@ -1,33 +1,31 @@
 <?php
+include 'config.php';
+$Dni = $_POST['dni'];
 
-    // Iniciar.
-    include 'config.php';
-    $Dni = $_POST['dni'];
-    
-    $sql = "SELECT  b.commentdate,b.commenttime,b.createdUser,b.comment0 FROM bitpriorities b INNER JOIN patients p ON p.KP_UUID = b.FK_Patient WHERE p.dni = '$Dni' ORDER BY b.commentdate DESC, b.commenttime DESC";
-    $result = mysqli_query($conn,$sql);
-    
-    if (!$result){
-        die('Query Error'. mysqli_error($conn));
-    }
+$sql = "SELECT b.response_date, b.response_time, b.created_by, b.reception_notes
+        FROM priorities b
+        INNER JOIN patients p ON p.id = b.patient_id
+        WHERE p.document_number = '$Dni'
+        ORDER BY b.response_date DESC, b.response_time DESC";
 
-    $resultCount = mysqli_num_rows($result);
+$result = mysqli_query($conn, $sql);
 
-    if ($resultCount > 0 ){
-        $json = array();
-        while ($row = mysqli_fetch_array($result)){
+if (!$result) {
+    die('Query Error' . mysqli_error($conn));
+}
+
+$resultCount = mysqli_num_rows($result);
+if ($resultCount > 0) {
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
-            'commentdate' => $row['commentdate'],
-            'commenttime' => $row['commenttime'],
-            'createdUser' => $row['createdUser'],
-            'comment0' => $row['comment0']
+            'commentdate' => $row['response_date'],
+            'commenttime' => $row['response_time'],
+            'createdUser' => $row['created_by'],
+            'comment0'    => $row['reception_notes']
         );
-        }
-        $jsonstring = json_encode($json);
-    }else{
-        $jsonstring = 'error';
     }
-
-    echo $jsonstring;
-    
-?>
+    echo json_encode($json);
+} else {
+    echo 'error';
+}

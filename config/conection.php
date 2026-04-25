@@ -1,72 +1,60 @@
 <?php
-
+include('config.php');
 session_start();
-if (isset($_POST["Accion"])) {
-    if (isset($_POST["Accion"]) == 'login') {
-        login();
-    };
-};
 
+header('Content-Type: text/html; charset=UTF-8');
+
+if (isset($_POST["Accion"]) && $_POST["Accion"] == 'login') {
+    login();
+}
 
 function login()
 {
-    #Conexión
-    include('config.php');
+    global $conn;
 
-    try {
-        #Verificar Credenciales
-        $name0 = isset($_POST["name"]) ? $_POST["name"] : '';
-        $pass0 = isset($_POST["pass"]) ? $_POST["pass"] : '';
-        $md5pass = md5($pass0);
-        $json = array();
+    $name0   = isset($_POST["name"]) ? $_POST["name"] : '';
+    $pass0   = isset($_POST["pass"]) ? $_POST["pass"] : '';
+    $md5pass = md5($pass0);
+
+    $sql    = "SELECT id, first_name, last_name, privilege FROM users WHERE username = '" . $name0 . "' AND password = '" . $md5pass . "'";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row          = mysqli_fetch_array($result, MYSQLI_NUM);
+        $userFullName = $row[1] . ' ' . $row[2];
+        $privilegeSet = $row[3];
+
+        $file = ($privilegeSet === 'root' || $privilegeSet === 'admin')
+            ? 'dashboard.php'
+            : 'medicines_l.php';
+
+        $_SESSION['id']      = $row[0];
+        $_SESSION['usuario'] = $userFullName;
+
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+        $base     = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/';
+        $url      = $base . 'pages/' . $file;
+
+        $titulo       = 'Éxito';
+        $subMensaje   = 'Conexión Exitosa';
+        $tipo         = 'success';
+        $nombreUsuario = $userFullName;
+    } else {
+        $titulo        = 'Error';
+        $subMensaje    = 'Usuario no encontrado';
+        $tipo          = 'error';
         $nombreUsuario = '';
-        $url = '';
-
-        $sql = "SELECT Name0,Name1,LastName0,LastName1,fk_privilegeSet FROM bitusers WHERE NickName = '" . $name0 . "' AND Password0 = '" . $md5pass . "'";
-        $result = mysqli_query($conn, $sql);
-        $rowsresult = $result->num_rows;
-        if ($rowsresult > 0) {
-
-            $row = $result->fetch_array(MYSQLI_NUM);
-            $userFullName = $row[0] . " " . $row[2];
-            $privilegeSet = $row[4];
-
-            if ($privilegeSet != 'root' && $privilegeSet != 'prioritaria' && $privilegeSet != 'administrador') {
-                $file = 'medicines_l.php';
-            } else {
-                $file = 'dashboard.php';
-            }
-
-
-            $_SESSION['usuario'] =  $userFullName;
-
-            // Parametros Sweet Alert
-            $titulo = 'Éxito';
-            $subMensaje = 'Conexión Exitosa';
-            $tipo = 'success';
-            $nombreUsuario = $_SESSION['usuario'];
-            $url = "http://192.168.1.22/samebit/pages/".$file;
-        } else {
-
-            $titulo = 'Error';
-            $subMensaje = 'Usuario no encontrado';
-            $tipo = 'error';
-            $nombreUsuario = '';
-            $url = '';
-            $privilegeSet = '';
-        }
-    } catch (\Throwable $th) {
-
-        $titulo = 'Error';
-        $subMensaje = 'Usuario no encontrado';
-        $tipo = 'error';
-        $nombreUsuario = '';
-        $url = '';
-        $privilegeSet = '';
+        $url           = '';
+        $privilegeSet  = '';
     }
 
-
-    $message = ['Title' => $titulo, 'Mensaje' => $subMensaje, 'Tipo' => $tipo, 'nombreusuario' => $nombreUsuario, 'url' => $url, 'privilegeSet' => $privilegeSet];
-    $message = json_encode($message);
-    echo $message;
+    $message = [
+        'Title'         => $titulo,
+        'Mensaje'       => $subMensaje,
+        'Tipo'          => $tipo,
+        'nombreusuario' => $nombreUsuario,
+        'url'           => $url,
+        'privilegeSet'  => $privilegeSet,
+    ];
+    echo json_encode($message);
 }

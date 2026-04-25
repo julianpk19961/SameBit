@@ -1,6 +1,4 @@
-var user = [];
 var user = JSON.parse(localStorage.getItem('user'));
-
 
 function showCustomDialog(data = '') {
 
@@ -31,35 +29,32 @@ function showReportCard(defaultDate = '') {
         let startDate = generateDate(defaultDate),
             endDate = generateDate(defaultDate, 23, 59, 59, 59);
 
-
         let checkIn_start = startDate.toJSON().slice(0, 19),
             checkIn_end = endDate.toJSON().slice(0, 19);
 
-        $('#checkOut-start').val(checkIn_start);
-        $('#checkOut-end').val(checkIn_end);
+        $('#checkout-start').val(checkIn_start);
+        $('#checkout-end').val(checkIn_end);
     }
-
 
     if ($('#checkin-start').length) {
-        checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start
+        checkInStartToJson = typeof checkIn_start === 'undefined' ? $('#checkin-start').val() : checkIn_start;
     }
     if ($('#checkin-end').length) {
-        checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end
+        checkInEndToJson = typeof checkIn_end === 'undefined' ? $('#checkin-end').val() : checkIn_end;
     }
-
 
     const postData = {
         dni: $('#dni-request').val(),
         user: $('#user-request').val(),
         checkinStart: checkInStartToJson,
         checkinEnd: checkInEndToJson,
-        checkOutStart: $('#checkOut-start').val(),
-        checkOutEnd: $('#checkOut-end').val(),
+        checkOutStart: $('#checkout-start').val(),
+        checkOutEnd: $('#checkout-end').val(),
         appointmentStart: $('#appointment-start').val(),
         appointmentEnd: $('#appointment-end').val(),
     };
 
-    $('#recordsSummary').DataTable({
+    $('#table-resumen').DataTable({
 
         "ajax": {
             "type": "POST",
@@ -79,29 +74,17 @@ function showReportCard(defaultDate = '') {
             {
                 "data": "RANGO",
                 "render": function (data, type) {
-
                     if (type === 'display') {
-
                         let response_data = '';
                         switch (data) {
-                            case "0":
-                                response_data = 'A';
-                                break;
-                            case "1":
-                                response_data = 'B';
-                                break;
-                            case "2":
-                                response_data = 'C';
-                                break;
-                            case "3":
-                                response_data = 'Sisben';
-                                break;
-                            default:
-                                break;
+                            case "0": response_data = 'A'; break;
+                            case "1": response_data = 'B'; break;
+                            case "2": response_data = 'C'; break;
+                            case "3": response_data = 'Sisben'; break;
+                            default: break;
                         }
                         return `${response_data}`;
                     }
-
                     return data;
                 }
             },
@@ -109,23 +92,15 @@ function showReportCard(defaultDate = '') {
             {
                 "data": "APROBADO",
                 "render": function (data, type) {
-
                     if (type === 'display') {
-
                         let response_data = '';
                         switch (data) {
-                            case "1":
-                                response_data = 'Sí';
-                                break;
-                            case "0":
-                                response_data = 'No';
-                                break;
-                            default:
-                                break;
+                            case "1": response_data = 'Sí'; break;
+                            case "0": response_data = 'No'; break;
+                            default: break;
                         }
                         return `${response_data}`;
                     }
-
                     return data;
                 }
             },
@@ -134,46 +109,30 @@ function showReportCard(defaultDate = '') {
             {
                 "data": "ANEXO_9",
                 "render": function (data, type) {
-
                     if (type === 'display') {
-
                         let response_data = '';
                         switch (data) {
-                            case "1":
-                                response_data = 'Sí';
-                                break;
-                            case "0":
-                                response_data = 'No';
-                                break;
-                            default:
-                                break;
+                            case "1": response_data = 'Sí'; break;
+                            case "0": response_data = 'No'; break;
+                            default: break;
                         }
                         return `${response_data}`;
                     }
-
                     return data;
                 }
             },
             {
                 "data": "ANEXO_10",
                 "render": function (data, type) {
-
                     if (type === 'display') {
-
                         let response_data = '';
                         switch (data) {
-                            case "1":
-                                response_data = 'Sí';
-                                break;
-                            case "0":
-                                response_data = 'No';
-                                break;
-                            default:
-                                break;
+                            case "1": response_data = 'Sí'; break;
+                            case "0": response_data = 'No'; break;
+                            default: break;
                         }
                         return `${response_data}`;
                     }
-
                     return data;
                 }
             },
@@ -219,66 +178,32 @@ function showReportCard(defaultDate = '') {
             text: '<i class="bi bi-filetype-xls"></i>',
             className: 'bg-success text-white',
             titleAttr: 'Generar Archivo: Excel',
-            exportOptions: {
-                orthogonal: 'export' // Mantener el contenido completo en el archivo Excel
-            }
+            exportOptions: { orthogonal: 'export' }
         }, {
             extend: 'csvHtml5',
             text: '<i class="bi bi-filetype-csv"></i>',
             className: 'bg-info text-white',
             titleAttr: 'Generar Archivo: CSV',
-            exportOptions: {
-                orthogonal: 'export' // Mantener el contenido completo en el archivo Excel
-            }
-        } //, 
-        // {
-        //     extend: 'pdfHtml5',
-        //     orientation: 'landscape',
-        //     pageSize: 'LEGAL',
-        //     autoWidth: true,
-        //     text: '<i class="bi bi-filetype-pdf"></i>',
-        //     className: 'bg-danger text-white',
-        //     titleAttr: 'Generar Archivo: PDF',
-        //     exportOptions: {
-        //         columns: ':visible',
-        //         orthogonal: 'export' // Mantener el contenido completo en el archivo PDF
-        //         // columns: 'th:not(:last-child)'
-        //     }
-        // }
-        ],
-        "lengthMenu": [30, 50, 100, 200], /*"All"*/
+            exportOptions: { orthogonal: 'export' }
+        }],
+        "lengthMenu": [30, 50, 100, 200],
         "language": {
             "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
         "initComplete": function () {
-
-            var table_id = $('#recordsSummary').DataTable();
-            var cols_positions = [0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23];
-            hideColums(table_id, cols_positions);
-
+            $('#table-resumen').DataTable().columns([0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23]).visible(false);
         }
-        // , "drawCallback": function () {
-        //     var table = $('#recordsSummary').DataTable();
-        //     table.fnAdjustColumnSizing();
-
-        // }
     });
-
-
 }
 
 function atentionswitch() {
-
     if ($('#approved').val() != 1) {
         $('#attention-date').val('');
         $('#attention-date').prop("disabled", true);
         return false;
     }
-
     $('#attention-date').prop("disabled", false);
-
-};
-
+}
 
 function cargar_ips() {
     $.ajax({
@@ -286,31 +211,32 @@ function cargar_ips() {
         type: 'GET',
         success: function (response) {
             let ipslist = JSON.parse(response);
-            let template = '<option value="" title="">Seleccione una opción</option>';
-            ipslist.forEach(ipslist => {
-                template += `
-                    <option value=${ipslist.pk_uuid}>${ipslist.name}</option>
-                    `
+            let template = '<option value="">Seleccione una opción</option>';
+            ipslist.forEach(item => {
+                template += `<option value="${item.pk_uuid}">${item.name}</option>`;
             });
             $('#ips').html(template);
+        },
+        error: function () {
+            console.error('Error cargando IPS');
         }
     });
 }
 
 function cargar_eps() {
     $.ajax({
-        url: '../config/calleps.php',
+        url: '../config/callEps.php',
         type: 'GET',
         success: function (response) {
             let eps = JSON.parse(response);
-            let template = '<option value="" title="">Seleccione una opción</option>';
-            eps.forEach(eps => {
-                template += `
-                    <option value=${eps.pk_uuid}>${eps.name} </option>
-                    `
+            let template = '<option value="">Seleccione una opción</option>';
+            eps.forEach(item => {
+                template += `<option value="${item.pk_uuid}">${item.name}</option>`;
             });
-            $('#Eps').html(template);
-
+            $('#eps').html(template);
+        },
+        error: function () {
+            console.error('Error cargando EPS');
         }
     });
 }
@@ -321,67 +247,83 @@ function cargar_diagnosis() {
         type: 'GET',
         success: function (response) {
             let diagnosis = JSON.parse(response);
-            let template = '<option value="" title="">Seleccione una opción</option>';
-            diagnosis.forEach(diagnosis => {
-                template += `
-                    <option value=${diagnosis.KP_UUID} title=${diagnosis.Observation}>${diagnosis.Codigo}</option>
-                    `
+            let template = '<option value="">Seleccione una opción</option>';
+            diagnosis.forEach(item => {
+                template += `<option value="${item.KP_UUID}" title="${item.Observation}">${item.Codigo}</option>`;
             });
             $('#diagnosis').html(template);
+        },
+        error: function () {
+            console.error('Error cargando diagnósticos');
         }
     });
 }
 
-// Función para cargar el historico
-function cargar_historico(dni) {
+function cargar_hoy() {
+    $('#table-patients').DataTable({
+        ajax: {
+            method: 'GET',
+            url: '../config/getTodayPriorities.php',
+        },
+        columns: [
+            { data: 'UUID' },
+            { data: 'PACIENTE' },
+            { data: 'DOC_NUMBER' },
+            null,
+        ],
+        paging: true,
+        scrollCollapse: true,
+        responsive: true,
+        destroy: true,
+        deferRender: true,
+        order: [[1, 'asc']],
+        columnDefs: [
+            { targets: 0, visible: false },
+            {
+                targets: 3,
+                data: null,
+                defaultContent: "<button class='patient-select btn btn-info' style='width:100%; word-wrap: break-word;'>Seleccionar</button>"
+            }
+        ],
+        language: {
+            url: 'http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json'
+        }
+    });
+}
 
+// Carga historial del paciente en #tbody-historial sin mostrar el panel
+function cargar_historico(dni) {
     $.ajax({
         url: '../config/callhistory.php',
         type: 'POST',
         data: { dni },
         success: function (response) {
-            // Sin respuesta
             if (response == 'error') {
-                //Ocultar tablas por error.
-                $('#history-patient').hide();
-                $('#search-patients').hide();
-
+                $('#tbody-historial').html('');
+                return;
             }
-            else {
-
-                // Decomponer el json que se capturo en el script ejecutado y medir su cantidad de resultados
-                let history = JSON.parse(response);
-                // Cuando exista más de un resultado, el sistema debe dibujar las opciones para ser seleccionadas
-                let template = '';
-                history.forEach(history => {
-                    template +=
-                        `<tr>
-                        <td style="vertical-align:middle;">${history.commentdate} </td>
-                        <td style="vertical-align:middle;">${history.commenttime} </td>
-                        <td style="vertical-align:middle;">${history.createdUser}</td>
-                        <td style="vertical-align:middle;">${history.comment0}</td>
-                        </tr>`
-                });
-                // Mostrar el template en la etiqueta pacientes
-                // Mostrar cuadro de selección y ocultar cuadro de historico
-                $('#patienshistory').html(template);
-                $('#search-patients').hide();
-                $('#history-patient').show();
-            }
+            let history = JSON.parse(response);
+            let template = '';
+            history.forEach(item => {
+                template +=
+                    `<tr>
+                    <td style="vertical-align:middle;">${item.commentdate}</td>
+                    <td style="vertical-align:middle;">${item.commenttime}</td>
+                    <td style="vertical-align:middle;">${item.createdUser}</td>
+                    <td style="vertical-align:middle;">${item.comment0}</td>
+                    </tr>`;
+            });
+            $('#tbody-historial').html(template);
         }
     });
 }
 
-// Acción para input de número de documento
+// Búsqueda por número de documento
 $(document).on('keyup', '#dni', function () {
     let dni = $('#dni').val();
-    // La función se activa cuando el tamaño del input cumpla con minimo 4 caracteres
     if (dni.length >= 4) {
 
-        table = $('#table-patients');
-
-        table.DataTable({
-
+        $('#table-patients').DataTable({
             "ajax": {
                 "method": 'POST',
                 "data": { dni },
@@ -398,13 +340,13 @@ $(document).on('keyup', '#dni', function () {
             "responsive": true,
             "destroy": true,
             "deferRender": true,
-            "order": [2]
-            ,
+            "order": [2],
             columnDefs: [
+                { targets: 0, visible: false },
                 {
                     targets: 3,
                     data: null,
-                    defaultContent: "<button class='patient-select btn btn-info' style='width:100%; word-wrap: break-word;'>Selecionar</button>"
+                    defaultContent: "<button class='patient-select btn btn-info' style='width:100%; word-wrap: break-word;'>Seleccionar</button>"
                 }
             ],
             "language": {
@@ -412,25 +354,20 @@ $(document).on('keyup', '#dni', function () {
             }
         });
 
-        table_id = 'table-patients';
-        cols_positions = [0];
-        hideColums(table_id, cols_positions);
-
         $('#history-patient').hide();
         $('#search-patients').show();
 
     } else {
-        // ocultar barras de selección e historico
-        $('#search-patients').hide();
+        cargar_hoy();
+        $('#search-patients').show();
         $('#history-patient').hide();
     }
 });
 
-// Accion: seleccionar paciente del listado [Se ejecuta al oprimir el botón Seleccionar en la tabla generada con la función anterior]
+// Seleccionar paciente del listado
 $(document).on('click', '.patient-select', function () {
 
-    if (confirm('¿Está seguro de querer selecionar el paciente')) {
-        // Capturar el elemnento padre y posterior tomar el atributo almacenado en el triggerClass=pacientid
+    if (confirm('¿Está seguro de querer seleccionar el paciente?')) {
         let row = $(this).closest("tr");
         let data = $('#table-patients').DataTable().row(row).data();
         let pk_uuid = data['UUID'];
@@ -442,17 +379,17 @@ $(document).on('click', '.patient-select', function () {
         $.post('../config/usepatient.php', { pk_uuid }, function (response) {
 
             const patient = JSON.parse(response);
-            $('#bitregister').trigger('reset');
-            $('#pk_uuid').val(patient.pk_uuid);
+            $('#form-registro').trigger('reset');
+            $('#pk-uuid').val(patient.pk_uuid);
             $('#dni').val(patient.dni);
             $('#nombre').val(patient.name);
             $('#apellido').val(patient.lastname);
-            $('#documenttype').val(patient.documentType);
-            $('#Eps').val(patient.eps);
+            $('#document-type').val(patient.documentType);
+            $('#eps').val(patient.eps);
             $('#ips').val(patient.ips);
-            $('#EpsClassification').val(patient.range);
+            $('#eps-classification').val(patient.range);
             $('#search-patients').hide();
-            $('#history-patient').show();
+            $('#history-patient').hide();
 
             cargar_historico(patient.dni);
         });
@@ -463,10 +400,8 @@ $(document).on('click', '.patient-select', function () {
 $(document).ready(function () {
 
     if (user == null) {
-        location.href = 'http://localhost/samebit/pages/login.php';
+        location.href = '/pages/login.php';
         return false;
-    } else {
-        user = JSON.parse(user);
     }
 
     cargar_ips();
@@ -474,92 +409,92 @@ $(document).ready(function () {
     atentionswitch();
     cargar_diagnosis();
 
-    //Ocultar barras de busqueda e historico
-    $('#search-patients').hide();
+    $('#section-registro').hide();
     $('#history-patient').hide();
+    cargar_hoy();
+    $('#search-patients').show();
 
+});
+
+// Registro Novedades: muestra el formulario de registro
+$(document).on('click', '#btn-new-record', function (e) {
+    e.preventDefault();
+    $('#section-registro').show();
+    $('#history-patient').hide();
+    cargar_hoy();
+    $('#search-patients').show();
 });
 
 $(document).on('change', '#approved', function () {
     atentionswitch();
 });
 
-// Acción: clic en el botón de limpiar formulario
+// Limpiar formulario
 $(document).on('click', '.bit-clean', function () {
-    // confirmacion
     if (confirm('¿Está seguro de limpiar el formulario? Los datos no serán recuperados')) {
-        // limpiar datos y ocultar tablass
-        $('#bitregister').trigger('reset');
-        $('#search-patients').hide();
+        $('#form-registro').trigger('reset');
+        $('#tbody-historial').html('');
         $('#history-patient').hide();
+        cargar_hoy();
+        $('#search-patients').show();
     }
 });
 
-// Accion: Oprimir el botón enviar
-$(document).on('submit', '#bitregister', function (event) {
-    // confirmacion
-    if (confirm('¿Está seguro de enviar el formulario')) {
+// Enviar formulario
+$(document).on('submit', '#form-registro', function (event) {
+    if (confirm('¿Está seguro de enviar el formulario?')) {
 
-        //Validar campos vacios
-        if ($('#documenttype').val() == '' || $('#dni').val() == '' || $('#nombre').val() == '' || $('#apellido').val() == '' ||
-            $('#contacttype').val() == '' || $('#CommentDate').val() == '' || $('#CommentTime').val() == '' || $('#Eps').val() == '' ||
-            $('#ips').val() == '' || $('#SentBy').val() == '' || $('#EpsStatus').val() == '' || $('#EpsClassification').val() == '') {
-            // Error por campos vacios.
+        if ($('#document-type').val() == '' || $('#dni').val() == '' || $('#nombre').val() == '' || $('#apellido').val() == '' ||
+            $('#contact-type').val() == '' || $('#comment-date').val() == '' || $('#eps').val() == '' ||
+            $('#ips').val() == '' || $('#sent-by').val() == '' || $('#eps-status').val() == '' || $('#eps-classification').val() == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Faltan datos',
-                text: 'Campos Obligatorios vacios',
+                text: 'Campos obligatorios vacíos',
                 timer: 5000
             });
             return false;
         }
-        else {
 
-            // Capturar datos a enviar
-            const postData = {
+        const postData = {
+            pk_uuid:           $('#pk-uuid').val(),
+            dni:               $('#dni').val(),
+            documenttype:      $('#document-type').val(),
+            name:              $('#nombre').val(),
+            lastname:          $('#apellido').val(),
+            contacttype:       $('#contact-type').val(),
+            checkInDate:       $('#check-in-date').val(),
+            commentDate:       $('#comment-date').val(),
+            approved:          $('#approved').val(),
+            AtentionDate:      $('#attention-date').val(),
+            Eps:               $('#eps').val(),
+            ips:               $('#ips').val(),
+            EpsStatus:         $('#eps-status').val(),
+            EpsClassification: $('#eps-classification').val(),
+            diagnosis:         $('#diagnosis').val(),
+            CallNumber:        $('#call-number').val(),
+            SentBy:            $('#sent-by').val(),
+            ObservationIn:     $('#observation-in').val(),
+            exhibitNine:       $('#exhibit-nine').val(),
+            exhibitTen:        $('#exhibit-ten').val(),
+            sendTo:            $('#send-to').val(),
+            ObservationOut:    $('#observation-out').val()
+        };
 
-                pk_uuid: $('#pk_uuid').val(),
-                dni: $('#dni').val(),
-                documenttype: $('#documenttype').val(),
-                name: $('#nombre').val(),
-                lastname: $('#apellido').val(),
-                contacttype: $('#contacttype').val(),
-                checkInDate: $('#check-in-date').val(),
-                commentDate: $('#CommentDate').val(),
-                approved: $('#approved').val(),
-                AtentionDate: $('#attention-date').val(),
-                Eps: $('#Eps').val(),
-                ips: $('#ips').val(),
-                EpsStatus: $('#EpsStatus').val(),
-                EpsClassification: $('#EpsClassification').val(),
-                diagnosis: $('#diagnosis').val(),
-                CallNumber: $('#CallNumber').val(),
-                SentBy: $('#SentBy').val(),
-                ObservationIn: $('#ObservationIn').val(),
-                exhibitNine: $('#exhibitNine').val(),
-                exhibitTen: $('#exhibitTen').val(),
-                sendTo: $('#sendTo').val(),
-                ObservationOut: $('#ObservationOut').val()
+        event.preventDefault();
 
-            };
-
-            event.preventDefault();
-
-            $.post('../config/commit.php', postData, function (response) {
-
-                $('#bitregister').trigger('reset');
-                $('#search-patients').hide();
-                $('#history-patient').hide();
-                $('#pk_uuid').val('');
-
-            });
-        }
-
-
+        $.post('../config/Commit.php', postData, function (response) {
+            $('#form-registro').trigger('reset');
+            $('#tbody-historial').html('');
+            $('#history-patient').hide();
+            $('#pk-uuid').val('');
+            cargar_hoy();
+            $('#search-patients').show();
+        });
     }
 });
 
-$('#reportSamebitModal').on('click', function () {
+$('#btn-reportes').on('click', function () {
 
     if (user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
         Swal.fire({
@@ -567,28 +502,28 @@ $('#reportSamebitModal').on('click', function () {
             title: 'ACCESO RESTRINGIDO',
             text: 'El usuario no está autorizado',
             timer: 5000
-        })
+        });
         return false;
     }
 
-    // if (user.privilegeSet != 'root') {
-    //     showCustomDialog('Esta función está en mantenimiento, volverémos pronto')
-    //     return false;
-    // }
+    if ($('#pk-uuid').val() && $('#dni').val()) {
+        $('#history-patient').show();
+    } else {
+        $('#history-patient').hide();
+    }
 
     $('#modal-report').modal('show');
-    $('#getInformation').trigger('reset');
+    $('#form-reporte').trigger('reset');
     let defaultDate = new Date();
     showReportCard(defaultDate);
 });
 
-$('#contacttype').on('change', (e) => {
+$('#contact-type').on('change', (e) => {
     let value = e.target.value;
     $('.switchTitle').html(value.toUpperCase());
-
 });
 
-$('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('change', (e) => {
+$('input[type="date"], input[type="time"], input[type="datetime-local"]').on('change', (e) => {
 
     const pullTrigger = e.target,
         triggerClass = (pullTrigger.className).split(' ')[0];
@@ -613,11 +548,9 @@ $('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('c
     }
 
     if (fieldTrigger.length > 1 || fieldCompare.length > 1) {
-
         if (fieldTrigger.length > 1) {
             fieldTrigger = $(`#${fieldTrigger[0].id}`);
         }
-
         if (fieldCompare.length > 1) {
             fieldCompare = $(`#${fieldCompare[0].id}`);
         }
@@ -633,14 +566,12 @@ $('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('c
     }
 
     if (in_val >= out_val) {
-
         data = {
             'icon': 'error',
             'title': 'Valor no valido',
             'text': 'El valor ingresado no puede ser inferior al valor inicial: ' + in_val,
             'time': '5000',
         };
-
         out_field.val('');
         in_field.focus();
         showCustomDialog(data);
@@ -648,11 +579,11 @@ $('input[type="date"] , input[type="time"], input[type="datetime-local"]').on('c
 
 });
 
-$('#cleanRequest').on('click', (e) => {
+$('#btn-limpiar-reporte').on('click', (e) => {
     Swal.fire({
         icon: 'warning',
         title: 'Atención',
-        text: '¿Está seguro de reiniciar el formularío',
+        text: '¿Está seguro de reiniciar el formulario?',
         showCancelButton: true,
         cancelButtonText: 'No',
         showConfirmButton: true,
@@ -660,13 +591,12 @@ $('#cleanRequest').on('click', (e) => {
         dangermode: true,
     }).then((result) => {
         if (result.isConfirmed) {
-            $('#getInformation').trigger('reset');
+            $('#form-reporte').trigger('reset');
         }
     });
 });
 
 function hideColums(table_id, cols_positions) {
-    table = $('#' + table_id);
-    table = table.DataTable();
+    let table = $('#' + table_id).DataTable();
     table.columns(cols_positions).visible(false);
 }

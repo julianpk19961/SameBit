@@ -4,10 +4,10 @@ include './generales/header.php';
 
 <header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
-      <img src="../img/SameinLogo.png" height="40" class="logo">
+      <img src="../img/logo.png" height="40" class="logo">
     </a>
     <ul class="nav nav-pills">
-            <li class="nav-item"><a href="./dashboard.php" class="nav-link" aria-current="page">Samebit</a></li>
+            <li class="nav-item"><a href="./dashboard.php" class="nav-link" aria-current="page"><?php echo htmlspecialchars($appName); ?></a></li>
             <li class="nav-item"><a href="./asisttop.php" class="nav-link active" aria-current="page">Asist</a></li>
             <li class="nav-item"><a href="./medicines_l.php" class="nav-link" aria-current="page">Samecomed</a></li>
             <li class="nav-item"><a href="../config/logout.php" class="nav-link link-secondary">Cerrar Sesión</a></li>

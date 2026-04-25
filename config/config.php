@@ -1,11 +1,11 @@
 <?php
 // Datos sesion
-$host = "localhost";
+$host = getenv('DB_HOST') ?: "localhost";
 $port = 3306;
 $socket = "";
 $user = "usrconect";
 $password = "toor";
-$dbname = "samebit";
+$dbname = "bit_medical";
 
 #Estabelercer conexión
 $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);

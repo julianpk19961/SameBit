@@ -1,4 +1,3 @@
-<!-- Llamado para encabezado de la página -->
 <?php
 include './generales/header.php';
 ?>
@@ -7,7 +6,7 @@ include './generales/header.php';
 
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
 
-        <img src="../img/SameinLogo.png" height="40" class="logo">
+        <img src="../img/logo.png" height="40" class="logo">
     </a>
 
     <nav>
