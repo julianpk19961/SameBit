@@ -4,7 +4,12 @@
       "Bash(docker exec *)",
       "Bash(docker-compose down *)",
       "Bash(grep -nE \"\\\\$\\\\\\('#[a-zA-Z_-]+'\\\\\\)|\\\\$\\\\\\(\\\\\"#[a-zA-Z_-]+\\\\\"\\\\\\)|#[a-zA-Z_-]+\" /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/dashboard.js)",
-      "Bash(grep -n '\\\\$_POST' /Users/mantum/Documents/Personal/destroywolves/SameBit/config/Commit.php)"
+      "Bash(grep -n '\\\\$_POST' /Users/mantum/Documents/Personal/destroywolves/SameBit/config/Commit.php)",
+      "Bash(docker-compose ps *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(r\\) for r in d['data'][:3]]\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('Total hoy:', len\\(d['data']\\)\\); [print\\(r\\) for r in d['data'][:2]]\")",
+      "Bash(grep -o 'offcanvas[^{;,\" ]*' /Users/mantum/Documents/Personal/destroywolves/SameBit/css/bootstrap-css/bootstrap.min.css)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }

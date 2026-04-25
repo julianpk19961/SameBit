@@ -46,8 +46,7 @@ $(document).on('click', '#btn-back-to-menu', function (e) {
 });
 
 $(document).on('click', '#btn-new-record-card', function (e) {
-    e.preventDefault();
-    showRegistroSection();
+    location.href = './calls.php';
 });
 
 function showCustomDialog(data = '') {

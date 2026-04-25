@@ -5,9 +5,9 @@ date_default_timezone_set('America/Bogota');
 $today = date('Y-m-d');
 
 $sql = "SELECT
-    p.id                AS UUID,
-    CONCAT(TIME_FORMAT(pr.checkin_time, '%H:%i'), ' - ', pr.first_name, ' ', pr.last_name) AS PACIENTE,
-    pr.document_number  AS DOC_NUMBER
+    p.id                                                                    AS UUID,
+    CONCAT(TIME_FORMAT(pr.checkin_time, '%H:%i'), ' - ', p.first_name, ' ', p.last_name) AS PACIENTE,
+    p.document_number                                                       AS DOC_NUMBER
 FROM priorities pr
 INNER JOIN patients p ON pr.patient_id = p.id
 WHERE pr.checkin_date = '$today'
