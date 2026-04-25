@@ -139,34 +139,56 @@ SameBit/
 
 ## 🔄 Flujo de Uso Principal
 
-1. **Login** (`pages/login.php`)
-   - Usuario y contraseña
-   - Validación en backend
+### 1️⃣ **Login** (`pages/login.php`)
+- Ingresa usuario y contraseña
+- Validación segura en backend
 
-2. **Dashboard** (`pages/dashboard.php`)
-   - Bienvenida personalizada
-   - Opciones: Nuevo registro, Reportes
+### 2️⃣ **Panel de Control - Dashboard** (`pages/dashboard.php`)
+Una vez autenticado, verás 4 opciones principales:
 
-3. **Registro de Paciente**
-   - Buscar paciente por DNI (si existe)
-   - Llenar datos: Nombres, apellidos, EPS, IPS, rango
-   - Guardar
+| Opción | Descripción | Enlace |
+|--------|-----------|--------|
+| 📞 **Registro de Llamadas** | Registra nuevas llamadas y novedades de pacientes | Formulario en dashboard |
+| 💊 **Medicamentos** | Gestión de medicamentos, kardex y inventario | `pages/medicines_l.php` |
+| 📊 **Reportes** | Visualiza reportes, citas y prioridades | Dashboard (tabla) |
+| 📋 **Tratamiento (TOP)** | Seguimiento de resultados de tratamiento | `pages/asisttop.php` |
 
-4. **Gestión de Medicamentos** (`pages/medicines_l.php`)
-   - Listar medicamentos activos
-   - Crear nuevo medicamento
-   - Ver kardex (movimientos)
-   - Activar/Inactivar
+### 3️⃣ **Registro de Pacientes/Llamadas**
+1. Click en **"Registro de Llamadas"** en el Dashboard
+2. Busca paciente por DNI (si existe)
+3. Llena datos: Nombres, apellidos, EPS, IPS, rango
+4. Completa referencia y contra-referencia
+5. Confirma y envía
 
-5. **Reportes** (`config/getPriorities.php`)
-   - Filtrar por fecha, usuario, paciente
-   - Visualizar citas y diagnósticos
-   - Exportar a Excel/PDF
+**Botón "Volver al Menú"**: Regresa al panel principal
 
-6. **Tratamiento (TOP)** (`pages/asisttop.php`)
-   - Registrar consumo de drogas
-   - Seguimiento por etapas
-   - Ver gráficos de progreso
+### 4️⃣ **Gestión de Medicamentos** (`pages/medicines_l.php`)
+Accesible desde el Panel de Control o directamente:
+- 📋 Listar medicamentos activos
+- ➕ Crear nuevo medicamento
+- 👁️ Ver kardex (movimientos)
+- ✏️ Editar medicina
+- 🔄 Activar/Inactivar
+- 🗑️ Eliminar
+
+### 5️⃣ **Reportes** 
+Desde el Dashboard:
+- 📅 Filtrar por fecha, usuario, paciente
+- 📊 Visualizar citas y diagnósticos
+- ⬇️ Exportar a Excel/PDF
+
+### 6️⃣ **Tratamiento (TOP)** (`pages/asisttop.php`)
+Perfil de resultados de tratamiento:
+- 📝 Registrar consumo de drogas
+- 📈 Seguimiento por etapas (Ingreso, Egreso, En tratamiento, Seguimiento)
+- 📊 Ver gráficos de progreso
+
+### 🔙 **Navegación**
+- **Desde cualquier módulo**: Hay links en la barra superior para acceder a otros módulos
+- **Desde Dashboard**: Usa el panel de control con 4 opciones principales
+- **Botón "Volver"**: Disponible en formularios para regresar al menú
+
+---
 
 ## 🛠️ Desarrollo
 

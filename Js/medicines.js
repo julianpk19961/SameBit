@@ -180,7 +180,7 @@ $('#destroyMedicine').submit((e) => {
         data = JSON.parse(response);
         Swal.fire({
             icon: data.icon,
-            title: data.tittle,
+            title: data.title,
             text: data.text,
             timer: 5000
         });
