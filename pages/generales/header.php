@@ -12,6 +12,7 @@ $page       = end($link_array);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?php echo htmlspecialchars($title); ?></title>
 
+  <link rel="icon" href="../img/logo.png" type="image/png">
   <link rel="stylesheet" href="../css/bootstrap-css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">

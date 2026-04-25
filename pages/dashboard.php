@@ -32,7 +32,7 @@ include './generales/header.php';
           <div class="display-4 text-warning mb-3">📞</div>
           <h5 class="card-title fw-bold">Registro de Llamadas</h5>
           <p class="card-text text-muted small">Registra nuevas llamadas y novedades de pacientes</p>
-          <button class="btn btn-warning btn-sm mt-3 w-100" id="btn-new-record">Ir →</button>
+          <a href="./calls.php" class="btn btn-warning btn-sm mt-3 w-100">Ir →</a>
         </div>
       </div>
     </div>
