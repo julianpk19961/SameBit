@@ -1,6 +1,11 @@
-<?php 
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 
-$index ='http://192.168.1.22/samebit/';
+$appName = 'bit-medical';
+
+$index = 'http://localhost:8081/';
 $url = '/pages/login.php';
 $urldashboard = $index.'pages/dashboard.php';
-$title = 'Same-Bit';
+$title = $appName;

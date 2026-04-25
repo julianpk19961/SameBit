@@ -1,67 +1,44 @@
 localStorage.removeItem('user');
 
-// Funcion en documento para envio de formulario login
 $("#login").submit(function (e) {
-
-    // Prevenir eventos automáticos por defecto
     e.preventDefault();
     $('#loader').removeClass('hidden');
-    // var form_data = jQuery( this ).serializeArray();
-    // Variables a envíar
+
     var parametros = {
         'Accion': 'login',
-        'name': $("#login__username").val(),
-        'pass': $("#login__password").val()
+        'name':   $("#login__username").val(),
+        'pass':   $("#login__password").val()
     };
 
-
-    // Ajax
-    jQuery.ajax({
-        // Credenciales y datos para ejeccion
-        url: '../config/conection.php',
+    $.ajax({
+        url:  '../config/conection.php',
         type: 'POST',
         data: parametros,
-
         success: function (response) {
-
-            // return false;
-
-            // Funcion para respuesta
-            // Decomponer respuesta
             var data = JSON.parse(response);
 
-            var Titulo = data.Title;
-            var Mensaje = data.Mensaje;
-            var Tipo = data.Tipo;
-            var nombreusuario = data.nombreusuario;
-            var url = data.url;
-
-            // validaciones de sesión  
-            if (Tipo == 'success' && nombreusuario != '') {
-                // Mensaje de confirmación con respuesta obtenida.
-
-                var datastr = JSON.stringify(response);
-                localStorage.setItem('user', datastr);
-                $('#loader').addClass('hidden');
-                location.href = url;
+            if (data.Tipo === 'success' && data.nombreusuario !== '') {
+                localStorage.setItem('user', JSON.stringify(data));
+                location.href = data.url;
+                return;
             }
 
+            $('#loader').addClass('hidden');
             Swal.fire({
-                icon: Tipo,
-                title: Titulo,
-                text: Mensaje,
-                timer: 5000
-            })
+                icon:  data.Tipo,
+                title: data.Title,
+                text:  data.Mensaje,
+                timer: 4000
+            });
         },
-        fail: function (err) {
-            // Alerta de error
+        error: function () {
+            $('#loader').addClass('hidden');
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Oops parece que un cable se desconectó',
-                timer: 5000
-            })
+                icon:  'error',
+                title: 'Error de conexión',
+                text:  'No se pudo conectar con el servidor',
+                timer: 4000
+            });
         }
     });
-    return false;
 });

@@ -1,41 +1,32 @@
 <?php
-
 include 'config.php';
 
 $Dni = $_POST['dni'];
+$Dni = mysqli_real_escape_string($conn, $Dni);
 
-$sql = "SELECT  KP_UUID AS UUID, CONCAT(Name0,' ',LastName0) as PACIENTE,Name0 as NOMBRE,LastName0 as APELLIDO,
-dni as DOC_NUMBER,documentType as DOC_TYPE,FK_Eps as EPS,FK_Range as CLASIFICACION 
-
-FROM patients 
-WHERE dni LIKE '%$Dni%' 
-ORDER BY dni DESC";
+$sql = "SELECT
+    id               AS UUID,
+    CONCAT(first_name, ' ', last_name) AS PACIENTE,
+    first_name       AS NOMBRE,
+    last_name        AS APELLIDO,
+    document_number  AS DOC_NUMBER,
+    document_type    AS DOC_TYPE,
+    eps_id           AS EPS,
+    range_level      AS CLASIFICACION
+FROM patients
+WHERE document_number LIKE '%$Dni%'
+ORDER BY document_number DESC";
 
 $result = mysqli_query($conn, $sql);
-
-
 
 if (!$result) {
     die('Query Error' . mysqli_error($conn));
 }
 
 $resultCount = mysqli_num_rows($result);
-
 if ($resultCount > 0) {
-
     while ($data = mysqli_fetch_assoc($result)) {
-
-        //en caso de tener problemas con la ñ y carácteres latam
-        // $array['data'][] = array_map("utf8_encode",$data);
-
         $array['data'][] = $data;
-
-        //   $data_array[] = array(
-        //     $data->KP_UUID,
-        //     $data->Dni,
-        //     $data->Name0 . ' ' . $data->LastName0,
-        //     );
-
     }
 } else {
     $array['data'] = ['error' => 'no se encontraron registros'];

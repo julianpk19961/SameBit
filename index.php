@@ -1,11 +1,10 @@
-  <?php 
+<?php
 include './config/setup.php';
 
-if($_SESSION["id"]){
-  header("Location:.$urldashboard");
+if (isset($_SESSION["id"])) {
+  header("Location: $urldashboard");
   die();
-  }else{
-    header("Location:.$url");
-    die();
+} else {
+  header("Location: $url");
+  die();
 }
-?>
