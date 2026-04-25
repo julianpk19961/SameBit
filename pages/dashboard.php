@@ -2,34 +2,99 @@
 include './generales/header.php';
 ?>
 
-<header class="d-flex flex-wrap justify-content-left py-3 mb-4 border-bottom">
-  <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
+<header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
+  <a href="/" class="d-flex align-items-center mb-2 mb-md-0 text-dark text-decoration-none">
     <img src="../img/logo.png" height="40" class="logo">
+    <span class="ms-2 fw-bold text-primary"><?php echo htmlspecialchars($appName); ?></span>
   </a>
 
   <nav>
     <ul class="nav nav-pills">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <?php echo htmlspecialchars($appName); ?>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" id="btn-new-record" href="#">Registro Novedades</a></li>
-          <li><a class="dropdown-item" id="btn-reportes">Reportes</a></li>
-        </ul>
-
-      </li>
-      <!-- <li class="nav-item"><a href="./asisttop.php" class="nav-link" aria-current="page">Asist</a></li>
-      <li class="nav-item"><a href="./medicines_l.php" class="nav-link" aria-current="page">Samecomed</a></li> -->
-      <li class="nav-item"><a href="../config/logout.php" class="nav-link link-secondary">Cerrar Sesión</a></li>
+      <li class="nav-item"><span class="nav-link text-muted">Bienvenido: <?php echo $_SESSION['usuario']; ?></span></li>
+      <li class="nav-item"><a href="../config/logout.php" class="nav-link link-danger">Cerrar Sesión</a></li>
     </ul>
   </nav>
 </header>
 
-  <h4 class="text-uppercase text-center w-100 text-primary">BIENVENIDO <?php echo $_SESSION['usuario']; ?>
-  </h4>
+<!-- MENÚ PRINCIPAL DE NAVEGACIÓN -->
+<div class="container-fluid mt-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="text-center text-primary fw-bold mb-4">Panel de Control</h2>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-5">
+    <!-- Card 1: Registro de Novedades/Llamadas -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;" id="btn-new-record-card">
+        <div class="card-body text-center">
+          <div class="display-4 text-warning mb-3">📞</div>
+          <h5 class="card-title fw-bold">Registro de Llamadas</h5>
+          <p class="card-text text-muted small">Registra nuevas llamadas y novedades de pacientes</p>
+          <button class="btn btn-warning btn-sm mt-3 w-100" id="btn-new-record">Ir →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Gestión de Medicamentos -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <div class="display-4 text-success mb-3">💊</div>
+          <h5 class="card-title fw-bold">Medicamentos</h5>
+          <p class="card-text text-muted small">Gestiona catálogo de medicinas y kardex</p>
+          <a href="./medicines_l.php" class="btn btn-success btn-sm mt-3 w-100">Ir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Reportes -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <div class="display-4 text-info mb-3">📊</div>
+          <h5 class="card-title fw-bold">Reportes</h5>
+          <p class="card-text text-muted small">Visualiza reportes y prioridades</p>
+          <button class="btn btn-info btn-sm mt-3 w-100" id="btn-reportes">Ir →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Tratamiento (TOP) -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <div class="display-4 text-primary mb-3">📋</div>
+          <h5 class="card-title fw-bold">Tratamiento</h5>
+          <p class="card-text text-muted small">TOP - Seguimiento de resultados</p>
+          <a href="./asisttop.php" class="btn btn-primary btn-sm mt-3 w-100">Ir →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estilos para las cards -->
+<style>
+.hover-card {
+  transition: all 0.3s ease;
+}
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+.display-4 {
+  font-size: 3rem;
+}
+</style>
 
   <section id="section-registro" class="h-50" style="display:none">
+    <div class="mb-3">
+      <button class="btn btn-secondary btn-sm" id="btn-back-to-menu">
+        <i class="bi bi-arrow-left"></i> Volver al Menú
+      </button>
+    </div>
     <form id="form-registro" accept-charset="UTF-8" method="POST">
       <div class="container-fluid py-1 h-50">
         <div class="row d-flex justify-content-center align-items-center h-50">

@@ -1,5 +1,55 @@
 var user = JSON.parse(localStorage.getItem('user'));
 
+// ====== NAVEGACIÓN DEL DASHBOARD ======
+function showMenu() {
+    // Ocultar todas las secciones
+    $('#section-registro').hide();
+    $('#history-patient').hide();
+    
+    // Mostrar menú principal (si existe)
+    // El menú está al inicio, solo aseguramos que sea visible
+    document.querySelector('.container-fluid') ? document.querySelector('.container-fluid').style.display = 'block' : null;
+}
+
+function showRegistroSection() {
+    // Ocultar menú
+    const menuContainer = document.querySelectorAll('.container-fluid')[0];
+    if (menuContainer && menuContainer.querySelector('.card')) {
+        menuContainer.style.display = 'none';
+    }
+    
+    // Mostrar formulario de registro
+    $('#section-registro').show();
+    $('#history-patient').hide();
+    cargar_hoy();
+    $('#search-patients').show();
+    window.scrollTo(0, 0);
+}
+
+function showReportesSection() {
+    // Ocultar menú
+    const menuContainer = document.querySelectorAll('.container-fluid')[0];
+    if (menuContainer && menuContainer.querySelector('.card')) {
+        menuContainer.style.display = 'none';
+    }
+    
+    // Mostrar tabla de reportes
+    $('#section-registro').hide();
+    // Scroll a la tabla de reportes
+    window.scrollTo(0, document.querySelector('#table-resumen')?.offsetTop || 0);
+}
+
+// ====== EVENT LISTENERS DE NAVEGACIÓN ======
+$(document).on('click', '#btn-back-to-menu', function (e) {
+    e.preventDefault();
+    showMenu();
+});
+
+$(document).on('click', '#btn-new-record-card', function (e) {
+    e.preventDefault();
+    showRegistroSection();
+});
+
 function showCustomDialog(data = '') {
 
     if (data.length == 0) {
@@ -416,13 +466,16 @@ $(document).ready(function () {
 
 });
 
+// Reportes: muestra la tabla de reportes
+$(document).on('click', '#btn-reportes', function (e) {
+    e.preventDefault();
+    showReportesSection();
+});
+
 // Registro Novedades: muestra el formulario de registro
 $(document).on('click', '#btn-new-record', function (e) {
     e.preventDefault();
-    $('#section-registro').show();
-    $('#history-patient').hide();
-    cargar_hoy();
-    $('#search-patients').show();
+    showRegistroSection();
 });
 
 $(document).on('change', '#approved', function () {

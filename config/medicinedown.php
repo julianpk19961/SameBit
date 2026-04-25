@@ -27,7 +27,7 @@ if ($total == 0) {
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
-    echo 'Query Error' . mysqli_error($conn);
+    echo json_encode(['icon' => 'error', 'title' => 'Error', 'text' => 'Query Error: ' . mysqli_error($conn)]);
 } else {
     echo json_encode(['icon' => $icon, 'title' => $title, 'text' => $text]);
 }
