@@ -330,26 +330,7 @@ $(document).on('submit', '#form-registro-call', function (e) {
         confirmButtonText: 'Guardar',
         confirmButtonColor: '#198754',
         allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: function() {
-            // Asegurar que el diálogo está centrado y visible
-            const swalContainer = document.querySelector('.swal2-container');
-            if (swalContainer) {
-                swalContainer.style.zIndex = '99999';
-            }
-            // Desabilitar scroll del offcanvas mientras se muestra la alerta
-            const offcanvasBody = document.querySelector('.offcanvas-body');
-            if (offcanvasBody) {
-                offcanvasBody.style.overflow = 'hidden';
-            }
-        },
-        didClose: function() {
-            // Restaurar scroll del offcanvas
-            const offcanvasBody = document.querySelector('.offcanvas-body');
-            if (offcanvasBody) {
-                offcanvasBody.style.overflow = 'auto';
-            }
-        }
+        allowEscapeKey: false
     }).then(r => {
         if (!r.isConfirmed) return;
 
