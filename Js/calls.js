@@ -1,4 +1,5 @@
 var user = JSON.parse(localStorage.getItem('user'));
+var diagnosisList = [];
 
 $(document).ready(function () {
     if (!user) {
@@ -13,9 +14,7 @@ $(document).ready(function () {
 
     initMainTable();
     cargarSelectsForm();
-    initPatientTable();
 
-    // Abrir offcanvas de registro
     document.getElementById('btn-nueva-llamada').addEventListener('click', function () {
         bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-registro')).show();
     });
@@ -48,7 +47,7 @@ function initMainTable() {
         pageLength: 50,
         lengthMenu: [[10, 25, 50], [10, 25, 50]],
         order: [[0, 'desc']],
-        language: { url: 'http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json' },
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json' },
         dom: '<"d-flex justify-content-between align-items-center mb-2"lf>rtip',
         responsive: true,
         processing: true
@@ -60,84 +59,68 @@ $('#btn-refresh').on('click', function () {
 });
 
 // ──────────────────────────────────────────────
-// TABLA DE BÚSQUEDA DE PACIENTES (en offcanvas)
-// ──────────────────────────────────────────────
-var patientDT = null;
-
-function initPatientTable() {
-    patientDT = $('#call-table-patients').DataTable({
-        data: [],
-        columns: [
-            { data: 'PACIENTE', title: 'Paciente' },
-            { data: 'DOC_NUMBER', title: 'Documento' },
-            {
-                data: null,
-                title: 'Acción',
-                orderable: false,
-                defaultContent: '<button type="button" class="btn btn-sm btn-primary call-patient-select">Seleccionar</button>'
-            }
-        ],
-        pageLength: 5,
-        lengthChange: false,
-        language: { url: 'http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json' },
-        dom: '<"mb-1"f>rtip'
-    });
-}
-
-// ──────────────────────────────────────────────
-// BÚSQUEDA EN TIEMPO REAL POR DNI
+// BÚSQUEDA EN TIEMPO REAL (nombre o documento)
 // ──────────────────────────────────────────────
 var searchTimer = null;
 
 $(document).on('keyup', '#call-dni', function () {
     clearTimeout(searchTimer);
-    const dni = $(this).val().trim();
+    const q = $(this).val().trim();
 
-    if (dni.length < 4) {
-        $('#call-patient-list').hide();
+    // Si había un paciente seleccionado y el usuario volvió a escribir, limpiar selección
+    if ($('#call-pk-uuid').val()) {
+        $('#call-pk-uuid').val('');
+        $('#call-nombre, #call-apellido').val('');
+        $('#call-selected-patient').hide();
+    }
+
+    if (q.length < 3) {
+        $('#call-patient-list').empty().hide();
         return;
     }
 
     searchTimer = setTimeout(function () {
-        $.post('../config/getPatients.php', { dni: dni }, function (res) {
-            const resp = JSON.parse(res);
-            const rows = (resp.data && Array.isArray(resp.data)) ? resp.data : [];
+        $.post('../config/getPatients.php', { q: q })
+            .done(function (res) {
+                var rows;
+                try { rows = (typeof res === 'object') ? res : JSON.parse(res); } catch(e) { return; }
+                if (!Array.isArray(rows)) rows = [];
 
-            patientDT.clear();
-            if (rows.length > 0) {
-                patientDT.rows.add(rows).draw();
-                $('#call-patient-list').show();
-            } else {
-                $('#call-patient-list').hide();
-            }
-        });
+                var $list = $('#call-patient-list').empty();
+                if (rows.length === 0) { $list.hide(); return; }
+
+                rows.forEach(function (p) {
+                    $('<li>')
+                        .append($('<span class="pd-doc">').text(p.DOC_NUMBER))
+                        .append($('<span class="pd-name">').text(p.PACIENTE))
+                        .append($('<i class="bi bi-arrow-right-circle-fill pd-icon">'))
+                        .data('patient', p)
+                        .appendTo($list);
+                });
+                $list.show();
+            });
     }, 300);
 });
 
 // ──────────────────────────────────────────────
 // SELECCIONAR PACIENTE
 // ──────────────────────────────────────────────
-$(document).on('click', '.call-patient-select', function () {
-    const rowData = patientDT.row($(this).closest('tr')).data();
-    if (!rowData) return;
+$(document).on('click', '#call-patient-list li', function () {
+    var p = $(this).data('patient');
+    if (!p) return;
 
-    $.post('../config/usepatient.php', { pk_uuid: rowData.UUID }, function (res) {
-        const p = JSON.parse(res);
+    $('#call-pk-uuid').val(p.UUID);
+    $('#call-document-type').val(p.DOC_TYPE).trigger('change');
+    $('#call-dni').val(p.DOC_NUMBER);
+    $('#call-nombre').val(p.NOMBRE);
+    $('#call-apellido').val(p.APELLIDO);
+    $('#call-eps').val(p.EPS).trigger('change');
+    $('#call-ips').val(p.IPS).trigger('change');
+    $('#call-eps-classification').val(p.RANGO).trigger('change');
 
-        $('#call-pk-uuid').val(p.pk_uuid);
-        $('#call-dni').val(p.dni);
-        $('#call-nombre').val(p.name);
-        $('#call-apellido').val(p.lastname);
-        $('#call-document-type').val(p.documentType);
-        $('#call-eps').val(p.eps);
-        $('#call-ips').val(p.ips);
-        $('#call-eps-classification').val(p.range);
-
-        // Mostrar tag del paciente seleccionado
-        $('#call-selected-name').text(p.name + ' ' + p.lastname + '  ·  Doc: ' + p.dni);
-        $('#call-selected-patient').show();
-        $('#call-patient-list').hide();
-    });
+    $('#call-selected-name').text(p.NOMBRE + ' ' + p.APELLIDO + ' · Doc: ' + p.DOC_NUMBER);
+    $('#call-selected-patient').show();
+    $('#call-patient-list').empty().hide();
 });
 
 // Limpiar paciente seleccionado
@@ -167,10 +150,7 @@ function cargarSelectsForm() {
     });
 
     $.get('../config/calldiagnosis.php', function (res) {
-        const list = JSON.parse(res);
-        let opts = '<option value="">— Seleccione —</option>';
-        list.forEach(i => opts += `<option value="${i.KP_UUID}" title="${i.Observation}">${i.Codigo}</option>`);
-        $('#call-diagnosis').html(opts);
+        diagnosisList = typeof res === 'object' ? res : JSON.parse(res);
     });
 }
 
@@ -187,6 +167,7 @@ $(document).on('change', '#call-approved', function () {
 // LIMPIAR FORMULARIO
 // ──────────────────────────────────────────────
 $('#call-btn-clean').on('click', function () {
+    document.activeElement && document.activeElement.blur();
     Swal.fire({
         icon: 'warning',
         title: '¿Limpiar formulario?',
@@ -201,17 +182,93 @@ $('#call-btn-clean').on('click', function () {
 function limpiarFormulario() {
     $('#form-registro-call')[0].reset();
     $('#call-pk-uuid').val('');
-    $('#call-patient-list').hide();
+    $('#call-patient-list').empty().hide();
     $('#call-selected-patient').hide();
     $('#call-attention-date').prop('disabled', true);
-    patientDT.clear().draw();
+    $('#call-diagnosis').val('');
+    $('#call-diagnosis-search').val('');
+    $('#call-diagnosis-selected').hide();
+    $('#call-diagnosis-list').empty().hide();
 }
+
+// ──────────────────────────────────────────────
+// BÚSQUEDA DIAGNÓSTICO
+// ──────────────────────────────────────────────
+var diagnosisTimer = null;
+
+$(document).on('keyup', '#call-diagnosis-search', function () {
+    clearTimeout(diagnosisTimer);
+    const q = $(this).val().trim().toLowerCase();
+
+    if ($('#call-diagnosis').val()) {
+        $('#call-diagnosis').val('');
+        $('#call-diagnosis-selected').hide();
+    }
+
+    if (q.length < 1) { $('#call-diagnosis-list').empty().hide(); return; }
+
+    diagnosisTimer = setTimeout(function () {
+        const filtered = diagnosisList.filter(d =>
+            d.Codigo.toLowerCase().includes(q) ||
+            (d.Observation && d.Observation.toLowerCase().includes(q))
+        ).slice(0, 10);
+
+        const $list = $('#call-diagnosis-list').empty();
+        if (filtered.length === 0) { $list.hide(); return; }
+
+        filtered.forEach(function (d) {
+            $('<li>')
+                .append($('<span class="pd-doc">').text(d.Codigo))
+                .append($('<span class="pd-name">').text(d.Observation || ''))
+                .append($('<i class="bi bi-arrow-right-circle-fill pd-icon">'))
+                .data('diag', d)
+                .appendTo($list);
+        });
+        $list.show();
+    }, 200);
+});
+
+$(document).on('click', '#call-diagnosis-list li', function () {
+    const d = $(this).data('diag');
+    if (!d) return;
+    const label = d.Codigo + (d.Observation ? ' - ' + d.Observation : '');
+    $('#call-diagnosis').val(d.KP_UUID);
+    $('#call-diagnosis-search').val(label);
+    $('#call-diagnosis-name').text(label);
+    $('#call-diagnosis-selected').show();
+    $('#call-diagnosis-list').empty().hide();
+});
+
+$(document).on('click', '#call-clear-diagnosis', function () {
+    $('#call-diagnosis').val('');
+    $('#call-diagnosis-search').val('').focus();
+    $('#call-diagnosis-selected').hide();
+});
+
+// ──────────────────────────────────────────────
+// FECHAS: botón Ahora + abrir calendario al clic
+// ──────────────────────────────────────────────
+function setNow(inputId) {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const val = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    $(inputId).val(val).trigger('change');
+}
+
+$(document).on('click', 'input[type="datetime-local"]:not(:disabled)', function () {
+    try { this.showPicker(); } catch (e) {}
+});
 
 // ──────────────────────────────────────────────
 // ENVIAR FORMULARIO
 // ──────────────────────────────────────────────
+var guardandoLlamada = false;
+
 $(document).on('submit', '#form-registro-call', function (e) {
     e.preventDefault();
+    e.stopImmediatePropagation();
+    if (guardandoLlamada) return;
+    document.activeElement && document.activeElement.blur();
 
     const requeridos = [
         ['#call-document-type', 'Tipo de Identificación'],
@@ -236,6 +293,12 @@ $(document).on('submit', '#form-registro-call', function (e) {
     if (faltante) {
         Swal.fire({ icon: 'error', title: 'Campo requerido', text: `"${faltante[1]}" es obligatorio.`, timer: 4000 });
         $(faltante[0]).focus();
+        return;
+    }
+
+    if (!$('#call-pk-uuid').val()) {
+        Swal.fire({ icon: 'error', title: 'Paciente no válido', text: 'Debe seleccionar un paciente de la lista de resultados.', timer: 4000 });
+        $('#call-dni').focus();
         return;
     }
 
@@ -274,13 +337,24 @@ $(document).on('submit', '#form-registro-call', function (e) {
             ObservationOut:    $('#call-observation-out').val()
         };
 
+        guardandoLlamada = true;
         $.post('../config/Commit.php', postData, function () {
+            guardandoLlamada = false;
             Swal.fire({ icon: 'success', title: '¡Llamada registrada!', timer: 2000, showConfirmButton: false });
             limpiarFormulario();
             bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas-registro'))?.hide();
             $('#table-calls').DataTable().ajax.reload(null, false);
-        }).fail(function () {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar la llamada. Intente de nuevo.' });
+        }).fail(function (xhr) {
+            guardandoLlamada = false;
+            if (Swal.isVisible()) return;
+            var msg = 'No se pudo guardar la llamada.';
+            try {
+                var resp = JSON.parse(xhr.responseText);
+                if (resp && resp.error) msg = resp.error;
+            } catch(e) {
+                if (xhr.responseText) msg = xhr.responseText.substring(0, 300);
+            }
+            Swal.fire({ icon: 'error', title: 'Error (' + xhr.status + ')', text: msg });
         });
     });
 });

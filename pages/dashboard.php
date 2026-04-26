@@ -9,8 +9,13 @@ include './generales/header.php';
   </a>
 
   <nav>
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills align-items-center gap-1">
       <li class="nav-item"><span class="nav-link text-muted">Bienvenido: <?php echo $_SESSION['usuario']; ?></span></li>
+      <li class="nav-item">
+        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="Modo sistema">
+          <i class="bi bi-circle-half" id="theme-icon"></i>
+        </button>
+      </li>
       <li class="nav-item"><a href="../config/logout.php" class="nav-link link-danger">Cerrar Sesión</a></li>
     </ul>
   </nav>
@@ -25,57 +30,41 @@ include './generales/header.php';
   </div>
 
   <div class="row g-4 mb-5">
-    <!-- Card 1: Registro de Novedades/Llamadas -->
+    <!-- Card 1: Registro de Llamadas -->
     <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;" id="btn-new-record-card">
-        <div class="card-body text-center">
-          <div class="display-4 text-warning mb-3">📞</div>
+      <div class="card h-100 shadow-sm border-0 hover-card" id="btn-new-record-card">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <div class="display-4 mb-3">📞</div>
           <h5 class="card-title fw-bold">Registro de Llamadas</h5>
           <p class="card-text text-muted small">Registra nuevas llamadas y novedades de pacientes</p>
-          <a href="./calls.php" class="btn btn-warning btn-sm mt-3 w-100">Ir →</a>
         </div>
       </div>
     </div>
 
     <!-- Card 2: Gestión de Medicamentos -->
     <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;">
-        <div class="card-body text-center">
-          <div class="display-4 text-success mb-3">💊</div>
+      <div class="card h-100 shadow-sm border-0 hover-card" onclick="location.href='./medicines_l.php'">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <div class="display-4 mb-3">💊</div>
           <h5 class="card-title fw-bold">Medicamentos</h5>
           <p class="card-text text-muted small">Gestiona catálogo de medicinas y kardex</p>
-          <a href="./medicines_l.php" class="btn btn-success btn-sm mt-3 w-100">Ir →</a>
         </div>
       </div>
     </div>
 
     <!-- Card 3: Reportes -->
     <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" style="cursor: pointer;">
-        <div class="card-body text-center">
-          <div class="display-4 text-info mb-3">📊</div>
+      <div class="card h-100 shadow-sm border-0 hover-card" id="btn-reportes">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <div class="display-4 mb-3">📊</div>
           <h5 class="card-title fw-bold">Reportes</h5>
           <p class="card-text text-muted small">Visualiza reportes y prioridades</p>
-          <button class="btn btn-info btn-sm mt-3 w-100" id="btn-reportes">Ir →</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Estilos para las cards -->
-<style>
-.hover-card {
-  transition: all 0.3s ease;
-}
-.hover-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-}
-.display-4 {
-  font-size: 3rem;
-}
-</style>
 
   <section id="section-registro" class="h-50" style="display:none">
     <div class="mb-3">
@@ -505,12 +494,10 @@ include './generales/header.php';
     </div>
   </div>
 
-  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <script src="../Js/datatables/jquery.dataTables.min.js"></script>
+  <script src="../Js/datatables/dataTables.bootstrap5.min.js"></script>
+  <script src="../Js/datatables/dataTables.buttons.min.js"></script>
+  <script src="../Js/datatables/buttons.html5.min.js"></script>
+  <script src="../Js/datatables/buttons.print.min.js"></script>
   <script src="../Js/dashboard.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.print.min.js"></script>
 </body>

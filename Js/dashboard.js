@@ -237,7 +237,7 @@ function showReportCard(defaultDate = '') {
         }],
         "lengthMenu": [30, 50, 100, 200],
         "language": {
-            "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
         "initComplete": function () {
             $('#table-resumen').DataTable().columns([0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23]).visible(false);
@@ -335,7 +335,7 @@ function cargar_hoy() {
             }
         ],
         language: {
-            url: 'http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json'
+            url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json'
         }
     });
 }
@@ -399,7 +399,7 @@ $(document).on('keyup', '#dni', function () {
                 }
             ],
             "language": {
-                "url": "http://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
             }
         });
 

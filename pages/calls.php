@@ -1,41 +1,100 @@
 <?php include './generales/header.php'; ?>
 
 <style>
-  .offcanvas-body { background: #f8f9fa; }
+  .offcanvas-body {
+    background: var(--app-bg);
+  }
+
   .form-section {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 12px;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--card-border);
   }
+
   .form-section-title {
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: .08em;
     text-transform: uppercase;
-    color: #6c757d;
+    color: var(--text-muted);
     margin-bottom: 12px;
   }
-  .form-section-title.ref    { color: #198754; }
-  .form-section-title.cref   { color: #e67e22; }
+
+  .form-section-title.ref  { color: #198754; }
+  .form-section-title.cref { color: #e67e22; }
+
   .patient-tag {
-    background: #fff3cd;
-    border: 1px solid #ffc107;
+    background: var(--alert-warn-bg);
+    border: 1px solid var(--card-border);
     border-radius: 6px;
     padding: 6px 10px;
     font-size: .875rem;
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--text-primary);
   }
-  #call-patient-list { max-height: 220px; overflow-y: auto; }
+
+  .patient-dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    max-height: 280px;
+    overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,.18);
+  }
+  .patient-dropdown li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--card-border);
+    transition: background .12s;
+  }
+  .patient-dropdown li:last-child { border-bottom: none; }
+  .patient-dropdown li:hover { background: var(--app-bg-subtle); }
+  .patient-dropdown .pd-doc {
+    font-size: .78rem;
+    color: var(--text-muted);
+    min-width: 120px;
+  }
+  .patient-dropdown .pd-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .patient-dropdown .pd-icon {
+    font-size: 1.1rem;
+    color: var(--link-primary);
+    opacity: .7;
+  }
+
+  #table-calls_wrapper {
+    overflow-x: auto;
+  }
   #table-calls_wrapper .dataTables_length select,
   #table-calls_wrapper .dataTables_filter input {
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--card-border);
     border-radius: 6px;
     padding: 4px 8px;
   }
+  #table-calls td, #table-calls th { white-space: nowrap; }
+
+  #table-calls_wrapper .dataTables_length select,
+  #table-calls_wrapper .dataTables_filter input {
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 4px 8px;
+  }
+
+  /* SweetAlert2 debe aparecer por encima del offcanvas (z-index 1045) */
+  .swal2-container { z-index: 99999 !important; }
 </style>
 
 <header class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-4 border-bottom px-4">
@@ -44,11 +103,16 @@
     <span class="ms-2 fw-bold text-primary"><?php echo htmlspecialchars($appName); ?></span>
   </a>
   <nav>
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills align-items-center gap-1">
       <li class="nav-item"><a href="./dashboard.php" class="nav-link">
-        <i class="bi bi-house"></i> Inicio</a></li>
+          <i class="bi bi-house"></i> Inicio</a></li>
       <li class="nav-item"><span class="nav-link text-muted">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['usuario']); ?></span></li>
+          <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['usuario']); ?></span></li>
+      <li class="nav-item">
+        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="Modo sistema">
+          <i class="bi bi-circle-half" id="theme-icon"></i>
+        </button>
+      </li>
       <li class="nav-item"><a href="../config/logout.php" class="nav-link link-danger">Cerrar Sesión</a></li>
     </ul>
   </nav>
@@ -99,7 +163,7 @@
      OFFCANVAS — REGISTRO DE LLAMADA
      ==================================================== -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas-registro" style="width: min(680px, 100vw);">
-  <div class="offcanvas-header border-bottom bg-white">
+  <div class="offcanvas-header border-bottom">
     <h5 class="offcanvas-title fw-bold">
       <i class="bi bi-telephone-plus me-2 text-warning"></i>Registrar Llamada
     </h5>
@@ -126,8 +190,8 @@
             <option value="42">Doc. Extranjero</option>
             <option value="43">No definido DIAN</option>
           </select>
-          <input type="number" class="form-control" id="call-dni"
-                 placeholder="Escriba el número de documento..." autofocus>
+          <input type="text" class="form-control" id="call-dni"
+            placeholder="Buscar por nombre o número de documento..." autofocus autocomplete="off">
         </div>
 
         <!-- Paciente seleccionado -->
@@ -140,18 +204,7 @@
         </div>
 
         <!-- Resultados búsqueda -->
-        <div id="call-patient-list" style="display:none;">
-          <table class="table table-sm table-hover table-bordered mb-0" id="call-table-patients">
-            <thead class="table-primary">
-              <tr>
-                <th>Paciente</th>
-                <th>Documento</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody id="call-tbody-patients"></tbody>
-          </table>
-        </div>
+        <ul id="call-patient-list" class="patient-dropdown" style="display:none;"></ul>
       </div>
 
       <!-- ── Datos paciente ── -->
@@ -220,9 +273,17 @@
         <div class="row g-2">
           <div class="col-6">
             <label class="form-label">DIAGNÓSTICO *</label>
-            <select class="form-select" id="call-diagnosis" required>
-              <option value="">— Seleccione —</option>
-            </select>
+            <input type="hidden" id="call-diagnosis">
+            <input type="text" class="form-control" id="call-diagnosis-search"
+              placeholder="Buscar por código o descripción..." autocomplete="off">
+            <ul id="call-diagnosis-list" class="patient-dropdown" style="display:none;"></ul>
+            <div id="call-diagnosis-selected" style="display:none;" class="patient-tag mt-1">
+              <i class="bi bi-clipboard2-pulse-fill text-success"></i>
+              <span id="call-diagnosis-name" class="fw-semibold" style="font-size:.82rem; flex:1;"></span>
+              <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" id="call-clear-diagnosis">
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </div>
           </div>
           <div class="col-6">
             <label class="form-label">N° LLAMADAS / CORREOS</label>
@@ -230,11 +291,17 @@
           </div>
           <div class="col-6">
             <label class="form-label">FECHA SOLICITUD *</label>
-            <input type="datetime-local" class="form-control comunication_in" id="call-check-in-date" required>
+            <div class="input-group">
+              <input type="datetime-local" class="form-control comunication_in" id="call-check-in-date" required>
+              <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-check-in-date')" title="Poner fecha y hora actual">Ahora</button>
+            </div>
           </div>
           <div class="col-6">
             <label class="form-label">FECHA COMENTARIO *</label>
-            <input type="datetime-local" class="form-control comunication_out" id="call-comment-date" required>
+            <div class="input-group">
+              <input type="datetime-local" class="form-control comunication_out" id="call-comment-date" required>
+              <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-comment-date')" title="Poner fecha y hora actual">Ahora</button>
+            </div>
           </div>
           <div class="col-6">
             <label class="form-label">FECHA CITA</label>
@@ -255,7 +322,7 @@
           <div class="col-12">
             <label class="form-label">OBSERVACIÓN *</label>
             <textarea class="form-control" id="call-observation-in" rows="2"
-                      placeholder="Describa la observación de la solicitud..." required></textarea>
+              placeholder="Describa la observación de la solicitud..." required></textarea>
           </div>
         </div>
       </div>
@@ -279,7 +346,7 @@
           <div class="col-12">
             <label class="form-label">OBSERVACIÓN *</label>
             <textarea class="form-control" id="call-observation-out" rows="2"
-                      placeholder="Describa la observación de la contra-referencia..." required></textarea>
+              placeholder="Describa la observación de la contra-referencia..." required></textarea>
           </div>
         </div>
       </div>
@@ -297,7 +364,6 @@
   </div>
 </div>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
 <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
 <script src="../Js/calls.js"></script>

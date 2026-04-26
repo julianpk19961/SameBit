@@ -9,7 +9,14 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(r\\) for r in d['data'][:3]]\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('Total hoy:', len\\(d['data']\\)\\); [print\\(r\\) for r in d['data'][:2]]\")",
       "Bash(grep -o 'offcanvas[^{;,\" ]*' /Users/mantum/Documents/Personal/destroywolves/SameBit/css/bootstrap-css/bootstrap.min.css)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(curl -sL \"https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js\" -o /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/sweetalert2/sweetalert2.min.js)",
+      "Bash(grep -n '$index' /Users/mantum/Documents/Personal/destroywolves/SameBit/pages/generales/header.php)",
+      "Bash(grep -rn '$index' /Users/mantum/Documents/Personal/destroywolves/SameBit/config/)",
+      "Bash(grep -rn '$index' /Users/mantum/Documents/Personal/destroywolves/SameBit/ '--include=*.php')",
+      "Bash(xargs ls *)",
+      "Bash(curl -sL \"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css\" -o /Users/mantum/Documents/Personal/destroywolves/SameBit/css/bootstrap-css/bootstrap.min.css)",
+      "Bash(php -r ' *)"
     ]
   }
 }

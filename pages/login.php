@@ -7,7 +7,7 @@ include './generales/header.php';
   <div class="login-card">
 
     <div class="login-logo">
-      <img src="<?php echo $index; ?>img/logo.png" alt="<?php echo htmlspecialchars($appName); ?>">
+      <img src="../img/logo.png" alt="<?php echo htmlspecialchars($appName); ?>">
     </div>
 
     <h1 class="login-title">BIENVENIDO</h1>

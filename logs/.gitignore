@@ -1,0 +1,9 @@
+# Ignorar todos los archivos en el directorio logs
+*
+
+# Excepto este archivo .gitignore
+!.gitignore
+
+# Los archivos de log se generan automáticamente
+# y contienen información sensible que no debe
+# ser versionada en el repositorio

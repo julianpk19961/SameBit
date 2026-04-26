@@ -15,7 +15,7 @@ if ($count > 0) {
         $json[] = array(
             'KP_UUID'     => $row['id'],
             'Codigo'      => $row['code'],
-            'Observation' => utf8_encode($row['description'])
+            'Observation' => mb_convert_encoding($row['description'], 'ISO-8859-1', 'UTF-8')
         );
     }
     echo json_encode($json);

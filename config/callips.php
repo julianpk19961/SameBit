@@ -12,9 +12,10 @@ if (!$result) {
 if ($count > 0) {
     $json = array();
     while ($row = mysqli_fetch_array($result)) {
+        $name = mb_convert_encoding($row['name'], 'ISO-8859-1', 'UTF-8');
         $json[] = array(
             'pk_uuid' => $row['id'],
-            'name'    => strtoupper(utf8_encode($row['name'])),
+            'name'    => mb_strtoupper($name, 'UTF-8'),
             'nit'     => $row['nit']
         );
     }

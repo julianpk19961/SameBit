@@ -1,36 +1,62 @@
 <?php
-include 'config.php';
+require_once 'config.php';
 
-$Dni = $_POST['dni'];
-$Dni = mysqli_real_escape_string($conn, $Dni);
+header('Content-Type: application/json; charset=UTF-8');
 
-$sql = "SELECT
-    id               AS UUID,
-    CONCAT(first_name, ' ', last_name) AS PACIENTE,
-    first_name       AS NOMBRE,
-    last_name        AS APELLIDO,
-    document_number  AS DOC_NUMBER,
-    document_type    AS DOC_TYPE,
-    eps_id           AS EPS,
-    range_level      AS CLASIFICACION
-FROM patients
-WHERE document_number LIKE '%$Dni%'
-ORDER BY document_number DESC";
-
-$result = mysqli_query($conn, $sql);
-
-if (!$result) {
-    die('Query Error' . mysqli_error($conn));
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode([]);
+    exit;
 }
 
-$resultCount = mysqli_num_rows($result);
-if ($resultCount > 0) {
-    while ($data = mysqli_fetch_assoc($result)) {
-        $array['data'][] = $data;
-    }
-} else {
-    $array['data'] = ['error' => 'no se encontraron registros'];
+$q = isset($_POST['q']) ? trim($_POST['q']) : '';
+
+if (strlen($q) < 2) {
+    echo json_encode([]);
+    exit;
 }
 
-echo json_encode($array);
-mysqli_close($conn);
+$stmt = $conn->prepare("
+    SELECT
+        id              AS UUID,
+        first_name      AS NOMBRE,
+        last_name       AS APELLIDO,
+        CONCAT(first_name, ' ', last_name) AS PACIENTE,
+        document_number AS DOC_NUMBER,
+        document_type   AS DOC_TYPE,
+        eps_id          AS EPS,
+        ips_id          AS IPS,
+        range_level     AS RANGO
+    FROM patients
+    WHERE document_number LIKE ? OR CONCAT(first_name, ' ', last_name) LIKE ?
+    ORDER BY document_number
+    LIMIT 10
+");
+
+if (!$stmt) {
+    echo json_encode([]);
+    exit;
+}
+
+$like = '%' . $q . '%';
+$stmt->bind_param('ss', $like, $like);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    $data[] = [
+        'UUID'       => $row['UUID'],
+        'PACIENTE'   => $row['PACIENTE'],
+        'NOMBRE'     => $row['NOMBRE'],
+        'APELLIDO'   => $row['APELLIDO'],
+        'DOC_NUMBER' => $row['DOC_NUMBER'],
+        'DOC_TYPE'   => $row['DOC_TYPE'],
+        'EPS'        => $row['EPS'],
+        'IPS'        => $row['IPS'],
+        'RANGO'      => $row['RANGO'],
+    ];
+}
+
+$stmt->close();
+echo json_encode($data);

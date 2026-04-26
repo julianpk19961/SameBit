@@ -14,16 +14,16 @@ $("#login").submit(function (e) {
         url:  '../config/conection.php',
         type: 'POST',
         data: parametros,
-        success: function (response) {
-            var data = JSON.parse(response);
+        dataType: 'json',
+        success: function (data) {
+            $('#loader').addClass('hidden');
 
             if (data.Tipo === 'success' && data.nombreusuario !== '') {
                 localStorage.setItem('user', JSON.stringify(data));
-                location.href = data.url;
+                window.location.href = data.url;
                 return;
             }
 
-            $('#loader').addClass('hidden');
             Swal.fire({
                 icon:  data.Tipo,
                 title: data.Title,
@@ -31,12 +31,14 @@ $("#login").submit(function (e) {
                 timer: 4000
             });
         },
-        error: function () {
+        error: function (xhr, status, error) {
             $('#loader').addClass('hidden');
+            console.error('Login error:', status, error);
+            console.error('Response:', xhr.responseText);
             Swal.fire({
                 icon:  'error',
                 title: 'Error de conexión',
-                text:  'No se pudo conectar con el servidor',
+                text:  'No se pudo conectar con el servidor: ' + (error || 'Error desconocido'),
                 timer: 4000
             });
         }
