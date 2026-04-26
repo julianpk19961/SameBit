@@ -58,4 +58,4 @@ if ($resultCount > 0) {
 }
 array_push($responseArray, $jsonkardex);
 
-echo json_encode($responseArray);
+echo json_encode($responseArray, JSON_OUT);

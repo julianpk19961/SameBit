@@ -5,14 +5,14 @@ header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode([]);
+    echo json_encode([], JSON_OUT);
     exit;
 }
 
 $q = isset($_POST['q']) ? trim($_POST['q']) : '';
 
 if (strlen($q) < 2) {
-    echo json_encode([]);
+    echo json_encode([], JSON_OUT);
     exit;
 }
 
@@ -34,7 +34,7 @@ $stmt = $conn->prepare("
 ");
 
 if (!$stmt) {
-    echo json_encode([]);
+    echo json_encode([], JSON_OUT);
     exit;
 }
 
@@ -59,4 +59,4 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $stmt->close();
-echo json_encode($data);
+echo json_encode($data, JSON_OUT);

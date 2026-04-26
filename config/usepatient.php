@@ -13,7 +13,7 @@ header('Content-Type: application/json; charset=UTF-8');
 // Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
+    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
     exit;
 }
 
@@ -23,7 +23,7 @@ if (isset($_POST['pk_uuid']) && !empty($_POST['pk_uuid'])) {
     
     // Validar que sea un UUID válido (formato básico)
     if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $pk_uuid)) {
-        echo json_encode(['error' => 'UUID inválido']);
+        echo json_encode(['error' => 'UUID inválido'], JSON_OUT);
         exit;
     }
     
@@ -33,7 +33,7 @@ if (isset($_POST['pk_uuid']) && !empty($_POST['pk_uuid'])) {
                             WHERE id = ?");
     
     if (!$stmt) {
-        echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+        echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
         exit;
     }
     
@@ -43,7 +43,7 @@ if (isset($_POST['pk_uuid']) && !empty($_POST['pk_uuid'])) {
     
     if (!$result) {
         $stmt->close();
-        echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+        echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
         exit;
     }
     
@@ -59,9 +59,9 @@ if (isset($_POST['pk_uuid']) && !empty($_POST['pk_uuid'])) {
             'range'        => htmlspecialchars($row['range_level']),
             'ips'          => htmlspecialchars($row['ips_id']),
         );
-        echo json_encode($json);
+        echo json_encode($json, JSON_OUT);
     } else {
-        echo json_encode(['error' => 'Paciente no encontrado']);
+        echo json_encode(['error' => 'Paciente no encontrado'], JSON_OUT);
     }
     
     $stmt->close();

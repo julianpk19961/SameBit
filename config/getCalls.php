@@ -19,7 +19,7 @@ LEFT JOIN patients  p     ON pr.patient_id     = p.id
 LEFT JOIN entities e_eps  ON pr.eps_id         = e_eps.id
 LEFT JOIN entities e_ips  ON pr.ips_id         = e_ips.id
 LEFT JOIN diagnoses d     ON pr.diagnosis_id   = d.id
-WHERE pr.checkin_date = '$today'
+WHERE DATE(pr.created_at) = '$today'
 ORDER BY pr.checkin_time DESC";
 
 $result = mysqli_query($conn, $sql);
@@ -31,6 +31,6 @@ if ($result) {
     }
 }
 
-header('Content-Type: application/json');
-echo json_encode(['data' => $data]);
+header('Content-Type: application/json; charset=UTF-8');
+echo json_encode(['data' => $data], JSON_OUT);
 mysqli_close($conn);

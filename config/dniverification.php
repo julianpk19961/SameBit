@@ -11,7 +11,7 @@ require_once 'config.php';
 // Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
+    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
     exit;
 }
 
@@ -20,14 +20,14 @@ $dni = isset($_POST['dni']) ? trim($_POST['dni']) : '';
 
 // Validar que el DNI no esté vacío
 if (empty($dni)) {
-    echo json_encode(['error' => 'DNI requerido']);
+    echo json_encode(['error' => 'DNI requerido'], JSON_OUT);
     exit;
 }
 
 // Validar que el DNI sea numérico (ajustar según tipo de documento)
 // Si se permiten letras en el DNI, quitar esta validación
 if (!ctype_alnum($dni)) {
-    echo json_encode(['error' => 'DNI inválido']);
+    echo json_encode(['error' => 'DNI inválido'], JSON_OUT);
     exit;
 }
 
@@ -39,7 +39,7 @@ $stmt = $conn->prepare("SELECT id, first_name, last_name, document_number, docum
                         LIMIT 20");
 
 if (!$stmt) {
-    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
     exit;
 }
 
@@ -51,7 +51,7 @@ $result = $stmt->get_result();
 
 if (!$result) {
     $stmt->close();
-    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
     exit;
 }
 
@@ -72,7 +72,7 @@ if ($result_count > 0) {
     }
     
     header('Content-Type: application/json; charset=UTF-8');
-    echo json_encode($json);
+    echo json_encode($json, JSON_OUT);
 } else {
     echo 'error';
 }

@@ -13,7 +13,7 @@ header('Content-Type: application/json; charset=UTF-8');
 // Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
+    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
     exit;
 }
 
@@ -25,21 +25,21 @@ $notes = isset($_POST["observation"]) ? trim($_POST["observation"]) : '';
 // Validaciones
 if (empty($name)) {
     http_response_code(400);
-    echo json_encode(['error' => 'El nombre del medicamento es requerido']);
+    echo json_encode(['error' => 'El nombre del medicamento es requerido'], JSON_OUT);
     exit;
 }
 
 // Validar longitud del nombre
 if (strlen($name) > 200) {
     http_response_code(400);
-    echo json_encode(['error' => 'El nombre del medicamento es demasiado largo (máx 200 caracteres)']);
+    echo json_encode(['error' => 'El nombre del medicamento es demasiado largo (máx 200 caracteres, JSON_OUT)']);
     exit;
 }
 
 // Validar longitud de referencia
 if (strlen($reference) > 100) {
     http_response_code(400);
-    echo json_encode(['error' => 'La referencia es demasiado larga (máx 100 caracteres)']);
+    echo json_encode(['error' => 'La referencia es demasiado larga (máx 100 caracteres, JSON_OUT)']);
     exit;
 }
 
@@ -75,7 +75,7 @@ $stmt = $conn->prepare("INSERT INTO medicines (id, name, reference, notes) VALUE
 
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
     exit;
 }
 
@@ -102,7 +102,7 @@ if ($stmt->execute()) {
                 'created_at' => $row['created_at']
             ]
         ];
-        echo json_encode($json);
+        echo json_encode($json, JSON_OUT);
     } else {
         echo json_encode(['success' => true, 'message' => 'Medicamento guardado, pero no se pudo recuperar']);
     }
@@ -110,7 +110,7 @@ if ($stmt->execute()) {
     $select_stmt->close();
 } else {
     http_response_code(500);
-    echo json_encode(['error' => 'Error al guardar medicamento: ' . $conn->error]);
+    echo json_encode(['error' => 'Error al guardar medicamento: ' . $conn->error], JSON_OUT);
 }
 
 $stmt->close();

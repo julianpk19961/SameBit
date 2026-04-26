@@ -3,22 +3,19 @@ include 'config.php';
 
 $sql    = "SELECT id, code, description FROM diagnoses ORDER BY code";
 $result = mysqli_query($conn, $sql);
-$count  = mysqli_num_rows($result);
 
 if (!$result) {
-    die('Query Error' . mysqli_error($conn));
+    echo json_encode([], JSON_OUT);
+    exit;
 }
 
-if ($count > 0) {
-    $json = array();
-    while ($row = mysqli_fetch_array($result)) {
-        $json[] = array(
-            'KP_UUID'     => $row['id'],
-            'Codigo'      => $row['code'],
-            'Observation' => mb_convert_encoding($row['description'], 'ISO-8859-1', 'UTF-8')
-        );
-    }
-    echo json_encode($json);
-} else {
-    echo '[]';
+$json = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $json[] = [
+        'KP_UUID'     => $row['id'],
+        'Codigo'      => $row['code'],
+        'Observation' => $row['description']
+    ];
 }
+header('Content-Type: application/json; charset=UTF-8');
+echo json_encode($json, JSON_OUT);

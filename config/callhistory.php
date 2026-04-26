@@ -25,7 +25,7 @@ if ($resultCount > 0) {
             'comment0'    => $row['reception_notes']
         );
     }
-    echo json_encode($json);
+    echo json_encode($json, JSON_OUT);
 } else {
     echo 'error';
 }

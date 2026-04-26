@@ -28,7 +28,7 @@ $result = $conn->query($sql);
 
 if (!$result) {
     http_response_code(500);
-    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
     exit;
 }
 
@@ -46,9 +46,9 @@ if ($result_count > 0) {
             'nrows'      => intval($row['nrows'])
         );
     }
-    echo json_encode($json);
+    echo json_encode($json, JSON_OUT);
 } else {
-    echo json_encode(['error' => 'No hay medicamentos registrados']);
+    echo json_encode(['error' => 'No hay medicamentos registrados'], JSON_OUT);
 }
 
 $conn->close();

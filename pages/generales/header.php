@@ -24,11 +24,15 @@ $csrf_token = generate_csrf_token();
   <link rel="stylesheet" href="../css/bootstrap-icons/bootstrap-icons.css">
   <link rel="stylesheet" href="../css/font-awesome/font-awesome.min.css">
   <link rel="stylesheet" href="../css/select2/select2.min.css">
+  <link rel="stylesheet" href="../Js/sweetalert2/sweetalert2.min.css">
 
   <?php if ($page === 'login.php'): ?>
   <link rel="stylesheet" href="../css/Login.css">
   <?php else: ?>
   <link rel="stylesheet" href="../css/pacientes.css">
+  <?php if ($page === 'calls.php'): ?>
+  <link rel="stylesheet" href="../css/calls.css">
+  <?php endif; ?>
   <?php endif; ?>
 </head>
 <body>

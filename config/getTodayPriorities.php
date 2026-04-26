@@ -16,7 +16,7 @@ ORDER BY pr.checkin_time ASC";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
-    echo json_encode(['data' => []]);
+    echo json_encode(['data' => []], JSON_OUT);
     mysqli_close($conn);
     exit;
 }
@@ -26,5 +26,5 @@ while ($row = mysqli_fetch_assoc($result)) {
     $array['data'][] = $row;
 }
 
-echo json_encode($array);
+echo json_encode($array, JSON_OUT);
 mysqli_close($conn);

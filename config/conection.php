@@ -40,7 +40,7 @@ function login()
             'url' => '',
             'privilegeSet' => '',
         ];
-        echo json_encode($message);
+        echo json_encode($message, JSON_OUT);
         return;
     }
 
@@ -56,7 +56,7 @@ function login()
             'url' => '',
             'privilegeSet' => '',
         ];
-        echo json_encode($message);
+        echo json_encode($message, JSON_OUT);
         return;
     }
 
@@ -111,7 +111,7 @@ function login()
                 'url' => $url,
                 'privilegeSet' => $privilegeSet,
             ];
-            echo json_encode($message);
+            echo json_encode($message, JSON_OUT);
             exit;
         } else {
             // Contraseña incorrecta
@@ -123,7 +123,7 @@ function login()
                 'url' => '',
                 'privilegeSet' => '',
             ];
-            echo json_encode($message);
+            echo json_encode($message, JSON_OUT);
             exit;
         }
     } else {
@@ -136,7 +136,7 @@ function login()
             'url' => '',
             'privilegeSet' => '',
         ];
-        echo json_encode($message);
+        echo json_encode($message, JSON_OUT);
         exit;
     }
 

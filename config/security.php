@@ -251,7 +251,7 @@ function set_security_headers() {
     header('Referrer-Policy: strict-origin-when-cross-origin');
     
     // Content Security Policy - Permitir CDNs para scripts, estilos y source maps
-    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net code.jquery.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net; img-src 'self' data:; font-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com; connect-src 'self' https:;");
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net code.jquery.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net; img-src 'self' data:; font-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com; connect-src 'self' https:; media-src 'self' data:;");
 }
 
 /**
@@ -279,7 +279,13 @@ function init_security() {
             ]);
         }
     }
-    
+
+    // Renovar temporizador de inactividad en cada petición para que el timer
+    // corra desde la última carga de página, no solo desde las llamadas AJAX a Commit.php
+    if (isset($_SESSION['id'], $_SESSION['usuario'])) {
+        $_SESSION['last_activity'] = time();
+    }
+
     // Establecer headers de seguridad (solo si no se han enviado headers)
     if (!headers_sent()) {
         set_security_headers();

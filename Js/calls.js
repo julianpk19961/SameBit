@@ -1,6 +1,24 @@
 var user = JSON.parse(localStorage.getItem('user'));
 var diagnosisList = [];
 
+function swalInOffcanvas(opts) {
+    // Blur focused element before opening Swal to avoid aria-hidden warnings on offcanvas
+    const focused = document.activeElement;
+    if (focused && focused !== document.body) focused.blur();
+    return Swal.fire(opts);
+}
+
+function showFormError(msg) {
+    $('#form-error-text').text(msg);
+    $('#form-error-banner').removeClass('d-none');
+    $('#form-error-banner')[0]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearFormError() {
+    $('#form-error-banner').addClass('d-none');
+    $('#form-error-text').text('');
+}
+
 $(document).ready(function () {
     if (!user) {
         location.href = '/pages/login.php';
@@ -15,8 +33,31 @@ $(document).ready(function () {
     initMainTable();
     cargarSelectsForm();
 
+    // Auto-refresh de la tabla cada 5 segundos
+    setInterval(function () {
+        $('#table-calls').DataTable().ajax.reload(null, false);
+    }, 5000);
+
     document.getElementById('btn-nueva-llamada').addEventListener('click', function () {
         bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-registro')).show();
+    });
+
+    // Focus en el campo documento al abrir el offcanvas
+    document.getElementById('offcanvas-registro').addEventListener('shown.bs.offcanvas', function () {
+        document.getElementById('call-dni').focus();
+    });
+
+    // Mover foco fuera del offcanvas cuando se cierra para evitar aria-hidden warnings
+    document.getElementById('offcanvas-registro').addEventListener('hide.bs.offcanvas', function () {
+        const focused = this.querySelector(':focus');
+        if (focused) focused.blur();
+    });
+
+    // Prevenir que Enter en inputs dispare el submit del formulario
+    $(document).on('keydown', '#form-registro-call input, #form-registro-call select', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     });
 });
 
@@ -136,14 +177,14 @@ $(document).on('click', '#call-clear-patient', function () {
 // ──────────────────────────────────────────────
 function cargarSelectsForm() {
     $.get('../config/callips.php', function (res) {
-        const list = JSON.parse(res);
+        const list = typeof res === 'object' ? res : JSON.parse(res);
         let opts = '<option value="">— Seleccione IPS —</option>';
         list.forEach(i => opts += `<option value="${i.pk_uuid}">${i.name}</option>`);
         $('#call-ips').html(opts);
     });
 
     $.get('../config/callEps.php', function (res) {
-        const list = JSON.parse(res);
+        const list = typeof res === 'object' ? res : JSON.parse(res);
         let opts = '<option value="">— Seleccione EPS —</option>';
         list.forEach(i => opts += `<option value="${i.pk_uuid}">${i.name}</option>`);
         $('#call-eps').html(opts);
@@ -167,16 +208,20 @@ $(document).on('change', '#call-approved', function () {
 // LIMPIAR FORMULARIO
 // ──────────────────────────────────────────────
 $('#call-btn-clean').on('click', function () {
-    document.activeElement && document.activeElement.blur();
-    Swal.fire({
+    swalInOffcanvas({
         icon: 'warning',
-        title: '¿Limpiar formulario?',
+        title: '¿Cancelar registro?',
         text: 'Los datos ingresados se perderán.',
         showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Limpiar',
-        confirmButtonColor: '#dc3545'
-    }).then(r => { if (r.isConfirmed) limpiarFormulario(); });
+        cancelButtonText: 'Continuar editando',
+        confirmButtonText: 'Cancelar',
+        confirmButtonColor: '#6c757d'
+    }).then(r => {
+        if (r.isConfirmed) {
+            limpiarFormulario();
+            bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas-registro'))?.hide();
+        }
+    });
 });
 
 function limpiarFormulario() {
@@ -189,6 +234,7 @@ function limpiarFormulario() {
     $('#call-diagnosis-search').val('');
     $('#call-diagnosis-selected').hide();
     $('#call-diagnosis-list').empty().hide();
+    clearFormError();
 }
 
 // ──────────────────────────────────────────────
@@ -237,6 +283,8 @@ $(document).on('click', '#call-diagnosis-list li', function () {
     $('#call-diagnosis-name').text(label);
     $('#call-diagnosis-selected').show();
     $('#call-diagnosis-list').empty().hide();
+    // Mover foco al siguiente campo para que el navegador no lo envíe a btn-close
+    $('#call-number').focus();
 });
 
 $(document).on('click', '#call-clear-diagnosis', function () {
@@ -268,7 +316,7 @@ $(document).on('submit', '#form-registro-call', function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
     if (guardandoLlamada) return;
-    document.activeElement && document.activeElement.blur();
+    console.log('[Guardar Llamada] Submit disparado');
 
     const requeridos = [
         ['#call-document-type', 'Tipo de Identificación'],
@@ -291,48 +339,37 @@ $(document).on('submit', '#form-registro-call', function (e) {
 
     const faltante = requeridos.find(([id]) => !$(id).val());
     if (faltante) {
-        // Mostrar alerta dentro del offcanvas, enfocarse en el campo
-        const $offcanvas = document.getElementById('offcanvas-registro');
-        const offcanvasInstance = bootstrap.Offcanvas.getInstance($offcanvas);
-        
-        Swal.fire({
-            icon: 'error',
-            title: 'Campo requerido',
-            text: `"${faltante[1]}" es obligatorio.`,
-            timer: 4000,
-            willOpen: function() {
-                // Asegurar que el offcanvas esté visible
-                if (offcanvasInstance && !offcanvasInstance._isShown) {
-                    offcanvasInstance.show();
-                }
-            }
-        });
-        setTimeout(() => $(faltante[0]).focus(), 100);
+        console.warn('[Guardar Llamada] Campo faltante:', faltante[1]);
+        showFormError(`El campo "${faltante[1]}" es obligatorio.`);
+        $(faltante[0]).focus();
         return;
     }
 
     if (!$('#call-pk-uuid').val()) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Paciente no válido',
-            text: 'Debe seleccionar un paciente de la lista de resultados.',
-            timer: 4000
-        });
+        console.warn('[Guardar Llamada] No hay paciente seleccionado');
+        showFormError('Debe seleccionar un paciente de la lista de resultados antes de guardar.');
         $('#call-dni').focus();
         return;
     }
 
-    Swal.fire({
-        icon: 'question',
+    console.log('[Guardar Llamada] Validación OK — paciente UUID:', $('#call-pk-uuid').val());
+    clearFormError();
+    swalInOffcanvas({
+        icon: 'info',
         title: '¿Guardar llamada?',
+        html: '<div style="font-size:1.1em">¿Confirma que desea registrar esta llamada con los datos ingresados?<br><span class="text-secondary" style="font-size:.95em;">Podrá editarla luego desde el historial.</span></div>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Guardar',
+        confirmButtonText: '<i class="bi bi-check-circle"></i> Guardar',
         confirmButtonColor: '#198754',
+        focusConfirm: true,
         allowOutsideClick: false,
         allowEscapeKey: false
     }).then(r => {
-        if (!r.isConfirmed) return;
+        if (!r.isConfirmed) {
+            console.log('[Guardar Llamada] Usuario canceló la confirmación');
+            return;
+        }
 
         const postData = {
             pk_uuid:           $('#call-pk-uuid').val(),
@@ -359,17 +396,16 @@ $(document).on('submit', '#form-registro-call', function (e) {
             ObservationOut:    $('#call-observation-out').val()
         };
 
+        console.log('[Guardar Llamada] Enviando POST a Commit.php', postData);
         guardandoLlamada = true;
         $.post('../config/Commit.php', postData, function (response) {
             guardandoLlamada = false;
+            console.log('[Guardar Llamada] Respuesta del servidor:', response);
             let successMsg = '¡Llamada registrada!';
-            
-            // Intentar extraer mensaje de success del backend
             if (typeof response === 'object' && response.message) {
                 successMsg = response.message;
             }
-            
-            Swal.fire({
+            swalInOffcanvas({
                 icon: 'success',
                 title: successMsg,
                 timer: 2000,
@@ -382,10 +418,7 @@ $(document).on('submit', '#form-registro-call', function (e) {
             });
         }).fail(function (xhr) {
             guardandoLlamada = false;
-            
-            // Evitar mostrar múltiples alertas
-            if (Swal.isVisible()) return;
-            
+            console.error('[Guardar Llamada] Error HTTP', xhr.status, xhr.responseText);
             var msg = 'No se pudo guardar la llamada.';
             try {
                 var resp = typeof xhr.responseText === 'string' ? JSON.parse(xhr.responseText) : xhr.responseText;
@@ -393,14 +426,20 @@ $(document).on('submit', '#form-registro-call', function (e) {
             } catch(e) {
                 if (xhr.responseText) msg = xhr.responseText.substring(0, 300);
             }
-            
-            Swal.fire({
-                icon: 'error',
-                title: 'Error (' + xhr.status + ')',
-                text: msg,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            });
+            if (xhr.status === 400) {
+                // Error de validación del backend → mostrar en banner del formulario
+                showFormError(msg);
+            } else {
+                // Error inesperado del servidor → SweetAlert
+                if (Swal.isVisible()) return;
+                swalInOffcanvas({
+                    icon: 'error',
+                    title: 'Error del servidor (' + xhr.status + ')',
+                    text: msg,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+            }
         });
     });
 });

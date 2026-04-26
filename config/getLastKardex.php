@@ -28,4 +28,4 @@ if ($resultCount > 0) {
     $jsonkardex = 'error';
 }
 
-echo json_encode($jsonkardex);
+echo json_encode($jsonkardex, JSON_OUT);

@@ -13,14 +13,14 @@ header('Content-Type: application/json; charset=UTF-8');
 // Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
+    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
     exit;
 }
 
 // Verificar autenticación
 if (!is_session_valid()) {
     http_response_code(401);
-    echo json_encode(['error' => 'No autenticado']);
+    echo json_encode(['error' => 'No autenticado'], JSON_OUT);
     exit;
 }
 
@@ -28,7 +28,7 @@ if (!is_session_valid()) {
 $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
 if (!empty($csrf_token) && !validate_csrf_token($csrf_token)) {
     http_response_code(403);
-    echo json_encode(['error' => 'Token CSRF inválido']);
+    echo json_encode(['error' => 'Token CSRF inválido'], JSON_OUT);
     exit;
 }
 
@@ -59,11 +59,24 @@ $data = [
 ];
 
 // Validaciones básicas
-$required_fields = ['dni', 'name', 'lastname', 'eps', 'ips', 'eps_classification', 'contacttype', 'observation_in', 'sent_by', 'eps_status'];
-foreach ($required_fields as $field) {
-    if (empty($data[$field])) {
+// Nota: se usa === '' en lugar de empty() porque campos como contacttype y eps_status
+// pueden tener el valor "0" que es válido pero que empty() trata como vacío.
+$required_fields = [
+    'dni'               => 'Identificación',
+    'name'              => 'Nombres',
+    'lastname'          => 'Apellidos',
+    'eps'               => 'EPS',
+    'ips'               => 'IPS',
+    'eps_classification'=> 'Rango EPS',
+    'contacttype'       => 'Tipo de Contacto',
+    'observation_in'    => 'Observación (Referencia)',
+    'sent_by'           => 'Remitido Desde',
+    'eps_status'        => 'Estado EPS',
+];
+foreach ($required_fields as $field => $label) {
+    if (!isset($data[$field]) || $data[$field] === '') {
         http_response_code(400);
-        echo json_encode(['error' => "Campo requerido faltante: $field"]);
+        echo json_encode(['error' => "El campo \"$label\" es obligatorio."], JSON_OUT);
         exit;
     }
 }
@@ -75,7 +88,7 @@ try {
     $attention_datetime = !empty($data['attention_date']) ? new DateTime($data['attention_date']) : null;
 } catch (Exception $e) {
     http_response_code(400);
-    echo json_encode(['error' => 'Formato de fecha inválido']);
+    echo json_encode(['error' => 'Formato de fecha inválido'], JSON_OUT);
     exit;
 }
 
@@ -107,7 +120,8 @@ try {
     if (empty($data['pk_uuid'])) {
         // INSERT nuevo paciente
         $stmt_patient = $conn->prepare("INSERT INTO patients (id, document_number, document_type, first_name, last_name, eps_id, range_level, ips_id, created_by, updated_by) VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt_patient->bind_param("ssssssss", 
+
+        if (!$stmt_patient->execute([
             $data['dni'],
             $data['documenttype'],
             $data['name'],
@@ -117,16 +131,13 @@ try {
             $data['ips'],
             $username,
             $username
-        );
-        
-        if (!$stmt_patient->execute()) {
+        ])) {
             throw new Exception("Error al guardar paciente: " . $stmt_patient->error);
         }
         
         // Obtener ID del paciente creado
         $stmt_get = $conn->prepare("SELECT id FROM patients WHERE document_number = ?");
-        $stmt_get->bind_param("s", $data['dni']);
-        $stmt_get->execute();
+        $stmt_get->execute([$data['dni']]);
         $result_get = $stmt_get->get_result();
         if ($result_get->num_rows > 0) {
             $row = $result_get->fetch_assoc();
@@ -145,7 +156,7 @@ try {
             range_level = ?, 
             updated_by = ? 
             WHERE document_number = ?");
-        $stmt_patient->bind_param("sssssssss",
+        if (!$stmt_patient->execute([
             $data['dni'],
             $data['documenttype'],
             $data['name'],
@@ -155,9 +166,7 @@ try {
             $data['eps_classification'],
             $username,
             $data['dni']
-        );
-        
-        if (!$stmt_patient->execute()) {
+        ])) {
             throw new Exception("Error al actualizar paciente: " . $stmt_patient->error);
         }
     }
@@ -201,11 +210,7 @@ try {
         throw new Exception("Error al preparar consulta de prioridad: " . $conn->error);
     }
     
-    // Construir string de tipos para bind_param
-    $types = str_repeat('s', count($params));
-    $stmt_priority->bind_param($types, ...$params);
-    
-    if (!$stmt_priority->execute()) {
+    if (!$stmt_priority->execute($params)) {
         throw new Exception("Error al guardar prioridad: " . $stmt_priority->error);
     }
     
@@ -218,7 +223,7 @@ try {
     echo json_encode([
         'success' => true,
         'message' => 'Registro guardado exitosamente'
-    ]);
+    ], JSON_OUT);
     
 } catch (Exception $e) {
     // Rollback en caso de error
@@ -227,7 +232,7 @@ try {
     http_response_code(500);
     echo json_encode([
         'error' => 'Error al guardar registro: ' . $e->getMessage()
-    ]);
+    ], JSON_OUT);
 }
 
 // Cerrar statements

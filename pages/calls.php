@@ -1,131 +1,9 @@
-<?php include './generales/header.php'; ?>
-
-<style>
-  .offcanvas-body {
-    background: var(--app-bg);
-  }
-
-  .form-section {
-    background: var(--card-bg);
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 12px;
-    border: 1px solid var(--card-border);
-  }
-
-  .form-section-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-  }
-
-  .form-section-title.ref  { color: #198754; }
-  .form-section-title.cref { color: #e67e22; }
-
-  .patient-tag {
-    background: var(--alert-warn-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: .875rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-primary);
-  }
-
-  .patient-dropdown {
-    list-style: none;
-    padding: 0;
-    margin: 4px 0 0;
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    background: var(--card-bg);
-    max-height: 280px;
-    overflow-y: auto;
-    box-shadow: 0 4px 16px rgba(0,0,0,.18);
-  }
-  .patient-dropdown li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 14px;
-    cursor: pointer;
-    border-bottom: 1px solid var(--card-border);
-    transition: background .12s;
-  }
-  .patient-dropdown li:last-child { border-bottom: none; }
-  .patient-dropdown li:hover { background: var(--app-bg-subtle); }
-  .patient-dropdown .pd-doc {
-    font-size: .78rem;
-    color: var(--text-muted);
-    min-width: 120px;
-  }
-  .patient-dropdown .pd-name {
-    flex: 1;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-  .patient-dropdown .pd-icon {
-    font-size: 1.1rem;
-    color: var(--link-primary);
-    opacity: .7;
-  }
-
-  #table-calls_wrapper {
-    overflow-x: auto;
-  }
-  #table-calls_wrapper .dataTables_length select,
-  #table-calls_wrapper .dataTables_filter input {
-    border: 1px solid var(--card-border);
-    border-radius: 6px;
-    padding: 4px 8px;
-  }
-  #table-calls td, #table-calls th { white-space: nowrap; }
-
-  #table-calls_wrapper .dataTables_length select,
-  #table-calls_wrapper .dataTables_filter input {
-    border: 1px solid var(--card-border);
-    border-radius: 6px;
-    padding: 4px 8px;
-  }
-
-  /* SweetAlert2 debe aparecer por encima de todo (mayor que offcanvas z-index: 1045) */
-  .swal2-container { 
-    z-index: 99999 !important; 
-    position: fixed !important;
-  }
-  .swal2-modal {
-    z-index: 99999 !important;
-  }
-  .swal2-backdrop {
-    z-index: 99998 !important;
-  }
-</style>
-
-<header class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-4 border-bottom px-4">
-  <a href="/pages/dashboard.php" class="d-flex align-items-center text-dark text-decoration-none">
-    <img src="../img/logo.png" height="40" class="logo">
-    <span class="ms-2 fw-bold text-primary"><?php echo htmlspecialchars($appName); ?></span>
-  </a>
-  <nav>
-    <ul class="nav nav-pills align-items-center gap-1">
-      <li class="nav-item"><a href="./dashboard.php" class="nav-link">
-          <i class="bi bi-house"></i> Inicio</a></li>
-      <li class="nav-item"><span class="nav-link text-muted">
-          <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['usuario']); ?></span></li>
-      <li class="nav-item">
-        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="Modo sistema">
-          <i class="bi bi-circle-half" id="theme-icon"></i>
-        </button>
-      </li>
-      <li class="nav-item"><a href="../config/logout.php" class="nav-link link-danger">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
-</header>
+<?php
+require_once '../config/setup.php';
+require_auth();
+include './generales/header.php';
+include './generales/nav.php';
+?>
 
 <div class="container-fluid px-4">
 
@@ -176,12 +54,21 @@
     <h5 class="offcanvas-title fw-bold">
       <i class="bi bi-telephone-plus me-2 text-warning"></i>Registrar Llamada
     </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" tabindex="-1"></button>
   </div>
 
   <div class="offcanvas-body">
     <form id="form-registro-call" novalidate>
       <input type="hidden" id="call-pk-uuid">
+
+      <!-- Banner de errores de validación -->
+      <div id="form-error-banner" class="alert alert-danger d-none mb-3" role="alert">
+        <div class="d-flex align-items-start gap-2">
+          <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1"></i>
+          <span id="form-error-text" class="flex-grow-1"></span>
+          <button type="button" class="btn-close" onclick="clearFormError()" aria-label="Cerrar"></button>
+        </div>
+      </div>
 
       <!-- ── Búsqueda paciente ── -->
       <div class="form-section">
@@ -207,7 +94,7 @@
         <div id="call-selected-patient" style="display:none;" class="patient-tag mb-2">
           <i class="bi bi-person-check-fill text-success"></i>
           <span id="call-selected-name" class="fw-semibold"></span>
-          <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" id="call-clear-patient">
+          <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" id="call-clear-patient" tabindex="-1">
             <i class="bi bi-x-circle"></i>
           </button>
         </div>
@@ -221,27 +108,27 @@
         <p class="form-section-title">Información del paciente</p>
         <div class="row g-2">
           <div class="col-6">
-            <label class="form-label">NOMBRES *</label>
+            <label class="form-label">NOMBRES <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="call-nombre" placeholder="Nombres del paciente" novalidate>
           </div>
           <div class="col-6">
-            <label class="form-label">APELLIDOS *</label>
+            <label class="form-label">APELLIDOS <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="call-apellido" placeholder="Apellidos del paciente" novalidate>
           </div>
           <div class="col-6">
-            <label class="form-label">IPS *</label>
+            <label class="form-label">IPS <span class="text-danger">*</span></label>
             <select class="form-select" id="call-ips" novalidate>
               <option value="">— Seleccione IPS —</option>
             </select>
           </div>
           <div class="col-6">
-            <label class="form-label">EPS *</label>
+            <label class="form-label">EPS <span class="text-danger">*</span></label>
             <select class="form-select" id="call-eps" novalidate>
               <option value="">— Seleccione EPS —</option>
             </select>
           </div>
           <div class="col-6">
-            <label class="form-label">RANGO *</label>
+            <label class="form-label">RANGO <span class="text-danger">*</span></label>
             <select class="form-select" id="call-eps-classification" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">A</option>
@@ -251,7 +138,7 @@
             </select>
           </div>
           <div class="col-6">
-            <label class="form-label">ESTADO EPS *</label>
+            <label class="form-label">ESTADO EPS <span class="text-danger">*</span></label>
             <select class="form-select" id="call-eps-status" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">Inactivo</option>
@@ -259,14 +146,14 @@
             </select>
           </div>
           <div class="col-6">
-            <label class="form-label">TIPO CONTACTO *</label>
+            <label class="form-label">TIPO CONTACTO <span class="text-danger">*</span></label>
             <select class="form-select" id="call-contact-type" novalidate>
               <option value="0">Llamada</option>
               <option value="correo">Correo</option>
             </select>
           </div>
           <div class="col-6">
-            <label class="form-label">APROBADO *</label>
+            <label class="form-label">APROBADO <span class="text-danger">*</span></label>
             <select class="form-select" id="call-approved" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">No</option>
@@ -281,7 +168,7 @@
         <p class="form-section-title ref">Referencia</p>
         <div class="row g-2">
           <div class="col-6">
-            <label class="form-label">DIAGNÓSTICO *</label>
+            <label class="form-label">DIAGNÓSTICO <span class="text-danger">*</span></label>
             <input type="hidden" id="call-diagnosis">
             <input type="text" class="form-control" id="call-diagnosis-search"
               placeholder="Buscar por código o descripción..." autocomplete="off" novalidate>
@@ -289,7 +176,7 @@
             <div id="call-diagnosis-selected" style="display:none;" class="patient-tag mt-1">
               <i class="bi bi-clipboard2-pulse-fill text-success"></i>
               <span id="call-diagnosis-name" class="fw-semibold" style="font-size:.82rem; flex:1;"></span>
-              <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" id="call-clear-diagnosis">
+              <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" id="call-clear-diagnosis" tabindex="-1">
                 <i class="bi bi-x-circle"></i>
               </button>
             </div>
@@ -299,17 +186,17 @@
             <input type="number" class="form-control" id="call-number" placeholder="0" min="0" novalidate>
           </div>
           <div class="col-6">
-            <label class="form-label">FECHA SOLICITUD *</label>
+            <label class="form-label">FECHA SOLICITUD <span class="text-danger">*</span></label>
             <div class="input-group">
               <input type="datetime-local" class="form-control comunication_in" id="call-check-in-date" novalidate>
-              <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-check-in-date')" title="Poner fecha y hora actual">Ahora</button>
+              <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-check-in-date')" title="Poner fecha y hora actual" tabindex="-1">Ahora</button>
             </div>
           </div>
           <div class="col-6">
-            <label class="form-label">FECHA COMENTARIO *</label>
+            <label class="form-label">FECHA COMENTARIO <span class="text-danger">*</span></label>
             <div class="input-group">
               <input type="datetime-local" class="form-control comunication_out" id="call-comment-date" novalidate>
-              <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-comment-date')" title="Poner fecha y hora actual">Ahora</button>
+              <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-comment-date')" title="Poner fecha y hora actual" tabindex="-1">Ahora</button>
             </div>
           </div>
           <div class="col-6">
@@ -325,11 +212,11 @@
             </select>
           </div>
           <div class="col-12">
-            <label class="form-label">REMITIDO DESDE *</label>
+            <label class="form-label">REMITIDO DESDE <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="call-sent-by" placeholder="Ej: Hospital General, Clínica X..." novalidate>
           </div>
           <div class="col-12">
-            <label class="form-label">OBSERVACIÓN *</label>
+            <label class="form-label">OBSERVACIÓN <span class="text-danger">*</span></label>
             <textarea class="form-control" id="call-observation-in" rows="2"
               placeholder="Describa la observación de la solicitud..." novalidate></textarea>
           </div>
@@ -341,7 +228,7 @@
         <p class="form-section-title cref">Contra-Referencia</p>
         <div class="row g-2">
           <div class="col-8">
-            <label class="form-label">REMITIDO A *</label>
+            <label class="form-label">REMITIDO A <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="call-send-to" placeholder="Destino de la contra-referencia..." novalidate>
           </div>
           <div class="col-4">
@@ -353,7 +240,7 @@
             </select>
           </div>
           <div class="col-12">
-            <label class="form-label">OBSERVACIÓN *</label>
+            <label class="form-label">OBSERVACIÓN <span class="text-danger">*</span></label>
             <textarea class="form-control" id="call-observation-out" rows="2"
               placeholder="Describa la observación de la contra-referencia..." novalidate></textarea>
           </div>
@@ -361,11 +248,11 @@
       </div>
 
       <div class="d-flex justify-content-end gap-2 pt-2">
-        <button type="button" class="btn btn-light border" id="call-btn-clean">
-          <i class="bi bi-eraser"></i> Limpiar
+        <button type="button" class="btn btn-secondary" id="call-btn-clean">
+          Cancelar
         </button>
         <button type="submit" class="btn btn-success px-4">
-          <i class="bi bi-check-lg"></i> Guardar Llamada
+          Guardar Llamada
         </button>
       </div>
 
@@ -373,7 +260,7 @@
   </div>
 </div>
 
-<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+<script src="../Js/datatables/jquery.dataTables.min.js"></script>
+<script src="../Js/datatables/dataTables.bootstrap5.min.js"></script>
 <script src="../Js/calls.js"></script>
-</body>
+<?php include './generales/footer.php'; ?>

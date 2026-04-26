@@ -13,7 +13,7 @@ header('Content-Type: application/json; charset=UTF-8');
 // Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
+    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
     exit;
 }
 
@@ -129,7 +129,7 @@ $sql_ids = "SELECT b.id FROM priorities b" . $where_clause . " LIMIT 1000";
 
 $stmt_ids = $conn->prepare($sql_ids);
 if (!$stmt_ids) {
-    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error], JSON_OUT);
     exit;
 }
 
@@ -142,7 +142,7 @@ $result_ids = $stmt_ids->get_result();
 
 if (!$result_ids) {
     $stmt_ids->close();
-    echo json_encode(['error' => 'Error en la consulta']);
+    echo json_encode(['error' => 'Error en la consulta'], JSON_OUT);
     exit;
 }
 
@@ -156,7 +156,7 @@ $stmt_ids->close();
 
 // Si no hay resultados, retornar vacío
 if (empty($ids)) {
-    echo json_encode(['data' => []]);
+    echo json_encode(['data' => []], JSON_OUT);
     exit;
 }
 
@@ -199,7 +199,7 @@ WHERE b.id IN (" . implode(',', array_fill(0, count($ids), '?')) . ")";
 
 $stmt_main = $conn->prepare($sql_main);
 if (!$stmt_main) {
-    echo json_encode(['error' => 'Error en la consulta principal: ' . $conn->error]);
+    echo json_encode(['error' => 'Error en la consulta principal: ' . $conn->error], JSON_OUT);
     exit;
 }
 
@@ -211,7 +211,7 @@ $result_main = $stmt_main->get_result();
 
 if (!$result_main) {
     $stmt_main->close();
-    echo json_encode(['error' => 'Error en la consulta principal']);
+    echo json_encode(['error' => 'Error en la consulta principal'], JSON_OUT);
     exit;
 }
 
@@ -254,4 +254,4 @@ while ($row = $result_main->fetch_assoc()) {
 $stmt_main->close();
 $conn->close();
 
-echo json_encode(['data' => $data_body]);
+echo json_encode(['data' => $data_body], JSON_OUT);
