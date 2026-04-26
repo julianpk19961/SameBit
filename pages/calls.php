@@ -213,27 +213,27 @@
         <div class="row g-2">
           <div class="col-6">
             <label class="form-label">NOMBRES *</label>
-            <input type="text" class="form-control" id="call-nombre" placeholder="Nombres del paciente" required>
+            <input type="text" class="form-control" id="call-nombre" placeholder="Nombres del paciente" novalidate>
           </div>
           <div class="col-6">
             <label class="form-label">APELLIDOS *</label>
-            <input type="text" class="form-control" id="call-apellido" placeholder="Apellidos del paciente" required>
+            <input type="text" class="form-control" id="call-apellido" placeholder="Apellidos del paciente" novalidate>
           </div>
           <div class="col-6">
             <label class="form-label">IPS *</label>
-            <select class="form-select" id="call-ips" required>
+            <select class="form-select" id="call-ips" novalidate>
               <option value="">— Seleccione IPS —</option>
             </select>
           </div>
           <div class="col-6">
             <label class="form-label">EPS *</label>
-            <select class="form-select" id="call-eps" required>
+            <select class="form-select" id="call-eps" novalidate>
               <option value="">— Seleccione EPS —</option>
             </select>
           </div>
           <div class="col-6">
             <label class="form-label">RANGO *</label>
-            <select class="form-select" id="call-eps-classification" required>
+            <select class="form-select" id="call-eps-classification" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">A</option>
               <option value="1">B</option>
@@ -243,7 +243,7 @@
           </div>
           <div class="col-6">
             <label class="form-label">ESTADO EPS *</label>
-            <select class="form-select" id="call-eps-status" required>
+            <select class="form-select" id="call-eps-status" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">Inactivo</option>
               <option value="1">Activo</option>
@@ -251,14 +251,14 @@
           </div>
           <div class="col-6">
             <label class="form-label">TIPO CONTACTO *</label>
-            <select class="form-select" id="call-contact-type" required>
+            <select class="form-select" id="call-contact-type" novalidate>
               <option value="0">Llamada</option>
               <option value="correo">Correo</option>
             </select>
           </div>
           <div class="col-6">
             <label class="form-label">APROBADO *</label>
-            <select class="form-select" id="call-approved" required>
+            <select class="form-select" id="call-approved" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">No</option>
               <option value="1">Sí</option>
@@ -275,7 +275,7 @@
             <label class="form-label">DIAGNÓSTICO *</label>
             <input type="hidden" id="call-diagnosis">
             <input type="text" class="form-control" id="call-diagnosis-search"
-              placeholder="Buscar por código o descripción..." autocomplete="off">
+              placeholder="Buscar por código o descripción..." autocomplete="off" novalidate>
             <ul id="call-diagnosis-list" class="patient-dropdown" style="display:none;"></ul>
             <div id="call-diagnosis-selected" style="display:none;" class="patient-tag mt-1">
               <i class="bi bi-clipboard2-pulse-fill text-success"></i>
@@ -287,29 +287,29 @@
           </div>
           <div class="col-6">
             <label class="form-label">N° LLAMADAS / CORREOS</label>
-            <input type="number" class="form-control" id="call-number" placeholder="0" min="0">
+            <input type="number" class="form-control" id="call-number" placeholder="0" min="0" novalidate>
           </div>
           <div class="col-6">
             <label class="form-label">FECHA SOLICITUD *</label>
             <div class="input-group">
-              <input type="datetime-local" class="form-control comunication_in" id="call-check-in-date" required>
+              <input type="datetime-local" class="form-control comunication_in" id="call-check-in-date" novalidate>
               <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-check-in-date')" title="Poner fecha y hora actual">Ahora</button>
             </div>
           </div>
           <div class="col-6">
             <label class="form-label">FECHA COMENTARIO *</label>
             <div class="input-group">
-              <input type="datetime-local" class="form-control comunication_out" id="call-comment-date" required>
+              <input type="datetime-local" class="form-control comunication_out" id="call-comment-date" novalidate>
               <button type="button" class="btn btn-outline-secondary" onclick="setNow('#call-comment-date')" title="Poner fecha y hora actual">Ahora</button>
             </div>
           </div>
           <div class="col-6">
             <label class="form-label">FECHA CITA</label>
-            <input type="datetime-local" class="form-control" id="call-attention-date" disabled>
+            <input type="datetime-local" class="form-control" id="call-attention-date" disabled novalidate>
           </div>
           <div class="col-6">
             <label class="form-label">¿ANEXO 9?</label>
-            <select class="form-select" id="call-exhibit-nine">
+            <select class="form-select" id="call-exhibit-nine" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">No</option>
               <option value="1">Sí</option>
@@ -317,12 +317,12 @@
           </div>
           <div class="col-12">
             <label class="form-label">REMITIDO DESDE *</label>
-            <input type="text" class="form-control" id="call-sent-by" placeholder="Ej: Hospital General, Clínica X..." required>
+            <input type="text" class="form-control" id="call-sent-by" placeholder="Ej: Hospital General, Clínica X..." novalidate>
           </div>
           <div class="col-12">
             <label class="form-label">OBSERVACIÓN *</label>
             <textarea class="form-control" id="call-observation-in" rows="2"
-              placeholder="Describa la observación de la solicitud..." required></textarea>
+              placeholder="Describa la observación de la solicitud..." novalidate></textarea>
           </div>
         </div>
       </div>
@@ -333,11 +333,11 @@
         <div class="row g-2">
           <div class="col-8">
             <label class="form-label">REMITIDO A *</label>
-            <input type="text" class="form-control" id="call-send-to" placeholder="Destino de la contra-referencia..." required>
+            <input type="text" class="form-control" id="call-send-to" placeholder="Destino de la contra-referencia..." novalidate>
           </div>
           <div class="col-4">
             <label class="form-label">¿ANEXO 10?</label>
-            <select class="form-select" id="call-exhibit-ten">
+            <select class="form-select" id="call-exhibit-ten" novalidate>
               <option value="" disabled selected>— Seleccione —</option>
               <option value="0">No</option>
               <option value="1">Sí</option>
@@ -346,7 +346,7 @@
           <div class="col-12">
             <label class="form-label">OBSERVACIÓN *</label>
             <textarea class="form-control" id="call-observation-out" rows="2"
-              placeholder="Describa la observación de la contra-referencia..." required></textarea>
+              placeholder="Describa la observación de la contra-referencia..." novalidate></textarea>
           </div>
         </div>
       </div>

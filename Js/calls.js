@@ -291,13 +291,33 @@ $(document).on('submit', '#form-registro-call', function (e) {
 
     const faltante = requeridos.find(([id]) => !$(id).val());
     if (faltante) {
-        Swal.fire({ icon: 'error', title: 'Campo requerido', text: `"${faltante[1]}" es obligatorio.`, timer: 4000 });
-        $(faltante[0]).focus();
+        // Mostrar alerta dentro del offcanvas, enfocarse en el campo
+        const $offcanvas = document.getElementById('offcanvas-registro');
+        const offcanvasInstance = bootstrap.Offcanvas.getInstance($offcanvas);
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Campo requerido',
+            text: `"${faltante[1]}" es obligatorio.`,
+            timer: 4000,
+            willOpen: function() {
+                // Asegurar que el offcanvas esté visible
+                if (offcanvasInstance && !offcanvasInstance._isShown) {
+                    offcanvasInstance.show();
+                }
+            }
+        });
+        setTimeout(() => $(faltante[0]).focus(), 100);
         return;
     }
 
     if (!$('#call-pk-uuid').val()) {
-        Swal.fire({ icon: 'error', title: 'Paciente no válido', text: 'Debe seleccionar un paciente de la lista de resultados.', timer: 4000 });
+        Swal.fire({
+            icon: 'error',
+            title: 'Paciente no válido',
+            text: 'Debe seleccionar un paciente de la lista de resultados.',
+            timer: 4000
+        });
         $('#call-dni').focus();
         return;
     }
@@ -338,23 +358,47 @@ $(document).on('submit', '#form-registro-call', function (e) {
         };
 
         guardandoLlamada = true;
-        $.post('../config/Commit.php', postData, function () {
+        $.post('../config/Commit.php', postData, function (response) {
             guardandoLlamada = false;
-            Swal.fire({ icon: 'success', title: '¡Llamada registrada!', timer: 2000, showConfirmButton: false });
-            limpiarFormulario();
-            bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas-registro'))?.hide();
-            $('#table-calls').DataTable().ajax.reload(null, false);
+            let successMsg = '¡Llamada registrada!';
+            
+            // Intentar extraer mensaje de success del backend
+            if (typeof response === 'object' && response.message) {
+                successMsg = response.message;
+            }
+            
+            Swal.fire({
+                icon: 'success',
+                title: successMsg,
+                timer: 2000,
+                showConfirmButton: false,
+                didClose: function() {
+                    limpiarFormulario();
+                    bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas-registro'))?.hide();
+                    $('#table-calls').DataTable().ajax.reload(null, false);
+                }
+            });
         }).fail(function (xhr) {
             guardandoLlamada = false;
+            
+            // Evitar mostrar múltiples alertas
             if (Swal.isVisible()) return;
+            
             var msg = 'No se pudo guardar la llamada.';
             try {
-                var resp = JSON.parse(xhr.responseText);
+                var resp = typeof xhr.responseText === 'string' ? JSON.parse(xhr.responseText) : xhr.responseText;
                 if (resp && resp.error) msg = resp.error;
             } catch(e) {
                 if (xhr.responseText) msg = xhr.responseText.substring(0, 300);
             }
-            Swal.fire({ icon: 'error', title: 'Error (' + xhr.status + ')', text: msg });
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Error (' + xhr.status + ')',
+                text: msg,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
         });
     });
 });
