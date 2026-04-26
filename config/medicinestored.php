@@ -1,31 +1,117 @@
 <?php
-include 'config.php';
+/**
+ * medicinestored.php - Guardar medicamento de forma segura
+ * 
+ * Usa prepared statements para prevenir SQL injection
+ * y valida los datos de entrada
+ */
 
-$name      = isset($_POST["name"])      ? $_POST["name"]      : '';
-$reference = isset($_POST["reference"]) ? $_POST["reference"] : '';
-$notes     = isset($_POST["observation"]) ? $_POST["observation"] : '';
+require_once 'config.php';
 
-mysqli_query($conn, "SET @new_uuid = UUID()");
-$sql    = "INSERT INTO medicines (id, name, reference, notes) VALUES (@new_uuid, '$name', '$reference', '$notes')";
-$result = mysqli_query($conn, $sql);
+header('Content-Type: application/json; charset=UTF-8');
 
-if (!$result) {
-    $result = 'Query Error' . mysqli_error($conn);
-} else {
-    $uuid_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT @new_uuid AS uuid"));
-    $new_uuid = $uuid_row['uuid'];
+// Verificar método POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Método no permitido']);
+    exit;
+}
 
-    $sql    = "SELECT * FROM medicines WHERE id = '$new_uuid'";
-    $result = mysqli_query($conn, $sql);
+// Obtener y sanitizar datos de entrada
+$name = isset($_POST["name"]) ? trim($_POST["name"]) : '';
+$reference = isset($_POST["reference"]) ? trim($_POST["reference"]) : '';
+$notes = isset($_POST["observation"]) ? trim($_POST["observation"]) : '';
 
-    if ($result) {
-        $json   = mysqli_fetch_array($result);
-        $result = json_encode($json);
-    }
+// Validaciones
+if (empty($name)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'El nombre del medicamento es requerido']);
+    exit;
+}
 
-    if (!$result) {
-        $result = 'Error al consultar registro creado: ' . mysqli_error($conn);
+// Validar longitud del nombre
+if (strlen($name) > 200) {
+    http_response_code(400);
+    echo json_encode(['error' => 'El nombre del medicamento es demasiado largo (máx 200 caracteres)']);
+    exit;
+}
+
+// Validar longitud de referencia
+if (strlen($reference) > 100) {
+    http_response_code(400);
+    echo json_encode(['error' => 'La referencia es demasiado larga (máx 100 caracteres)']);
+    exit;
+}
+
+// Generar UUID usando PHP (más seguro que variable de sesión MySQL)
+$new_uuid = com_create_guid();
+if (empty($new_uuid)) {
+    // Fallback: generar UUID manualmente si com_create_guid no está disponible
+    $new_uuid = sprintf(
+        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0x0fff) | 0x4000,
+        mt_rand(0, 0x3fff) | 0x8000,
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff)
+    );
+}
+
+// Función para generar UUID (si com_create_guid no existe)
+if (!function_exists('com_create_guid')) {
+    function com_create_guid() {
+        $data = openssl_random_pseudo_bytes(16);
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+        $data[8] = chr(ord($data[8] & 0x3f) | 0x80); // set bits 6-7 to 10
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }
 
-echo $result;
+// Usar prepared statement para INSERT
+$stmt = $conn->prepare("INSERT INTO medicines (id, name, reference, notes) VALUES (?, ?, ?, ?)");
+
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    exit;
+}
+
+$stmt->bind_param("ssss", $new_uuid, $name, $reference, $notes);
+
+if ($stmt->execute()) {
+    // Obtener el registro creado con prepared statement
+    $select_stmt = $conn->prepare("SELECT id, name, reference, notes, active, created_at FROM medicines WHERE id = ?");
+    $select_stmt->bind_param("s", $new_uuid);
+    $select_stmt->execute();
+    $result = $select_stmt->get_result();
+    
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $json = [
+            'success' => true,
+            'message' => 'Medicamento guardado exitosamente',
+            'data' => [
+                'id' => $row['id'],
+                'name' => htmlspecialchars($row['name']),
+                'reference' => htmlspecialchars($row['reference']),
+                'notes' => htmlspecialchars($row['notes']),
+                'active' => intval($row['active']),
+                'created_at' => $row['created_at']
+            ]
+        ];
+        echo json_encode($json);
+    } else {
+        echo json_encode(['success' => true, 'message' => 'Medicamento guardado, pero no se pudo recuperar']);
+    }
+    
+    $select_stmt->close();
+} else {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error al guardar medicamento: ' . $conn->error]);
+}
+
+$stmt->close();
+$conn->close();

@@ -375,7 +375,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
 
         destroy: true,
         "order": [orderBy],
-        "language": { "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json" },
+        "language": { "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json" },
         "lengthMenu": [row, 15, 30, 50, 100, "All"],
         "scrollX": false,
         paging: true,

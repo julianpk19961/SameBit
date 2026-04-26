@@ -1,35 +1,54 @@
 <?php
-include 'config.php';
+/**
+ * medicines.php - Listar medicamentos de forma segura
+ * 
+ * Retorna todos los medicamentos con su conteo de movimientos en kardex
+ * Usa prepared statements y sanitización de salida
+ */
 
-$sql = "SELECT
-    m.*,
-    (SELECT COUNT(*) FROM kardex k WHERE k.medicine_id = m.id) AS nrows
-FROM medicines m
-ORDER BY m.name ASC";
+require_once 'config.php';
 
-$result = mysqli_query($conn, $sql);
+header('Content-Type: application/json; charset=UTF-8');
+
+// Consulta segura (no usa input de usuario, pero usamos buenas prácticas)
+$sql = "SELECT 
+            m.id,
+            m.name,
+            m.reference,
+            m.notes,
+            m.active,
+            m.created_at,
+            COUNT(k.id) AS nrows
+        FROM medicines m
+        LEFT JOIN kardex k ON k.medicine_id = m.id
+        GROUP BY m.id, m.name, m.reference, m.notes, m.active, m.created_at
+        ORDER BY m.name ASC";
+
+$result = $conn->query($sql);
 
 if (!$result) {
-    die('Query Error' . mysqli_error($conn));
+    http_response_code(500);
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    exit;
 }
 
-$resultCount = mysqli_num_rows($result);
+$result_count = $result->num_rows;
 
-if ($resultCount > 0) {
+if ($result_count > 0) {
     $json = array();
-    while ($row = mysqli_fetch_array($result)) {
+    while ($row = $result->fetch_assoc()) {
         $json[] = array(
-            'KP_UUID'    => $row['id'],
-            'nombre'     => $row['name'],
-            'referencia' => $row['reference'],
-            'observacion'=> $row['notes'],
-            'z_xOne'     => $row['active'],
-            'nrows'      => $row['nrows']
+            'KP_UUID'    => htmlspecialchars($row['id']),
+            'nombre'     => htmlspecialchars($row['name']),
+            'referencia' => htmlspecialchars($row['reference']),
+            'observacion'=> htmlspecialchars($row['notes']),
+            'z_xOne'     => intval($row['active']),
+            'nrows'      => intval($row['nrows'])
         );
     }
-    $jsonstring = json_encode($json);
+    echo json_encode($json);
 } else {
-    $jsonstring = 'error';
+    echo json_encode(['error' => 'No hay medicamentos registrados']);
 }
 
-echo $jsonstring;
+$conn->close();

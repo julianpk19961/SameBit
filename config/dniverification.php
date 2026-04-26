@@ -1,32 +1,81 @@
 <?php
-include 'config.php';
-$Dni = $_POST['dni'];
+/**
+ * dniverification.php - Búsqueda segura de pacientes por DNI
+ * 
+ * Usa prepared statements para prevenir SQL injection
+ * y retorna resultados en formato JSON
+ */
 
-$sql    = "SELECT id, first_name, last_name, document_number, document_type, eps_id, range_level
-           FROM patients
-           WHERE document_number LIKE '$Dni%'
-           ORDER BY document_number DESC";
-$result = mysqli_query($conn, $sql);
+require_once 'config.php';
 
-if (!$result) {
-    die('Query Error' . mysqli_error($conn));
+// Verificar método POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Método no permitido']);
+    exit;
 }
 
-$resultCount = mysqli_num_rows($result);
-if ($resultCount > 0) {
+// Obtener y sanitizar DNI
+$dni = isset($_POST['dni']) ? trim($_POST['dni']) : '';
+
+// Validar que el DNI no esté vacío
+if (empty($dni)) {
+    echo json_encode(['error' => 'DNI requerido']);
+    exit;
+}
+
+// Validar que el DNI sea numérico (ajustar según tipo de documento)
+// Si se permiten letras en el DNI, quitar esta validación
+if (!ctype_alnum($dni)) {
+    echo json_encode(['error' => 'DNI inválido']);
+    exit;
+}
+
+// Usar prepared statement para prevenir SQL injection
+$stmt = $conn->prepare("SELECT id, first_name, last_name, document_number, document_type, eps_id, range_level 
+                        FROM patients 
+                        WHERE document_number LIKE ? 
+                        ORDER BY document_number DESC 
+                        LIMIT 20");
+
+if (!$stmt) {
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    exit;
+}
+
+// El DNI se busca como prefijo (LIKE 'dni%')
+$search_term = $dni . '%';
+$stmt->bind_param("s", $search_term);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if (!$result) {
+    $stmt->close();
+    echo json_encode(['error' => 'Error en la consulta: ' . $conn->error]);
+    exit;
+}
+
+$result_count = $result->num_rows;
+
+if ($result_count > 0) {
     $json = array();
-    while ($row = mysqli_fetch_array($result)) {
+    while ($row = $result->fetch_assoc()) {
         $json[] = array(
-            'PK_UUID'      => $row['id'],
-            'Name'         => $row['first_name'],
-            'LastName'     => $row['last_name'],
-            'dni'          => $row['document_number'],
-            'documentType' => $row['document_type'],
-            'eps'          => $row['eps_id'],
-            'range'        => $row['range_level']
+            'PK_UUID'      => htmlspecialchars($row['id']),
+            'Name'         => htmlspecialchars($row['first_name']),
+            'LastName'     => htmlspecialchars($row['last_name']),
+            'dni'          => htmlspecialchars($row['document_number']),
+            'documentType' => htmlspecialchars($row['document_type']),
+            'eps'          => htmlspecialchars($row['eps_id']),
+            'range'        => htmlspecialchars($row['range_level'])
         );
     }
+    
+    header('Content-Type: application/json; charset=UTF-8');
     echo json_encode($json);
 } else {
     echo 'error';
 }
+
+$stmt->close();
+$conn->close();
