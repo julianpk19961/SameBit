@@ -39,6 +39,7 @@ $(document).ready(function () {
     }, 5000);
 
     document.getElementById('btn-nueva-llamada').addEventListener('click', function () {
+        limpiarFormulario();
         bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-registro')).show();
     });
 
@@ -83,7 +84,16 @@ function initMainTable() {
                         : '<span class="badge bg-secondary">No</span>';
                 }
             },
-            { data: 'registrado_por' }
+            { data: 'registrado_por' },
+            {
+                data: 'call_id',
+                orderable: false,
+                render: function (id) {
+                    return `<button class="btn btn-sm btn-outline-primary btn-edit-call" data-id="${id}" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>`;
+                }
+            }
         ],
         pageLength: 50,
         lengthMenu: [[10, 25, 50], [10, 25, 50]],
@@ -98,6 +108,92 @@ function initMainTable() {
 $('#btn-refresh').on('click', function () {
     $('#table-calls').DataTable().ajax.reload(null, false);
 });
+
+// ──────────────────────────────────────────────
+// EDITAR LLAMADA
+// ──────────────────────────────────────────────
+$(document).on('click', '.btn-edit-call', function () {
+    const callId = $(this).data('id');
+    openEditCall(callId);
+});
+
+function openEditCall(callId) {
+    $.get('../config/getCall.php', { id: callId })
+        .done(function (data) {
+            enterEditMode(data);
+            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-registro')).show();
+        })
+        .fail(function () {
+            swalInOffcanvas({ icon: 'error', title: 'Error al cargar la llamada', timer: 2500, showConfirmButton: false });
+        });
+}
+
+function enterEditMode(data) {
+    limpiarFormulario();
+
+    $('#call-priority-id').val(data.call_id);
+    $('#call-pk-uuid').val(data.patient_id);
+
+    $('#offcanvas-registro-title').html('<i class="bi bi-pencil-square me-2 text-warning"></i>Editar Llamada');
+
+    // Ocultar búsqueda, mostrar bloque de paciente fijo
+    $('#search-section').hide();
+    $('#edit-patient-section').show();
+    $('#edit-patient-name-display').text(data.first_name + ' ' + data.last_name);
+    $('#edit-patient-dni-display').text(getDocTypeName(data.document_type) + ' · ' + data.document_number);
+
+    // Datos del paciente
+    $('#call-nombre').val(data.first_name);
+    $('#call-apellido').val(data.last_name);
+    $('#call-eps').val(data.eps_id).trigger('change');
+    $('#call-ips').val(data.ips_id).trigger('change');
+    $('#call-eps-classification').val(data.range_level).trigger('change');
+    $('#call-eps-status').val(data.eps_status).trigger('change');
+    $('#call-contact-type').val(data.contact_type).trigger('change');
+    $('#call-approved').val(data.approved).trigger('change');
+
+    // Diagnóstico
+    if (data.diag_id) {
+        $('#call-diagnosis').val(data.diag_id);
+        const label = data.diag_code + (data.diag_desc ? ' - ' + data.diag_desc : '');
+        $('#call-diagnosis-search').val(label);
+        $('#call-diagnosis-name').text(label);
+        $('#call-diagnosis-selected').show();
+    }
+
+    // Referencia
+    $('#call-number').val(data.calls_count || 0);
+    $('#call-sent-by').val(data.sent_by);
+    $('#call-observation-in').val(data.reception_notes);
+    $('#call-exhibit-nine').val(data.annex_nine != null ? data.annex_nine : '');
+
+    if (data.checkin_date && data.checkin_time) {
+        $('#call-check-in-date').val(data.checkin_date + 'T' + data.checkin_time.substring(0, 5));
+    }
+    if (data.response_date && data.response_time) {
+        $('#call-comment-date').val(data.response_date + 'T' + data.response_time.substring(0, 5));
+    }
+    if (data.approved == 1 && data.appointment_date && data.appointment_time) {
+        $('#call-attention-date').prop('disabled', false).val(data.appointment_date + 'T' + data.appointment_time.substring(0, 5));
+    }
+
+    // Contra-referencia
+    $('#call-send-to').val(data.sent_to);
+    $('#call-observation-out').val(data.outgoing_notes);
+    $('#call-exhibit-ten').val(data.annex_ten != null ? data.annex_ten : '');
+}
+
+function enterCreateMode() {
+    $('#offcanvas-registro-title').html('<i class="bi bi-telephone-plus me-2 text-warning"></i>Registrar Llamada');
+    $('#search-section').show();
+    $('#edit-patient-section').hide();
+    $('#call-priority-id').val('');
+}
+
+function getDocTypeName(code) {
+    const map = { '11': 'Reg. Civil', '12': 'Tarjeta Identidad', '13': 'Cédula', '21': 'T. Extranjería', '22': 'C. Extranjería', '31': 'NIT', '41': 'Pasaporte', '42': 'Doc. Extranjero', '43': 'No definido DIAN' };
+    return map[String(code)] || String(code);
+}
 
 // ──────────────────────────────────────────────
 // BÚSQUEDA EN TIEMPO REAL (nombre o documento)
@@ -227,6 +323,7 @@ $('#call-btn-clean').on('click', function () {
 function limpiarFormulario() {
     $('#form-registro-call')[0].reset();
     $('#call-pk-uuid').val('');
+    $('#call-priority-id').val('');
     $('#call-patient-list').empty().hide();
     $('#call-selected-patient').hide();
     $('#call-attention-date').prop('disabled', true);
@@ -235,6 +332,7 @@ function limpiarFormulario() {
     $('#call-diagnosis-selected').hide();
     $('#call-diagnosis-list').empty().hide();
     clearFormError();
+    enterCreateMode();
 }
 
 // ──────────────────────────────────────────────
@@ -318,9 +416,9 @@ $(document).on('submit', '#form-registro-call', function (e) {
     if (guardandoLlamada) return;
     console.log('[Guardar Llamada] Submit disparado');
 
-    const requeridos = [
-        ['#call-document-type', 'Tipo de Identificación'],
-        ['#call-dni', 'Identificación'],
+    const isEditMode = !!$('#call-priority-id').val();
+
+    const requeridosComunes = [
         ['#call-nombre', 'Nombres'],
         ['#call-apellido', 'Apellidos'],
         ['#call-eps', 'EPS'],
@@ -337,6 +435,12 @@ $(document).on('submit', '#form-registro-call', function (e) {
         ['#call-observation-out', 'Observación Contra-ref.']
     ];
 
+    const requeridos = isEditMode ? requeridosComunes : [
+        ['#call-document-type', 'Tipo de Identificación'],
+        ['#call-dni', 'Identificación'],
+        ...requeridosComunes
+    ];
+
     const faltante = requeridos.find(([id]) => !$(id).val());
     if (faltante) {
         console.warn('[Guardar Llamada] Campo faltante:', faltante[1]);
@@ -345,36 +449,36 @@ $(document).on('submit', '#form-registro-call', function (e) {
         return;
     }
 
-    if (!$('#call-pk-uuid').val()) {
+    if (!isEditMode && !$('#call-pk-uuid').val()) {
         console.warn('[Guardar Llamada] No hay paciente seleccionado');
         showFormError('Debe seleccionar un paciente de la lista de resultados antes de guardar.');
         $('#call-dni').focus();
         return;
     }
 
-    console.log('[Guardar Llamada] Validación OK — paciente UUID:', $('#call-pk-uuid').val());
+    console.log('[Guardar Llamada] Validación OK — modo:', isEditMode ? 'edición' : 'creación');
     clearFormError();
+
+    const confirmTitle = isEditMode ? '¿Guardar cambios?' : '¿Guardar llamada?';
+    const confirmHtml  = isEditMode
+        ? '<div style="font-size:1.1em">¿Confirma que desea guardar los cambios en esta llamada?</div>'
+        : '<div style="font-size:1.1em">¿Confirma que desea registrar esta llamada con los datos ingresados?<br><span class="text-secondary" style="font-size:.95em;">Podrá editarla luego desde el historial.</span></div>';
+
     swalInOffcanvas({
         icon: 'info',
-        title: '¿Guardar llamada?',
-        html: '<div style="font-size:1.1em">¿Confirma que desea registrar esta llamada con los datos ingresados?<br><span class="text-secondary" style="font-size:.95em;">Podrá editarla luego desde el historial.</span></div>',
+        title: confirmTitle,
+        html: confirmHtml,
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: '<i class="bi bi-check-circle"></i> Guardar',
+        confirmButtonText: '<i class="bi bi-check-circle"></i> ' + (isEditMode ? 'Actualizar' : 'Guardar'),
         confirmButtonColor: '#198754',
         focusConfirm: true,
         allowOutsideClick: false,
         allowEscapeKey: false
     }).then(r => {
-        if (!r.isConfirmed) {
-            console.log('[Guardar Llamada] Usuario canceló la confirmación');
-            return;
-        }
+        if (!r.isConfirmed) return;
 
-        const postData = {
-            pk_uuid:           $('#call-pk-uuid').val(),
-            dni:               $('#call-dni').val(),
-            documenttype:      $('#call-document-type').val(),
+        const commonData = {
             name:              $('#call-nombre').val(),
             lastname:          $('#call-apellido').val(),
             contacttype:       $('#call-contact-type').val(),
@@ -396,21 +500,31 @@ $(document).on('submit', '#form-registro-call', function (e) {
             ObservationOut:    $('#call-observation-out').val()
         };
 
-        console.log('[Guardar Llamada] Enviando POST a Commit.php', postData);
+        let endpoint, postData;
+        if (isEditMode) {
+            endpoint = '../config/UpdateCall.php';
+            postData = Object.assign({ call_id: $('#call-priority-id').val() }, commonData);
+        } else {
+            endpoint = '../config/Commit.php';
+            postData = Object.assign({
+                pk_uuid:      $('#call-pk-uuid').val(),
+                dni:          $('#call-dni').val(),
+                documenttype: $('#call-document-type').val()
+            }, commonData);
+        }
+
+        console.log('[Guardar Llamada] Enviando POST a', endpoint);
         guardandoLlamada = true;
-        $.post('../config/Commit.php', postData, function (response) {
+        $.post(endpoint, postData, function (response) {
             guardandoLlamada = false;
-            console.log('[Guardar Llamada] Respuesta del servidor:', response);
-            let successMsg = '¡Llamada registrada!';
-            if (typeof response === 'object' && response.message) {
-                successMsg = response.message;
-            }
+            const successMsg = (typeof response === 'object' && response.message) ? response.message
+                : (isEditMode ? '¡Llamada actualizada!' : '¡Llamada registrada!');
             swalInOffcanvas({
                 icon: 'success',
                 title: successMsg,
                 timer: 2000,
                 showConfirmButton: false,
-                didClose: function() {
+                didClose: function () {
                     limpiarFormulario();
                     bootstrap.Offcanvas.getInstance(document.getElementById('offcanvas-registro'))?.hide();
                     $('#table-calls').DataTable().ajax.reload(null, false);
@@ -418,8 +532,7 @@ $(document).on('submit', '#form-registro-call', function (e) {
             });
         }).fail(function (xhr) {
             guardandoLlamada = false;
-            console.error('[Guardar Llamada] Error HTTP', xhr.status, xhr.responseText);
-            var msg = 'No se pudo guardar la llamada.';
+            var msg = isEditMode ? 'No se pudo actualizar la llamada.' : 'No se pudo guardar la llamada.';
             try {
                 var resp = typeof xhr.responseText === 'string' ? JSON.parse(xhr.responseText) : xhr.responseText;
                 if (resp && resp.error) msg = resp.error;
@@ -427,10 +540,8 @@ $(document).on('submit', '#form-registro-call', function (e) {
                 if (xhr.responseText) msg = xhr.responseText.substring(0, 300);
             }
             if (xhr.status === 400) {
-                // Error de validación del backend → mostrar en banner del formulario
                 showFormError(msg);
             } else {
-                // Error inesperado del servidor → SweetAlert
                 if (Swal.isVisible()) return;
                 swalInOffcanvas({
                     icon: 'error',

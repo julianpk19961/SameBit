@@ -5,15 +5,16 @@ date_default_timezone_set('America/Bogota');
 $today = date('Y-m-d');
 
 $sql = "SELECT
-    TIME_FORMAT(pr.checkin_time, '%H:%i')      AS hora,
-    CONCAT(p.first_name, ' ', p.last_name)     AS paciente,
-    p.document_number                          AS documento,
-    COALESCE(e_eps.name, '—')                 AS eps,
-    COALESCE(e_ips.name, '—')                 AS ips,
-    COALESCE(d.code, '—')                     AS diagnostico,
-    pr.contact_type                            AS tipo_contacto,
-    pr.approved                                AS aprobado,
-    pr.created_by                              AS registrado_por
+    pr.id                                       AS call_id,
+    TIME_FORMAT(pr.checkin_time, '%H:%i')       AS hora,
+    CONCAT(p.first_name, ' ', p.last_name)      AS paciente,
+    p.document_number                           AS documento,
+    COALESCE(e_eps.name, '—')                  AS eps,
+    COALESCE(e_ips.name, '—')                  AS ips,
+    COALESCE(d.code, '—')                      AS diagnostico,
+    pr.contact_type                             AS tipo_contacto,
+    pr.approved                                 AS aprobado,
+    pr.created_by                               AS registrado_por
 FROM priorities pr
 LEFT JOIN patients  p     ON pr.patient_id     = p.id
 LEFT JOIN entities e_eps  ON pr.eps_id         = e_eps.id

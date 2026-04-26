@@ -38,6 +38,7 @@ include './generales/nav.php';
             <th>Contacto</th>
             <th>Aprobado</th>
             <th>Registrado por</th>
+            <th></th>
           </tr>
         </thead>
       </table>
@@ -51,7 +52,7 @@ include './generales/nav.php';
      ==================================================== -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas-registro" style="width: min(680px, 100vw);">
   <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title fw-bold">
+    <h5 class="offcanvas-title fw-bold" id="offcanvas-registro-title">
       <i class="bi bi-telephone-plus me-2 text-warning"></i>Registrar Llamada
     </h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" tabindex="-1"></button>
@@ -60,6 +61,7 @@ include './generales/nav.php';
   <div class="offcanvas-body">
     <form id="form-registro-call" novalidate>
       <input type="hidden" id="call-pk-uuid">
+      <input type="hidden" id="call-priority-id">
 
       <!-- Banner de errores de validación -->
       <div id="form-error-banner" class="alert alert-danger d-none mb-3" role="alert">
@@ -70,8 +72,8 @@ include './generales/nav.php';
         </div>
       </div>
 
-      <!-- ── Búsqueda paciente ── -->
-      <div class="form-section">
+      <!-- ── Búsqueda paciente (solo en modo crear) ── -->
+      <div class="form-section" id="search-section">
         <p class="form-section-title">Buscar paciente</p>
 
         <div class="input-group mb-2">
@@ -101,6 +103,21 @@ include './generales/nav.php';
 
         <!-- Resultados búsqueda -->
         <ul id="call-patient-list" class="patient-dropdown" style="display:none;"></ul>
+      </div>
+
+      <!-- ── Paciente (solo en modo editar: DNI no modificable) ── -->
+      <div class="form-section" id="edit-patient-section" style="display:none;">
+        <p class="form-section-title">Paciente</p>
+        <div class="patient-tag">
+          <i class="bi bi-person-badge-fill text-warning"></i>
+          <div>
+            <div class="fw-semibold" id="edit-patient-name-display"></div>
+            <small class="text-muted" id="edit-patient-dni-display"></small>
+          </div>
+          <span class="ms-auto badge bg-secondary" title="El documento de identidad no puede modificarse">
+            <i class="bi bi-lock-fill me-1"></i>DNI fijo
+          </span>
+        </div>
       </div>
 
       <!-- ── Datos paciente ── -->
