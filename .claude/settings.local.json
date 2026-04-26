@@ -16,7 +16,17 @@
       "Bash(grep -rn '$index' /Users/mantum/Documents/Personal/destroywolves/SameBit/ '--include=*.php')",
       "Bash(xargs ls *)",
       "Bash(curl -sL \"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css\" -o /Users/mantum/Documents/Personal/destroywolves/SameBit/css/bootstrap-css/bootstrap.min.css)",
-      "Bash(php -r ' *)"
+      "Bash(php -r ' *)",
+      "Bash(curl -s \"https://cdn.jsdelivr.net/npm/sweetalert2@11.26.24/dist/sweetalert2.min.css\" -o /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/sweetalert2/sweetalert2.min.css)",
+      "Bash(grep -rn '$_SESSION\\\\['\\\\''id'\\\\''\\\\]\\\\|session_start\\\\|SESSION\\\\['\\\\''usuario'\\\\''\\\\]' /Users/mantum/Documents/Personal/destroywolves/SameBit/config/ '--include=*.php' -l)",
+      "Bash(mysql -u usrconect -ptoor bit_medical -e \"SELECT id, code FROM diagnoses LIMIT 5;\")",
+      "Bash(mysql -u root bit_medical -e \"SELECT id, code FROM diagnoses LIMIT 5;\")",
+      "Bash(mysql -h 127.0.0.1 -u usrconect -ptoor bit_medical -e \"SELECT id, code FROM diagnoses LIMIT 5;\")",
+      "Bash(grep -oE \"\\\\$\\\\\\('#[^']+'\\\\\\)\" /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/dashboard.js)",
+      "Bash(grep -E \"\\\\$\\\\\\('#|getElementById|\\\\.on\\\\\\(\" /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/dashboard.js)",
+      "Bash(grep -oE \"\\\\\\\\\\\\$\\\\\\('#[^']+'\\\\\\)\" /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/dashboard.js)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
