@@ -93,8 +93,17 @@
     padding: 4px 8px;
   }
 
-  /* SweetAlert2 debe aparecer por encima del offcanvas (z-index 1045) */
-  .swal2-container { z-index: 99999 !important; }
+  /* SweetAlert2 debe aparecer por encima de todo (mayor que offcanvas z-index: 1045) */
+  .swal2-container { 
+    z-index: 99999 !important; 
+    position: fixed !important;
+  }
+  .swal2-modal {
+    z-index: 99999 !important;
+  }
+  .swal2-backdrop {
+    z-index: 99998 !important;
+  }
 </style>
 
 <header class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-4 border-bottom px-4">
