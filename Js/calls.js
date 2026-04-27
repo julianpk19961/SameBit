@@ -1,5 +1,8 @@
 var user = JSON.parse(localStorage.getItem('user'));
 var diagnosisList = [];
+var L = window.LANG || {};
+
+function t(key) { return L[key] || key; }
 
 function swalInOffcanvas(opts) {
     // Blur focused element before opening Swal to avoid aria-hidden warnings on offcanvas
@@ -26,14 +29,14 @@ $(document).ready(function () {
     }
 
     const hoy = new Date();
-    $('#fecha-hoy').text(hoy.toLocaleDateString('es-CO', {
+    $('#fecha-hoy').text(hoy.toLocaleDateString(navigator.language, {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     }));
 
     initMainTable();
     cargarSelectsForm();
 
-    // Auto-refresh de la tabla cada 5 segundos
+    // Auto-refresh table every 5 seconds
     setInterval(function () {
         $('#table-calls').DataTable().ajax.reload(null, false);
     }, 5000);
@@ -43,18 +46,15 @@ $(document).ready(function () {
         bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-registro')).show();
     });
 
-    // Focus en el campo documento al abrir el offcanvas
     document.getElementById('offcanvas-registro').addEventListener('shown.bs.offcanvas', function () {
         document.getElementById('call-dni').focus();
     });
 
-    // Mover foco fuera del offcanvas cuando se cierra para evitar aria-hidden warnings
     document.getElementById('offcanvas-registro').addEventListener('hide.bs.offcanvas', function () {
         const focused = this.querySelector(':focus');
         if (focused) focused.blur();
     });
 
-    // Prevenir que Enter en inputs dispare el submit del formulario
     $(document).on('keydown', '#form-registro-call input, #form-registro-call select', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -63,9 +63,12 @@ $(document).ready(function () {
 });
 
 // ──────────────────────────────────────────────
-// TABLA PRINCIPAL
+// MAIN TABLE
 // ──────────────────────────────────────────────
 function initMainTable() {
+    const langUrl = t('datatables_lang_url');
+    const langOpt = langUrl ? { url: langUrl } : {};
+
     $('#table-calls').DataTable({
         ajax: { url: '../config/getCalls.php', type: 'GET', dataSrc: 'data' },
         columns: [
@@ -79,9 +82,7 @@ function initMainTable() {
             {
                 data: 'aprobado',
                 render: function (v) {
-                    return v == 1
-                        ? '<span class="badge bg-success">Sí</span>'
-                        : '<span class="badge bg-secondary">No</span>';
+                    return v == 1 ? t('js_approved_yes') : t('js_approved_no');
                 }
             },
             { data: 'registrado_por' },
@@ -89,7 +90,7 @@ function initMainTable() {
                 data: 'call_id',
                 orderable: false,
                 render: function (id) {
-                    return `<button class="btn btn-sm btn-outline-primary btn-edit-call" data-id="${id}" title="Editar">
+                    return `<button class="btn btn-sm btn-outline-primary btn-edit-call" data-id="${id}" title="Edit">
                         <i class="bi bi-pencil-square"></i>
                     </button>`;
                 }
@@ -98,7 +99,7 @@ function initMainTable() {
         pageLength: 50,
         lengthMenu: [[10, 25, 50], [10, 25, 50]],
         order: [[0, 'desc']],
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json' },
+        language: langOpt,
         dom: '<"d-flex justify-content-between align-items-center mb-2"lf>rtip',
         responsive: true,
         processing: true
@@ -110,7 +111,7 @@ $('#btn-refresh').on('click', function () {
 });
 
 // ──────────────────────────────────────────────
-// EDITAR LLAMADA
+// EDIT CALL
 // ──────────────────────────────────────────────
 $(document).on('click', '.btn-edit-call', function () {
     const callId = $(this).data('id');
@@ -124,7 +125,7 @@ function openEditCall(callId) {
             bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvas-registro')).show();
         })
         .fail(function () {
-            swalInOffcanvas({ icon: 'error', title: 'Error al cargar la llamada', timer: 2500, showConfirmButton: false });
+            swalInOffcanvas({ icon: 'error', title: t('js_error_loading_call'), timer: 2500, showConfirmButton: false });
         });
 }
 
@@ -134,15 +135,13 @@ function enterEditMode(data) {
     $('#call-priority-id').val(data.call_id);
     $('#call-pk-uuid').val(data.patient_id);
 
-    $('#offcanvas-registro-title').html('<i class="bi bi-pencil-square me-2 text-warning"></i>Editar Llamada');
+    $('#offcanvas-registro-title').html(t('js_edit_call_title'));
 
-    // Ocultar búsqueda, mostrar bloque de paciente fijo
     $('#search-section').hide();
     $('#edit-patient-section').show();
     $('#edit-patient-name-display').text(data.first_name + ' ' + data.last_name);
     $('#edit-patient-dni-display').text(getDocTypeName(data.document_type) + ' · ' + data.document_number);
 
-    // Datos del paciente
     $('#call-nombre').val(data.first_name);
     $('#call-apellido').val(data.last_name);
     $('#call-eps').val(data.eps_id).trigger('change');
@@ -152,7 +151,6 @@ function enterEditMode(data) {
     $('#call-contact-type').val(data.contact_type).trigger('change');
     $('#call-approved').val(data.approved).trigger('change');
 
-    // Diagnóstico
     if (data.diag_id) {
         $('#call-diagnosis').val(data.diag_id);
         const label = data.diag_code + (data.diag_desc ? ' - ' + data.diag_desc : '');
@@ -161,7 +159,6 @@ function enterEditMode(data) {
         $('#call-diagnosis-selected').show();
     }
 
-    // Referencia
     $('#call-number').val(data.calls_count || 0);
     $('#call-sent-by').val(data.sent_by);
     $('#call-observation-in').val(data.reception_notes);
@@ -177,26 +174,35 @@ function enterEditMode(data) {
         $('#call-attention-date').prop('disabled', false).val(data.appointment_date + 'T' + data.appointment_time.substring(0, 5));
     }
 
-    // Contra-referencia
     $('#call-send-to').val(data.sent_to);
     $('#call-observation-out').val(data.outgoing_notes);
     $('#call-exhibit-ten').val(data.annex_ten != null ? data.annex_ten : '');
 }
 
 function enterCreateMode() {
-    $('#offcanvas-registro-title').html('<i class="bi bi-telephone-plus me-2 text-warning"></i>Registrar Llamada');
+    $('#offcanvas-registro-title').html(t('js_new_call_title'));
     $('#search-section').show();
     $('#edit-patient-section').hide();
     $('#call-priority-id').val('');
 }
 
 function getDocTypeName(code) {
-    const map = { '11': 'Reg. Civil', '12': 'Tarjeta Identidad', '13': 'Cédula', '21': 'T. Extranjería', '22': 'C. Extranjería', '31': 'NIT', '41': 'Pasaporte', '42': 'Doc. Extranjero', '43': 'No definido DIAN' };
+    const map = {
+        '11': t('doc_civil_registry'),
+        '12': t('doc_id_card'),
+        '13': t('doc_national_id'),
+        '21': t('doc_foreign_card'),
+        '22': t('doc_foreign_id'),
+        '31': t('doc_nit'),
+        '41': t('doc_passport'),
+        '42': t('doc_foreign_doc'),
+        '43': t('doc_undefined_dian')
+    };
     return map[String(code)] || String(code);
 }
 
 // ──────────────────────────────────────────────
-// BÚSQUEDA EN TIEMPO REAL (nombre o documento)
+// REAL-TIME PATIENT SEARCH
 // ──────────────────────────────────────────────
 var searchTimer = null;
 
@@ -204,7 +210,6 @@ $(document).on('keyup', '#call-dni', function () {
     clearTimeout(searchTimer);
     const q = $(this).val().trim();
 
-    // Si había un paciente seleccionado y el usuario volvió a escribir, limpiar selección
     if ($('#call-pk-uuid').val()) {
         $('#call-pk-uuid').val('');
         $('#call-nombre, #call-apellido').val('');
@@ -240,7 +245,7 @@ $(document).on('keyup', '#call-dni', function () {
 });
 
 // ──────────────────────────────────────────────
-// SELECCIONAR PACIENTE
+// SELECT PATIENT
 // ──────────────────────────────────────────────
 $(document).on('click', '#call-patient-list li', function () {
     var p = $(this).data('patient');
@@ -260,7 +265,6 @@ $(document).on('click', '#call-patient-list li', function () {
     $('#call-patient-list').empty().hide();
 });
 
-// Limpiar paciente seleccionado
 $(document).on('click', '#call-clear-patient', function () {
     $('#call-pk-uuid').val('');
     $('#call-selected-patient').hide();
@@ -269,19 +273,19 @@ $(document).on('click', '#call-clear-patient', function () {
 });
 
 // ──────────────────────────────────────────────
-// SELECTS DEL FORMULARIO
+// FORM SELECTS
 // ──────────────────────────────────────────────
 function cargarSelectsForm() {
     $.get('../config/callips.php', function (res) {
         const list = typeof res === 'object' ? res : JSON.parse(res);
-        let opts = '<option value="">— Seleccione IPS —</option>';
+        let opts = '<option value="">' + t('select_ips') + '</option>';
         list.forEach(i => opts += `<option value="${i.pk_uuid}">${i.name}</option>`);
         $('#call-ips').html(opts);
     });
 
     $.get('../config/callEps.php', function (res) {
         const list = typeof res === 'object' ? res : JSON.parse(res);
-        let opts = '<option value="">— Seleccione EPS —</option>';
+        let opts = '<option value="">' + t('select_eps') + '</option>';
         list.forEach(i => opts += `<option value="${i.pk_uuid}">${i.name}</option>`);
         $('#call-eps').html(opts);
     });
@@ -292,7 +296,7 @@ function cargarSelectsForm() {
 }
 
 // ──────────────────────────────────────────────
-// FECHA CITA según APROBADO
+// APPOINTMENT DATE based on APPROVED
 // ──────────────────────────────────────────────
 $(document).on('change', '#call-approved', function () {
     const aprobado = $(this).val() == '1';
@@ -301,16 +305,16 @@ $(document).on('change', '#call-approved', function () {
 });
 
 // ──────────────────────────────────────────────
-// LIMPIAR FORMULARIO
+// CLEAR FORM
 // ──────────────────────────────────────────────
 $('#call-btn-clean').on('click', function () {
     swalInOffcanvas({
         icon: 'warning',
-        title: '¿Cancelar registro?',
-        text: 'Los datos ingresados se perderán.',
+        title: t('js_cancel_record'),
+        text: t('js_data_will_be_lost'),
         showCancelButton: true,
-        cancelButtonText: 'Continuar editando',
-        confirmButtonText: 'Cancelar',
+        cancelButtonText: t('js_keep_editing'),
+        confirmButtonText: t('js_cancel'),
         confirmButtonColor: '#6c757d'
     }).then(r => {
         if (r.isConfirmed) {
@@ -336,7 +340,7 @@ function limpiarFormulario() {
 }
 
 // ──────────────────────────────────────────────
-// BÚSQUEDA DIAGNÓSTICO
+// DIAGNOSIS SEARCH
 // ──────────────────────────────────────────────
 var diagnosisTimer = null;
 
@@ -381,7 +385,6 @@ $(document).on('click', '#call-diagnosis-list li', function () {
     $('#call-diagnosis-name').text(label);
     $('#call-diagnosis-selected').show();
     $('#call-diagnosis-list').empty().hide();
-    // Mover foco al siguiente campo para que el navegador no lo envíe a btn-close
     $('#call-number').focus();
 });
 
@@ -392,7 +395,7 @@ $(document).on('click', '#call-clear-diagnosis', function () {
 });
 
 // ──────────────────────────────────────────────
-// FECHAS: botón Ahora + abrir calendario al clic
+// DATES: Now button + calendar on click
 // ──────────────────────────────────────────────
 function setNow(inputId) {
     const now = new Date();
@@ -406,7 +409,7 @@ $(document).on('click', 'input[type="datetime-local"]:not(:disabled)', function 
 });
 
 // ──────────────────────────────────────────────
-// ENVIAR FORMULARIO
+// SUBMIT FORM
 // ──────────────────────────────────────────────
 var guardandoLlamada = false;
 
@@ -414,63 +417,64 @@ $(document).on('submit', '#form-registro-call', function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
     if (guardandoLlamada) return;
-    console.log('[Guardar Llamada] Submit disparado');
+    console.log('[Save Call] Submit triggered');
 
     const isEditMode = !!$('#call-priority-id').val();
 
     const requeridosComunes = [
-        ['#call-nombre', 'Nombres'],
-        ['#call-apellido', 'Apellidos'],
-        ['#call-eps', 'EPS'],
-        ['#call-ips', 'IPS'],
-        ['#call-eps-classification', 'Rango'],
-        ['#call-eps-status', 'Estado EPS'],
-        ['#call-contact-type', 'Tipo Contacto'],
-        ['#call-approved', 'Aprobado'],
-        ['#call-check-in-date', 'Fecha Solicitud'],
-        ['#call-comment-date', 'Fecha Comentario'],
-        ['#call-sent-by', 'Remitido Desde'],
-        ['#call-observation-in', 'Observación'],
-        ['#call-send-to', 'Remitido A'],
-        ['#call-observation-out', 'Observación Contra-ref.']
+        ['#call-nombre',           'first_name'],
+        ['#call-apellido',         'last_name'],
+        ['#call-eps',              'eps'],
+        ['#call-ips',              'ips'],
+        ['#call-eps-classification','range_label'],
+        ['#call-eps-status',       'eps_status'],
+        ['#call-contact-type',     'contact_type'],
+        ['#call-approved',         'approved'],
+        ['#call-check-in-date',    'request_date'],
+        ['#call-comment-date',     'comment_date'],
+        ['#call-sent-by',          'sent_from'],
+        ['#call-observation-in',   'observation'],
+        ['#call-send-to',          'sent_to'],
+        ['#call-observation-out',  'observation']
     ];
 
     const requeridos = isEditMode ? requeridosComunes : [
-        ['#call-document-type', 'Tipo de Identificación'],
-        ['#call-dni', 'Identificación'],
+        ['#call-document-type', 'doc_national_id'],
+        ['#call-dni',           'document'],
         ...requeridosComunes
     ];
 
     const faltante = requeridos.find(([id]) => !$(id).val());
     if (faltante) {
-        console.warn('[Guardar Llamada] Campo faltante:', faltante[1]);
-        showFormError(`El campo "${faltante[1]}" es obligatorio.`);
+        const fieldLabel = t(faltante[1]);
+        console.warn('[Save Call] Missing field:', fieldLabel);
+        showFormError(t('js_required_field').replace('%s', fieldLabel));
         $(faltante[0]).focus();
         return;
     }
 
     if (!isEditMode && !$('#call-pk-uuid').val()) {
-        console.warn('[Guardar Llamada] No hay paciente seleccionado');
-        showFormError('Debe seleccionar un paciente de la lista de resultados antes de guardar.');
+        console.warn('[Save Call] No patient selected');
+        showFormError(t('js_select_patient'));
         $('#call-dni').focus();
         return;
     }
 
-    console.log('[Guardar Llamada] Validación OK — modo:', isEditMode ? 'edición' : 'creación');
+    console.log('[Save Call] Validation OK — mode:', isEditMode ? 'edit' : 'create');
     clearFormError();
 
-    const confirmTitle = isEditMode ? '¿Guardar cambios?' : '¿Guardar llamada?';
+    const confirmTitle = isEditMode ? t('js_save_changes') : t('js_save_call');
     const confirmHtml  = isEditMode
-        ? '<div style="font-size:1.1em">¿Confirma que desea guardar los cambios en esta llamada?</div>'
-        : '<div style="font-size:1.1em">¿Confirma que desea registrar esta llamada con los datos ingresados?<br><span class="text-secondary" style="font-size:.95em;">Podrá editarla luego desde el historial.</span></div>';
+        ? `<div style="font-size:1.1em">${t('js_confirm_save_changes')}</div>`
+        : `<div style="font-size:1.1em">${t('js_confirm_save_call')}<br><span class="text-secondary" style="font-size:.95em;">${t('js_can_edit_later')}</span></div>`;
 
     swalInOffcanvas({
         icon: 'info',
         title: confirmTitle,
         html: confirmHtml,
         showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: '<i class="bi bi-check-circle"></i> ' + (isEditMode ? 'Actualizar' : 'Guardar'),
+        cancelButtonText: t('js_cancel'),
+        confirmButtonText: '<i class="bi bi-check-circle"></i> ' + (isEditMode ? t('js_update') : t('js_save')),
         confirmButtonColor: '#198754',
         focusConfirm: true,
         allowOutsideClick: false,
@@ -513,12 +517,13 @@ $(document).on('submit', '#form-registro-call', function (e) {
             }, commonData);
         }
 
-        console.log('[Guardar Llamada] Enviando POST a', endpoint);
+        console.log('[Save Call] Posting to', endpoint);
         guardandoLlamada = true;
         $.post(endpoint, postData, function (response) {
             guardandoLlamada = false;
-            const successMsg = (typeof response === 'object' && response.message) ? response.message
-                : (isEditMode ? '¡Llamada actualizada!' : '¡Llamada registrada!');
+            const successMsg = (typeof response === 'object' && response.message)
+                ? response.message
+                : (isEditMode ? t('js_call_updated') : t('js_call_registered'));
             swalInOffcanvas({
                 icon: 'success',
                 title: successMsg,
@@ -532,7 +537,7 @@ $(document).on('submit', '#form-registro-call', function (e) {
             });
         }).fail(function (xhr) {
             guardandoLlamada = false;
-            var msg = isEditMode ? 'No se pudo actualizar la llamada.' : 'No se pudo guardar la llamada.';
+            var msg = isEditMode ? t('js_could_not_update') : t('js_could_not_save');
             try {
                 var resp = typeof xhr.responseText === 'string' ? JSON.parse(xhr.responseText) : xhr.responseText;
                 if (resp && resp.error) msg = resp.error;
@@ -545,7 +550,7 @@ $(document).on('submit', '#form-registro-call', function (e) {
                 if (Swal.isVisible()) return;
                 swalInOffcanvas({
                     icon: 'error',
-                    title: 'Error del servidor (' + xhr.status + ')',
+                    title: t('js_server_error') + ' (' + xhr.status + ')',
                     text: msg,
                     allowOutsideClick: false,
                     allowEscapeKey: false

@@ -20,6 +20,11 @@ require_once __DIR__ . '/security.php';
 // Inicializar seguridad (sesión, cookies, headers) - DEBE IR ANTES DE CUALQUIER OUTPUT
 init_security();
 
+// i18n — must come after session is started
+require_once __DIR__ . '/i18n.php';
+$app_lang    = detect_language();
+$translations = load_language($app_lang);
+
 // Configuración de la aplicación
 $appName = 'bit-medical';
 

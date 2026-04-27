@@ -1,4 +1,6 @@
 var user = JSON.parse(localStorage.getItem('user'));
+var L = window.LANG || {};
+function t(key) { return L[key] || key; }
 
 // ──────────────────────────────────────────────
 // NAVEGACIÓN
@@ -12,7 +14,7 @@ $(document).on('click', '#btn-new-record-card', function () {
 // ──────────────────────────────────────────────
 function showCustomDialog(data) {
     if (!data || !data.length) {
-        alert('parametros vacios');
+        alert(t('js_empty_params'));
         return false;
     }
     Swal.fire({
@@ -84,7 +86,7 @@ function showReportCard(defaultDate = '') {
                 data: 'APROBADO',
                 render: function (data, type) {
                     if (type !== 'display') return data;
-                    return data === '1' ? 'Sí' : 'No';
+                    return data === '1' ? t('js_yes') : t('js_no');
                 }
             },
             { data: 'FECHA_CITA' },
@@ -93,14 +95,14 @@ function showReportCard(defaultDate = '') {
                 data: 'ANEXO_9',
                 render: function (data, type) {
                     if (type !== 'display') return data;
-                    return data === '1' ? 'Sí' : 'No';
+                    return data === '1' ? t('js_yes') : t('js_no');
                 }
             },
             {
                 data: 'ANEXO_10',
                 render: function (data, type) {
                     if (type !== 'display') return data;
-                    return data === '1' ? 'Sí' : 'No';
+                    return data === '1' ? t('js_yes') : t('js_no');
                 }
             },
             { data: 'ENVIADO_A' },
@@ -153,7 +155,7 @@ function showReportCard(defaultDate = '') {
             }
         ],
         lengthMenu: [30, 50, 100, 200],
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json' },
+        language: t('datatables_lang_url') ? { url: t('datatables_lang_url') } : {},
         initComplete: function () {
             $('#table-resumen').DataTable().columns([0, 1, 9, 14, 15, 17, 18, 19, 20, 21, 22, 23]).visible(false);
         }
@@ -167,8 +169,8 @@ $('#btn-reportes').on('click', function () {
     if (user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
         Swal.fire({
             icon: 'error',
-            title: 'ACCESO RESTRINGIDO',
-            text: 'El usuario no está autorizado',
+            title: t('js_restricted_access'),
+            text: t('js_not_authorized'),
             timer: 5000
         });
         return false;
@@ -182,11 +184,11 @@ $('#btn-reportes').on('click', function () {
 $('#btn-limpiar-reporte').on('click', function () {
     Swal.fire({
         icon: 'warning',
-        title: 'Atención',
-        text: '¿Está seguro de reiniciar el formulario?',
+        title: t('js_attention'),
+        text: t('js_confirm_reset'),
         showCancelButton: true,
-        cancelButtonText: 'No',
-        confirmButtonText: 'Limpiar',
+        cancelButtonText: t('js_no'),
+        confirmButtonText: t('js_clean'),
     }).then(function (result) {
         if (result.isConfirmed) {
             $('#form-reporte').trigger('reset');
@@ -226,8 +228,8 @@ $('input[type="date"], input[type="time"], input[type="datetime-local"]').on('ch
     if (in_val >= out_val) {
         showCustomDialog({
             icon: 'error',
-            title: 'Valor no valido',
-            text: 'El valor ingresado no puede ser inferior al valor inicial: ' + in_val,
+            title: t('js_invalid_value'),
+            text: t('js_value_less_than_start') + in_val,
             time: '5000',
         });
         out_field.val('');

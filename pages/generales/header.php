@@ -9,7 +9,7 @@ $page       = end($link_array);
 $csrf_token = generate_csrf_token();
 ?>
 <!DOCTYPE html>
-<html lang="es" id="html-root">
+<html lang="<?php echo htmlspecialchars($app_lang); ?>" id="html-root">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,9 +36,11 @@ $csrf_token = generate_csrf_token();
   <?php endif; ?>
 </head>
 <body>
-  <!-- Variable global para CSRF token -->
+  <!-- Variables globales: CSRF token, idioma y traducciones -->
   <script>
     window.CSRF_TOKEN = '<?php echo htmlspecialchars($csrf_token); ?>';
+    window.APP_LANG   = '<?php echo $app_lang; ?>';
+    window.LANG       = <?php echo json_encode($translations, JSON_UNESCAPED_UNICODE); ?>;
   </script>
   
   <script src="../Js/jquery/jquery-3.6.1.min.js"></script>

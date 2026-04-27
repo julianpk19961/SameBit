@@ -10,32 +10,32 @@ include './generales/header.php';
       <img src="../img/logo.png" alt="<?php echo htmlspecialchars($appName); ?>">
     </div>
 
-    <h1 class="login-title">BIENVENIDO</h1>
+    <h1 class="login-title"><?php echo __('welcome'); ?></h1>
     <p class="login-subtitle"><?php echo htmlspecialchars($appName); ?></p>
 
     <form id="login" method="POST" class="form login" autocomplete="off">
       <div class="form__field">
         <label for="login__username">
           <svg class="icon"><use xlink:href="#icon-user"></use></svg>
-          <span class="hidden">Usuario</span>
+          <span class="hidden"><?php echo __('username'); ?></span>
         </label>
         <input id="login__username" type="text" name="username"
-               class="form__input" placeholder="Usuario"
+               class="form__input" placeholder="<?php echo __('username'); ?>"
                autocomplete="username" required>
       </div>
 
       <div class="form__field">
         <label for="login__password">
           <svg class="icon"><use xlink:href="#icon-lock"></use></svg>
-          <span class="hidden">Contraseña</span>
+          <span class="hidden"><?php echo __('password'); ?></span>
         </label>
         <input id="login__password" type="password" name="password"
-               class="form__input" placeholder="Contraseña"
+               class="form__input" placeholder="<?php echo __('password'); ?>"
                autocomplete="current-password" required>
       </div>
 
       <div class="form__field">
-        <button class="primary" type="submit">Iniciar Sesión</button>
+        <button class="primary" type="submit"><?php echo __('sign_in'); ?></button>
       </div>
     </form>
 

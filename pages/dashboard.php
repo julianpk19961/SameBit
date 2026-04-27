@@ -6,66 +6,66 @@ include './generales/nav.php';
 <div class="container-fluid mt-5">
   <div class="row mb-4">
     <div class="col-12">
-      <h2 class="text-center text-primary fw-bold mb-4">Panel de Control</h2>
+      <h2 class="text-center text-primary fw-bold mb-4"><?php echo __('control_panel'); ?></h2>
     </div>
   </div>
 
   <div class="row g-4 mb-5">
-    <!-- Card: Registro de Llamadas -->
+    <!-- Card: Call Registry -->
     <div class="col-md-6 col-lg-3">
       <div class="card h-100 shadow-sm border-0 hover-card" id="btn-new-record-card">
         <div class="card-body text-center d-flex flex-column justify-content-center">
           <div class="display-4 mb-3">📞</div>
-          <h5 class="card-title fw-bold">Registro de Llamadas</h5>
-          <p class="card-text text-muted small">Registra nuevas llamadas y novedades de pacientes</p>
+          <h5 class="card-title fw-bold"><?php echo __('call_registry'); ?></h5>
+          <p class="card-text text-muted small"><?php echo __('call_registry_desc'); ?></p>
         </div>
       </div>
     </div>
 
-    <!-- Card: Gestión de Medicamentos -->
+    <!-- Card: Medicines -->
     <div class="col-md-6 col-lg-3">
       <div class="card h-100 shadow-sm border-0 hover-card" onclick="location.href='./medicines_l.php'">
         <div class="card-body text-center d-flex flex-column justify-content-center">
           <div class="display-4 mb-3">💊</div>
-          <h5 class="card-title fw-bold">Medicamentos</h5>
-          <p class="card-text text-muted small">Gestiona catálogo de medicinas y kardex</p>
+          <h5 class="card-title fw-bold"><?php echo __('medicines'); ?></h5>
+          <p class="card-text text-muted small"><?php echo __('medicines_desc'); ?></p>
         </div>
       </div>
     </div>
 
-    <!-- Card: Reportes -->
+    <!-- Card: Reports -->
     <div class="col-md-6 col-lg-3">
       <div class="card h-100 shadow-sm border-0 hover-card" id="btn-reportes">
         <div class="card-body text-center d-flex flex-column justify-content-center">
           <div class="display-4 mb-3">📊</div>
-          <h5 class="card-title fw-bold">Reportes</h5>
-          <p class="card-text text-muted small">Visualiza reportes y prioridades</p>
+          <h5 class="card-title fw-bold"><?php echo __('reports'); ?></h5>
+          <p class="card-text text-muted small"><?php echo __('reports_desc'); ?></p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal: Reportes de prioridades -->
+<!-- Modal: Reports -->
 <div class="modal fade" id="modal-report" tabindex="-1" aria-labelledby="modal-titulo" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h1 class="modal-title fs-5" id="modal-titulo">DATOS REGISTRADOS</h1>
+        <h1 class="modal-title fs-5" id="modal-titulo"><?php echo __('registered_data'); ?></h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form action="" method="post" class="p-1" id="form-reporte">
           <div class="row">
             <div class="col-6">
-              <label><h6><sub>Datos Generales</sub></h6></label>
+              <label><h6><sub><?php echo __('general_data'); ?></sub></h6></label>
               <div class="row">
-                <div class="col-6" title="Puede buscar al paciente por número de documento o nombre">
-                  <label for="dni-request">Paciente</label>
+                <div class="col-6" title="<?php echo __('search_by_name_or_doc'); ?>">
+                  <label for="dni-request"><?php echo __('patient_label'); ?></label>
                   <input type="text" name="dni-request" id="dni-request" class="form-control" placeholder="">
                 </div>
                 <div class="col-6">
-                  <label for="user-request">Usuario Prioritaria</label>
+                  <label for="user-request"><?php echo __('priority_user'); ?></label>
                   <select name="user-request" id="user-request" class="form-control">
                     <option value="" selected></option>
                     <option value="Andrés Toro">ANDRES TORO</option>
@@ -78,50 +78,50 @@ include './generales/nav.php';
               </div>
             </div>
             <div class="col-6">
-              <label><h6><sub>Fecha Solicitud</sub></h6></label>
+              <label><h6><sub><?php echo __('request_date_range'); ?></sub></h6></label>
               <div class="row">
                 <div class="col-6">
-                  <label for="checkin-start">Desde</label>
+                  <label for="checkin-start"><?php echo __('from'); ?></label>
                   <input type="datetime-local" name="checkin-start" id="checkin-start" class="form-control" step="any">
                 </div>
                 <div class="col-6">
-                  <label for="checkin-end">Hasta</label>
+                  <label for="checkin-end"><?php echo __('to'); ?></label>
                   <input type="datetime-local" name="checkin-end" id="checkin-end" class="form-control" step="any">
                 </div>
               </div>
             </div>
             <div class="col-6">
-              <label><h6><sub>Fecha Comentario</sub></h6></label>
+              <label><h6><sub><?php echo __('comment_date_range'); ?></sub></h6></label>
               <div class="row">
                 <div class="col-6">
-                  <label for="checkout-start">Desde</label>
+                  <label for="checkout-start"><?php echo __('from'); ?></label>
                   <input type="datetime-local" name="checkout-start" id="checkout-start" class="form-control">
                 </div>
                 <div class="col-6">
-                  <label for="checkout-end">Hasta</label>
+                  <label for="checkout-end"><?php echo __('to'); ?></label>
                   <input type="datetime-local" name="checkout-end" id="checkout-end" class="form-control">
                 </div>
               </div>
             </div>
             <div class="col-6">
-              <label><h6><sub>Fecha Cita</sub></h6></label>
+              <label><h6><sub><?php echo __('appointment_date_range'); ?></sub></h6></label>
               <div class="row">
                 <div class="col-6">
-                  <label for="appointment-start">Desde</label>
+                  <label for="appointment-start"><?php echo __('from'); ?></label>
                   <input type="datetime-local" name="appointment-start" id="appointment-start" class="form-control">
                 </div>
                 <div class="col-6">
-                  <label for="appointment-end">Hasta</label>
+                  <label for="appointment-end"><?php echo __('to'); ?></label>
                   <input type="datetime-local" name="appointment-end" id="appointment-end" class="form-control">
                 </div>
               </div>
             </div>
             <div class="row-inline m-1">
               <div>
-                <button type="button" class="btn btn-sm btn-success m-1 float-end" onclick="showReportCard()">Buscar</button>
+                <button type="button" class="btn btn-sm btn-success m-1 float-end" onclick="showReportCard()"><?php echo __('search'); ?></button>
               </div>
               <div>
-                <button type="button" class="btn btn-sm btn-secondary m-1 float-end" id="btn-limpiar-reporte">Limpiar</button>
+                <button type="button" class="btn btn-sm btn-secondary m-1 float-end" id="btn-limpiar-reporte"><?php echo __('clear'); ?></button>
               </div>
             </div>
           </div>
@@ -131,30 +131,30 @@ include './generales/nav.php';
           <table class="table table-lg table-striped table-responsive w-100" id="table-resumen">
             <thead class="table-light">
               <tr>
-                <th>Recepción</th>
-                <th>Hora Recepcion</th>
-                <th>Respuesta</th>
-                <th>Hora Respuesta</th>
-                <th>Documento</th>
-                <th>Paciente</th>
-                <th>Enviado</th>
-                <th>Ips</th>
-                <th>Eps</th>
-                <th>Rango</th>
-                <th>Diagnostico</th>
-                <th>Aprobado</th>
-                <th>Fecha Cita</th>
-                <th>Hora Cita</th>
-                <th>Anexo 9</th>
-                <th>Anexo 10</th>
-                <th>Enviado a</th>
-                <th>Comentario</th>
-                <th>Comentario contrareferencia</th>
-                <th>Usuario Registra</th>
-                <th>Dias hasta la respuesta</th>
-                <th>Tiempo hasta la respuesta</th>
-                <th>Dias hasta la cita</th>
-                <th>Tiempo hasta la cita</th>
+                <th><?php echo __('reception'); ?></th>
+                <th><?php echo __('reception_time'); ?></th>
+                <th><?php echo __('response'); ?></th>
+                <th><?php echo __('response_time'); ?></th>
+                <th><?php echo __('document'); ?></th>
+                <th><?php echo __('patient'); ?></th>
+                <th><?php echo __('sent'); ?></th>
+                <th><?php echo __('ips'); ?></th>
+                <th><?php echo __('eps'); ?></th>
+                <th><?php echo __('range'); ?></th>
+                <th><?php echo __('diagnosis_col'); ?></th>
+                <th><?php echo __('approved_col'); ?></th>
+                <th><?php echo __('appointment_date_col'); ?></th>
+                <th><?php echo __('appointment_time_col'); ?></th>
+                <th><?php echo __('annex_9_col'); ?></th>
+                <th><?php echo __('annex_10_col'); ?></th>
+                <th><?php echo __('sent_to_col'); ?></th>
+                <th><?php echo __('comment_col'); ?></th>
+                <th><?php echo __('counter_ref_comment'); ?></th>
+                <th><?php echo __('register_user'); ?></th>
+                <th><?php echo __('days_to_response'); ?></th>
+                <th><?php echo __('time_to_response'); ?></th>
+                <th><?php echo __('days_to_appointment'); ?></th>
+                <th><?php echo __('time_to_appointment'); ?></th>
               </tr>
             </thead>
           </table>
