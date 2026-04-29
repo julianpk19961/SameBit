@@ -1,134 +1,137 @@
 # SameBit - AI Agent Instructions
 
-**SameBit** es una aplicación web médica/hospitalaria para gestión de pacientes, medicamentos y tratamientos. Construida en PHP 7+ con MySQL 8.0, jQuery, Bootstrap y Docker.
+**SameBit** is a medical/hospital web application for patient, medication, and treatment management. Built with PHP 7+, MySQL 8.0, jQuery, Bootstrap, and Docker.
 
-## Propósito General
+## General Purpose
 
-Plataforma web para:
-- Registro y gestión de pacientes (DNI, EPS, IPS, rangos)
-- Gestión de medicamentos (crear, actualizar, activar/inactivar)
-- Registro de diagnósticos y citas médicas
-- Seguimiento de tratamientos (TOP - Perfil de Resultados de Tratamiento)
-- Reportes y auditoría de actividades
+Web platform for:
+- Patient registration and management (ID, EPS, IPS, range levels)
+- Medication management (create, update, activate/deactivate)
+- Diagnosis and medical appointment tracking
+- Treatment follow-up (TOP - Treatment Outcome Profile)
+- Activity reports and auditing
 
-## Stack Tecnológico
+## Tech Stack
 
 - **Backend**: PHP 7+, MySQL 8.0
 - **Frontend**: Bootstrap 5, jQuery 3.5+, DataTables
-- **Infraestructura**: Docker + Docker Compose
-- **Librerías**: PHPExcel (reportes), PHPMailer (emails)
+- **Infrastructure**: Docker + Docker Compose
+- **Libraries**: PHPExcel (reports), PHPMailer (emails)
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-/config/        - Conexión, autenticación, lógica de negocio (*.php)
-/pages/         - Vistas principales (dashboard, login, pacientes, medicamentos)
-/Js/            - JavaScript del frontend (jQuery)
-/css/           - Estilos (Bootstrap + custom)
-/database/      - Schema SQL y seed data
-/img/           - Recursos visuales
-/PHPMailer/     - Librería para envío de emails
-/PHPExcel/      - Librería para manejo de hojas de cálculo
+/config/        - Connection, authentication, business logic (*.php)
+/pages/         - Main views (dashboard, login, patients, medications)
+/Js/            - Frontend JavaScript (jQuery)
+/css/           - Styles (Bootstrap + custom)
+/database/      - SQL schema and seed data
+/img/           - Visual assets
+/PHPMailer/     - Email library
+/PHPExcel/      - Spreadsheet library
 ```
 
-## Características Principales
+## Key Features
 
-### 1. Autenticación
-- Login seguro en `pages/login.php`
-- Sesiones PHP con verificación
-- Logout en `config/logout.php`
+### 1. Authentication
+- Secure login at `pages/login.php`
+- PHP sessions with validation
+- Logout at `config/logout.php`
 
-### 2. Gestión de Pacientes
-- Búsqueda por DNI (`config/dniverification.php`)
-- Registro de nuevos pacientes (`config/usepatient.php`)
-- Datos: tipo documento, EPS, IPS, rango
-- Archivo: `pages/dashboard.php` (interfaz principal)
+### 2. Patient Management
+- Search by ID (`config/dniverification.php`)
+- Register new patients (`config/usepatient.php`)
+- Data: document type, EPS, IPS, range
+- Main view: `pages/dashboard.php`
 
-### 3. Gestión de Medicamentos
-- CRUD completo (`pages/medicines_l.php`)
-- Estado activo/inactivo (`config/medicines.php`)
-- Almacenamiento (`config/medicinestored.php`)
-- Kardex (registro de movimientos - `config/newkardexmov.php`)
+### 3. Medication Management
+- Full CRUD (`pages/medicines_l.php`)
+- Active/inactive status (`config/medicines.php`)
+- Storage (`config/medicinestored.php`)
+- Kardex - movement ledger (`config/newkardexmov.php`)
 
-### 4. Reportes y Prioridades
-- Filtrado por fecha, usuario, DNI
-- Cálculo de prioridades (`config/getPriorities.php`, `config/getTodayPriorities.php`)
-- Diagnósticos asociados (`config/calldiagnosis.php`)
+### 4. Reports and Priorities
+- Filter by date, user, ID
+- Priority calculation (`config/getPriorities.php`, `config/getTodayPriorities.php`)
+- Associated diagnoses (`config/calldiagnosis.php`)
 
-### 5. Seguimiento de Tratamiento (TOP)
-- Registro de drogas consumidas
-- Etapas: Ingreso, Egreso, En tratamiento, Seguimiento
-- Visualización de progreso con gráficos
-- Archivo: `pages/asisttop.php`
+### 5. Treatment Follow-Up (TOP)
+- Drug consumption tracking
+- Stages: Admission, Discharge, In Treatment, Follow-Up
+- Progress visualization with charts
+- View: `pages/asisttop.php`
 
-## Convenciones de Código
+## Code Conventions
 
 ### PHP
-- Iniciar sesión en `config/setup.php` (siempre incluir)
-- Namespacing: usar `config/` para lógica, `pages/` para vistas
-- Salida JSON para AJAX: `json_encode($array)`
-- Encoding UTF-8 en conexión MySQL
+- Start session via `config/setup.php` (always include)
+- Naming: `config/` for logic, `pages/` for views
+- JSON output for AJAX: `json_encode($array, JSON_OUT)` (always use JSON_OUT flag)
+- UTF-8 encoding on MySQL connection
 
 ### JavaScript
-- Usar jQuery (versión 3.5+)
-- SweetAlert para diálogos (`Swal.fire()`)
-- DataTables para tablas paginadas (`pagination()`)
-- LocalStorage para datos de usuario
+- Use jQuery (version 3.5+)
+- SweetAlert for dialogs (`Swal.fire()`)
+- DataTables for paginated tables (`pagination()`)
+- LocalStorage for user data
 
-### Base de Datos
-- Tabla `patients`: pacientes
-- Tabla `medicines`: medicamentos
-- Tabla `kardex`: movimientos de medicinas
-- Tabla `priorities`: prioridades/citas
-- IDs: UUID (`KP_UUID`), estado (`z_xOne`: 1=activo, 0=inactivo)
+### Database
+- Table `patients`: patients
+- Table `medicines`: medications
+- Table `kardex`: medicine movements
+- Table `priorities`: priorities/appointments
+- IDs: UUID (`KP_UUID`), status (`z_xOne`: 1=active, 0=inactive)
+- All tables use `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
 
-## Configuración y Ejecución
+## Configuration and Execution
 
-### Iniciar Proyecto
+### Start Project
 ```bash
 docker-compose up -d
 ```
-- App en: `http://localhost:8081/`
-- DB: MySQL en `localhost:3306`
-- Usuario: `usrconect` / Contraseña: `toor`
+- App: `http://localhost:8081/`
+- DB: MySQL on `localhost:3306`
+- User: `usrconect` / Password: `toor`
 
-### Variables de Entorno
-- `DB_HOST`: localhost o nombre servicio docker (`db`)
-- Base de datos: `bit_medical`
+### Environment Variables
+- `DB_HOST`: localhost or docker service name (`db`)
+- Database: `bit_medical`
 
-### Base de Datos
+### Database
 - Schema: `database/schema.sql`
 - Seeds: `database/seed.sql`
-- Inicializa automáticamente al levantar docker
+- Auto-initializes when docker starts
 
-## Archivos Clave
+## Key Files
 
-| Archivo | Propósito |
-|---------|-----------|
-| `index.php` | Punto de entrada, redirige a login o dashboard |
-| `config/setup.php` | Configuración global, sesiones, rutas |
-| `config/config.php` | Conexión MySQL |
-| `pages/login.php` | Formulario de autenticación |
-| `pages/dashboard.php` | Panel principal post-login |
-| `Js/dashboard.js` | Lógica de reportes y filtrados |
-| `config/dniverification.php` | Búsqueda de pacientes por DNI |
-| `config/usepatient.php` | Crear/actualizar paciente |
-| `pages/medicines_l.php` | Listado y gestión de medicamentos |
-| `config/medicinestored.php` | Guardar medicina |
-| `pages/asisttop.php` | Registro de tratamiento |
+| File | Purpose |
+|------|---------|
+| `index.php` | Entry point, redirects to login or dashboard |
+| `config/setup.php` | Global config, sessions, paths |
+| `config/config.php` | MySQL connection (defines JSON_OUT constant) |
+| `pages/login.php` | Authentication form |
+| `pages/dashboard.php` | Main panel after login |
+| `Js/dashboard.js` | Reports and filtering logic |
+| `config/dniverification.php` | Patient search by ID |
+| `config/usepatient.php` | Create/update patient |
+| `pages/medicines_l.php` | Medication list and management |
+| `config/medicinestored.php` | Save medication |
+| `config/medicinedown.php` | Delete/deactivate medication |
+| `config/update_password.php` | Password change with bcrypt |
+| `pages/asisttop.php` | Treatment tracking |
 
-## Patrones Comunes
+## Common Patterns
 
 ### AJAX POST
 ```php
-// Recibir en config/
+// Receive in config/
 $data = $_POST;
-// Procesar
-// Responder JSON
-echo json_encode($response);
+// Process
+// Respond JSON
+echo json_encode($response, JSON_OUT);
 ```
 
-### Validación Frontend
+### Frontend Validation
 ```javascript
 if (emptyFields) {
     Swal.fire({ icon: 'error', title: 'Error', text: '...' });
@@ -138,27 +141,27 @@ if (emptyFields) {
 
 ### DataTables
 ```javascript
-pagination('#table-id', '15', columns, 'Título', [1, 'asc'], true);
+pagination('#table-id', '15', columns, 'Title', [1, 'asc'], true);
 ```
 
-## Mejoras Sugeridas para Agentes
+## Suggested Improvements for Agents
 
-1. **Seguridad**: Usar prepared statements en queries SQL (prevenir SQL injection)
-2. **API REST**: Migrar `config/*.php` a endpoints estructurados
-3. **Validación**: Implementar clases validator reutilizables
-4. **Testing**: Agregar tests unitarios para funciones críticas
-5. **Documentación**: API docs (phpDocumentor o Swagger)
-6. **Performance**: Cacheo de consultas frecuentes (Redis)
-7. **Code Quality**: PSR-12, linting, análisis estático
+1. **Security**: Use prepared statements in all SQL queries (prevent SQL injection)
+2. **REST API**: Migrate `config/*.php` to structured endpoints
+3. **Validation**: Implement reusable validator classes
+4. **Testing**: Add unit tests for critical functions
+5. **Documentation**: API docs (phpDocumentor or Swagger)
+6. **Performance**: Cache frequent queries (Redis)
+7. **Code Quality**: PSR-12, linting, static analysis
 
-## Debug y Troubleshooting
+## Debug and Troubleshooting
 
-- **Error de conexión DB**: Verificar `docker ps` y conexión en `config/config.php`
-- **Sesiones expiradas**: Check `config/setup.php` `session_start()`
-- **CORS issues**: Revisar headers AJAX en `Js/`
-- **Queries lentas**: Verificar índices en `database/schema.sql`
+- **DB connection error**: Check `docker ps` and connection in `config/config.php`
+- **Expired sessions**: Check `config/setup.php` `session_start()`
+- **CORS issues**: Review AJAX headers in `Js/`
+- **Slow queries**: Verify indexes in `database/schema.sql`
 
-## Recursos de Ayuda
+## Help Resources
 
 - Bootstrap: https://getbootstrap.com/docs/5.0/
 - jQuery: https://api.jquery.com/

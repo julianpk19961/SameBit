@@ -5,14 +5,14 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Method not allowed']);
+    echo json_encode(['error' => 'Method not allowed'], JSON_OUT);
     exit;
 }
 
 $lang = $_POST['lang'] ?? '';
 if (!in_array($lang, ['en', 'es'])) {
     http_response_code(400);
-    echo json_encode(['error' => 'Invalid language']);
+    echo json_encode(['error' => 'Invalid language'], JSON_OUT);
     exit;
 }
 
@@ -25,4 +25,4 @@ setcookie('app_lang', $lang, [
     'httponly' => true,
 ]);
 
-echo json_encode(['success' => true, 'lang' => $lang]);
+echo json_encode(['success' => true, 'lang' => $lang], JSON_OUT);

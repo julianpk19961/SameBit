@@ -104,7 +104,7 @@ if ($stmt->execute()) {
         ];
         echo json_encode($json, JSON_OUT);
     } else {
-        echo json_encode(['success' => true, 'message' => 'Medicamento guardado, pero no se pudo recuperar']);
+        echo json_encode(['success' => true, 'message' => 'Medicamento guardado, pero no se pudo recuperar'], JSON_OUT);
     }
     
     $select_stmt->close();

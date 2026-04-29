@@ -2,6 +2,13 @@
 -- bit-medical - Database Schema
 -- =============================================
 
+CREATE DATABASE IF NOT EXISTS `bit_medical`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE `bit_medical`;
+
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS profile_permissions;
@@ -25,7 +32,7 @@ CREATE TABLE entity_types (
     id         VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
     name       VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE entities (
     id             VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -34,14 +41,14 @@ CREATE TABLE entities (
     entity_type_id VARCHAR(36) NOT NULL,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (entity_type_id) REFERENCES entity_types(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE diagnoses (
     id          VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
     code        VARCHAR(20) NOT NULL UNIQUE,
     description TEXT,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE movement_categories (
     id           VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -49,7 +56,7 @@ CREATE TABLE movement_categories (
     abbreviation VARCHAR(20),
     type         TINYINT NOT NULL COMMENT '1=entry 2=balance_reset 3=exit',
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE medicines (
     id        VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -58,7 +65,7 @@ CREATE TABLE medicines (
     notes     TEXT,
     active    TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE patients (
     id              VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -75,7 +82,7 @@ CREATE TABLE patients (
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (eps_id) REFERENCES entities(id) ON DELETE SET NULL,
     FOREIGN KEY (ips_id) REFERENCES entities(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE kardex (
     id               INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,7 +100,7 @@ CREATE TABLE kardex (
     FOREIGN KEY (medicine_id) REFERENCES medicines(id),
     FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES movement_categories(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
 -- Permission and Profile Management System
@@ -106,7 +113,7 @@ CREATE TABLE modules (
     description TEXT,
     active      TINYINT(1) DEFAULT 1,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE permissions (
     id          VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -114,7 +121,7 @@ CREATE TABLE permissions (
     slug        VARCHAR(100) NOT NULL UNIQUE COMMENT 'e.g., view, create, edit',
     description TEXT,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE module_permissions (
     id            VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -124,7 +131,7 @@ CREATE TABLE module_permissions (
     UNIQUE KEY unique_module_permission (module_id, permission_id),
     FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE,
     FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE profiles (
     id          VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -133,7 +140,7 @@ CREATE TABLE profiles (
     description TEXT,
     active      TINYINT(1) DEFAULT 1,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE profile_permissions (
     id                   VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -145,7 +152,7 @@ CREATE TABLE profile_permissions (
     UNIQUE KEY unique_profile_module_permission (profile_id, module_permission_id),
     FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     FOREIGN KEY (module_permission_id) REFERENCES module_permissions(id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE users (
     id               VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -160,7 +167,7 @@ CREATE TABLE users (
     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE RESTRICT
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE priorities (
     id                 VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -200,4 +207,4 @@ CREATE TABLE priorities (
     FOREIGN KEY (eps_id)       REFERENCES entities(id)  ON DELETE SET NULL,
     FOREIGN KEY (ips_id)       REFERENCES entities(id)  ON DELETE SET NULL,
     FOREIGN KEY (diagnosis_id) REFERENCES diagnoses(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

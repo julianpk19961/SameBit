@@ -9,7 +9,7 @@ header('Content-Type: application/json; charset=UTF-8');
 // Prevenir acceso directo
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['Tipo' => 'error', 'Title' => 'Error', 'Mensaje' => 'Método no permitido']);
+    echo json_encode(['Tipo' => 'error', 'Title' => 'Error', 'Mensaje' => 'Método no permitido'], JSON_OUT);
     exit;
 }
 
