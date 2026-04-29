@@ -11,38 +11,7 @@ include './generales/nav.php';
   </div>
 
   <div class="row g-4 mb-5">
-    <!-- Card: Call Registry -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" id="btn-new-record-card">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <div class="display-4 mb-3">📞</div>
-          <h5 class="card-title fw-bold"><?php echo __('call_registry'); ?></h5>
-          <p class="card-text text-muted small"><?php echo __('call_registry_desc'); ?></p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card: Medicines -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" onclick="location.href='./medicines_l.php'">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <div class="display-4 mb-3">💊</div>
-          <h5 class="card-title fw-bold"><?php echo __('medicines'); ?></h5>
-          <p class="card-text text-muted small"><?php echo __('medicines_desc'); ?></p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card: Reports -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card h-100 shadow-sm border-0 hover-card" id="btn-reportes">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <div class="display-4 mb-3">📊</div>
-          <h5 class="card-title fw-bold"><?php echo __('reports'); ?></h5>
-          <p class="card-text text-muted small"><?php echo __('reports_desc'); ?></p>
-        </div>
-      </div>
-    </div>
+    <!-- Dashboard content goes here -->
   </div>
 </div>
 

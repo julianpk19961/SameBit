@@ -45,8 +45,14 @@ function login()
     }
 
     // Usar prepared statement para prevenir SQL injection
-    $stmt = $conn->prepare("SELECT id, password, first_name, last_name, privilege FROM users WHERE username = ?");
-    
+    // Traer profile_id y el slug del perfil para determinar permisos
+    $stmt = $conn->prepare("
+        SELECT u.id, u.password, u.first_name, u.last_name, u.profile_id, p.slug
+        FROM users u
+        LEFT JOIN profiles p ON u.profile_id = p.id
+        WHERE u.username = ?
+    ");
+
     if (!$stmt) {
         $message = [
             'Tipo' => 'error',
@@ -68,7 +74,8 @@ function login()
         $row = $result->fetch_assoc();
         $stored_hash = $row['password'];
         $userFullName = $row['first_name'] . ' ' . $row['last_name'];
-        $privilegeSet = $row['privilege'];
+        $profileSlug = $row['slug'] ?? 'visualizador'; // Valor por defecto
+        $privilegeSet = $profileSlug; // Usar el slug del perfil
 
         // Verificar contraseña con password_verify (soporta MD5 y Bcrypt)
         $password_valid = false;
@@ -87,8 +94,8 @@ function login()
             // Regenerar ID de sesión para prevenir session fixation
             session_regenerate_id(true);
 
-            // Determinar archivo de destino según privilegios
-            $file = ($privilegeSet === 'root' || $privilegeSet === 'admin')
+            // Determinar archivo de destino según perfil
+            $file = ($profileSlug === 'admin' || $profileSlug === 'root')
                 ? 'dashboard.php'
                 : 'medicines_l.php';
 

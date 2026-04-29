@@ -3,13 +3,6 @@ var L = window.LANG || {};
 function t(key) { return L[key] || key; }
 
 // ──────────────────────────────────────────────
-// NAVEGACIÓN
-// ──────────────────────────────────────────────
-$(document).on('click', '#btn-new-record-card', function () {
-    location.href = './calls.php';
-});
-
-// ──────────────────────────────────────────────
 // UTILIDADES DE REPORTE
 // ──────────────────────────────────────────────
 function showCustomDialog(data) {
@@ -165,21 +158,6 @@ function showReportCard(defaultDate = '') {
 // ──────────────────────────────────────────────
 // MODAL REPORTES
 // ──────────────────────────────────────────────
-$('#btn-reportes').on('click', function () {
-    if (user.privilegeSet != 'root' && user.privilegeSet != 'administrador') {
-        Swal.fire({
-            icon: 'error',
-            title: t('js_restricted_access'),
-            text: t('js_not_authorized'),
-            timer: 5000
-        });
-        return false;
-    }
-
-    $('#modal-report').modal('show');
-    $('#form-reporte').trigger('reset');
-    showReportCard(new Date());
-});
 
 $('#btn-limpiar-reporte').on('click', function () {
     Swal.fire({

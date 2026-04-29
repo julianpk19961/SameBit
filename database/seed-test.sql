@@ -108,15 +108,15 @@ INSERT INTO movement_categories (name, abbreviation, type) VALUES
 -- 4. CREAR USUARIOS ADICIONALES
 -- =============================================
 
-INSERT INTO users (username, password, first_name, last_name, privilege) VALUES
-('doctor1', MD5('pass123'), 'Juan', 'Pérez', 'standard'),
-('doctor2', MD5('pass123'), 'María', 'González', 'standard'),
-('nurse1', MD5('pass123'), 'Carlos', 'López', 'standard'),
-('nurse2', MD5('pass123'), 'Ana', 'Martínez', 'standard'),
-('farmacist1', MD5('pass123'), 'Pedro', 'Rodríguez', 'standard'),
-('operator1', MD5('pass123'), 'Luis', 'García', 'standard'),
-('operator2', MD5('pass123'), 'Patricia', 'Sánchez', 'standard'),
-('coordinator', MD5('pass123'), 'Fernando', 'Díaz', 'admin');
+INSERT INTO users (username, password, first_name, last_name, profile_id) VALUES
+('doctor1', MD5('pass123'), 'Juan', 'Pérez', 'prof-002'),
+('doctor2', MD5('pass123'), 'María', 'González', 'prof-002'),
+('nurse1', MD5('pass123'), 'Carlos', 'López', 'prof-002'),
+('nurse2', MD5('pass123'), 'Ana', 'Martínez', 'prof-002'),
+('farmacist1', MD5('pass123'), 'Pedro', 'Rodríguez', 'prof-002'),
+('operator1', MD5('pass123'), 'Luis', 'García', 'prof-002'),
+('operator2', MD5('pass123'), 'Patricia', 'Sánchez', 'prof-002'),
+('coordinator', MD5('pass123'), 'Fernando', 'Díaz', 'prof-001');
 
 -- =============================================
 -- 5. CREAR PACIENTES (1000 pacientes básicos)

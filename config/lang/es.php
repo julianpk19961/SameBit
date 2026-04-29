@@ -177,4 +177,32 @@ return [
 
     // DataTables language URL
     'datatables_lang_url'      => 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
+
+    // ── Users Management ───────────────────────────────────
+    'modules'                  => 'Módulos',
+    'users_management'         => 'Gestión de Usuarios',
+    'new_user'                 => 'Nuevo Usuario',
+    'information'              => 'Información',
+    'user_management_desc'     => 'Aquí puedes crear, editar y gestionar usuarios con sus perfiles y privilegios.',
+    'profile'                  => 'Perfil',
+    'actions'                  => 'Acciones',
+    'edit'                     => 'Editar',
+    'view_permissions'         => 'Ver Permisos',
+    'access_denied'            => 'Acceso denegado. Solo administradores pueden acceder a esta sección.',
+    'select_profile'           => 'Selecciona un perfil...',
+    'active_user'              => 'Usuario Activo',
+    'user_permissions'         => 'Permisos del Usuario',
+    'confirm'                  => 'Confirmar',
+    'yes_delete'               => 'Sí, eliminar',
+    'deleted'                  => 'Eliminado',
+    'user_deleted_success'     => 'Usuario eliminado exitosamente',
+    'error_deleting'           => 'Error al eliminar',
+    'connection_error'         => 'Error de conexión',
+    'edit_user'                => 'Editar Usuario',
+    'error_fetching_user'      => 'No se pudo obtener los datos del usuario',
+    'success'                  => 'Éxito',
+    'error_saving'             => 'Error al guardar',
+    'error_fetching_permissions' => 'No se pudieron obtener los permisos',
+    'leave_blank_to_keep'      => 'Dejar en blanco para no cambiar',
+    'min_6_chars'              => 'Mínimo 6 caracteres',
 ];

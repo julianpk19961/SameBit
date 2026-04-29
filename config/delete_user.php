@@ -5,7 +5,8 @@
  */
 
 require_once 'setup.php';
-require_once 'PermissionManager.php';
+
+header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(400);
@@ -13,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    $pm = new PermissionManager($pdo, $_SESSION['user_id']);
-    if (!$pm->isAdmin()) {
+    // Verificar que sea admin
+    if ($_SESSION['privilege'] !== 'admin') {
         throw new Exception('Acceso denegado');
     }
 
@@ -23,32 +24,44 @@ try {
         throw new Exception('ID de usuario requerido');
     }
 
-    // Prevenir eliminar al usuario actual
-    if ($user_id === $_SESSION['user_id']) {
-        throw new Exception('No puedes eliminar tu propio usuario');
+    // No permitir que el admin se elimine a sí mismo
+    if ($user_id === $_SESSION['id']) {
+        throw new Exception('No puedes eliminar tu propia cuenta');
     }
 
-    // Verificar que el usuario existe
-    $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
-    $stmt->execute([$user_id]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Verificar que el usuario exista
+    $stmt = $conn->prepare("SELECT id, username FROM users WHERE id = ?");
+    if (!$stmt) {
+        throw new Exception('Error en la consulta');
+    }
+    $stmt->bind_param("s", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (!$result) {
+    if ($result->num_rows === 0) {
         throw new Exception('Usuario no encontrado');
     }
 
-    $username = $result['username'];
+    $user = $result->fetch_assoc();
+    $stmt->close();
 
-    // Eliminar usuario (soft delete - actualizar active a 0)
-    $stmt = $pdo->prepare("UPDATE users SET active = 0, updated_at = NOW() WHERE id = ?");
-    $stmt->execute([$user_id]);
+    // Eliminar usuario
+    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+    if (!$stmt) {
+        throw new Exception('Error preparando eliminación');
+    }
+    $stmt->bind_param("s", $user_id);
+    if (!$stmt->execute()) {
+        throw new Exception('Error al eliminar usuario: ' . $stmt->error);
+    }
+    $stmt->close();
 
-    error_log("Usuario eliminado: $username (ID: $user_id)");
+    error_log("Usuario eliminado: {$user['username']}");
 
     echo json_encode([
         'success' => true,
         'message' => 'Usuario eliminado exitosamente'
-    ]);
+    ], JSON_OUT);
 
 } catch (Exception $e) {
     error_log("Error en delete_user.php: " . $e->getMessage());
@@ -56,6 +69,6 @@ try {
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
-    ]);
+    ], JSON_OUT);
 }
 ?>

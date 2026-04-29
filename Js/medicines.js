@@ -16,18 +16,17 @@ getTable = () => {
 
     template = '';
     $.ajax({
-        // script para verificación de cc existentes
         url: '../config/medicines.php',
         type: 'GET',
+        dataType: 'json', // jQuery parseará automáticamente el JSON
 
-        // Funcion para recorrer los resultados y dibujarlos en pantalla o seleccionarlo para ser usado (Cuando solo sea una registro)
         success: function (response) {
 
-            if (response == 'error') {
+            if (response.error) {
                 template += `<tr> <td colspan='8'>"No hay resultados"</td></tr>`
             } else {
 
-                let medicines = JSON.parse(response);
+                let medicines = response; // response ya es un objeto parseado
                 let i = 0;
                 medicines.forEach(medicine => {
 
@@ -45,7 +44,7 @@ getTable = () => {
                                     Ver
                                 </button>
                                 <button class="drop-element btn btn-${(medicine.nrows == 0 ? 'danger' : medicine.z_xOne == 1 ? 'secondary' : 'success')} btn-sm col-sm-5 text-white" data-bs-toggle="modal" data-bs-target="#modal-delete-" type="button" ">
-                                ${(medicine.nrows == 0 ? 'Eliminar' : medicine.z_xOne == 1 ? 'Inactivar' : 'Activar')} 
+                                ${(medicine.nrows == 0 ? 'Eliminar' : medicine.z_xOne == 1 ? 'Inactivar' : 'Activar')}
                                 </button>
                             </div>
                         </td>

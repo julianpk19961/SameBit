@@ -1,11 +1,12 @@
 <?php
 /**
- * Endpoint: Obtener permisos de un usuario
+ * Endpoint: Obtener permisos de usuario
  * POST /config/get_user_permissions.php
  */
 
 require_once 'setup.php';
-require_once 'PermissionManager.php';
+
+header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(400);
@@ -13,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    $pm = new PermissionManager($pdo, $_SESSION['user_id']);
-    if (!$pm->isAdmin()) {
+    // Verificar que sea admin
+    if ($_SESSION['privilege'] !== 'admin') {
         throw new Exception('Acceso denegado');
     }
 
@@ -23,21 +24,59 @@ try {
         throw new Exception('ID de usuario requerido');
     }
 
-    // Crear PermissionManager para el usuario solicitado
-    $user_pm = new PermissionManager($pdo, $user_id);
-    
-    $profile = $user_pm->getUserProfile();
-    if (!$profile) {
+    // Obtener perfil del usuario
+    $stmt = $conn->prepare("SELECT u.profile_id, p.name, p.slug FROM users u JOIN profiles p ON u.profile_id = p.id WHERE u.id = ?");
+    if (!$stmt) {
+        throw new Exception('Error en la consulta');
+    }
+    $stmt->bind_param("s", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
         throw new Exception('Usuario no encontrado');
     }
 
-    $permissions = $user_pm->getUserPermissions();
+    $profile = $result->fetch_assoc();
+    $stmt->close();
+
+    // Obtener permisos del perfil
+    $query = "
+        SELECT m.name as module_name, p.name as permission_name, pp.can_access
+        FROM profile_permissions pp
+        JOIN module_permissions mp ON pp.module_permission_id = mp.id
+        JOIN modules m ON mp.module_id = m.id
+        JOIN permissions p ON mp.permission_id = p.id
+        WHERE pp.profile_id = ?
+        ORDER BY m.name, p.name
+    ";
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        throw new Exception('Error en la consulta de permisos');
+    }
+    $stmt->bind_param("s", $profile['profile_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $permissions = [];
+    while ($row = $result->fetch_assoc()) {
+        $module = $row['module_name'];
+        if (!isset($permissions[$module])) {
+            $permissions[$module] = [];
+        }
+        $permissions[$module][$row['permission_name']] = (bool)$row['can_access'];
+    }
+    $stmt->close();
 
     echo json_encode([
         'success' => true,
-        'profile' => $profile,
+        'profile' => [
+            'id' => $profile['profile_id'],
+            'name' => htmlspecialchars($profile['name']),
+            'slug' => htmlspecialchars($profile['slug'])
+        ],
         'permissions' => $permissions
-    ]);
+    ], JSON_OUT);
 
 } catch (Exception $e) {
     error_log("Error en get_user_permissions.php: " . $e->getMessage());
@@ -45,6 +84,6 @@ try {
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
-    ]);
+    ], JSON_OUT);
 }
 ?>

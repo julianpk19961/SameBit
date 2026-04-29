@@ -5,7 +5,8 @@
  */
 
 require_once 'setup.php';
-require_once 'PermissionManager.php';
+
+header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(400);
@@ -13,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    $pm = new PermissionManager($pdo, $_SESSION['user_id']);
-    if (!$pm->isAdmin()) {
-        throw new Exception('Acceso denegado');
+    // Verificar que sea admin
+    if ($_SESSION['privilege'] !== 'admin') {
+        throw new Exception('Acceso denegado - solo administradores');
     }
 
     // Validar campos
@@ -32,11 +33,17 @@ try {
     }
 
     // Validar perfil
-    $stmt = $pdo->prepare("SELECT id FROM profiles WHERE id = ? AND active = 1");
-    $stmt->execute([$profile_id]);
-    if (!$stmt->fetch()) {
+    $stmt = $conn->prepare("SELECT id FROM profiles WHERE id = ? AND active = 1");
+    if (!$stmt) {
+        throw new Exception('Error en la consulta de perfil');
+    }
+    $stmt->bind_param("s", $profile_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows === 0) {
         throw new Exception('Perfil no válido');
     }
+    $stmt->close();
 
     // Crear nuevo usuario
     if (empty($user_id)) {
@@ -45,50 +52,88 @@ try {
         }
 
         // Verificar que el username sea único
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $stmt->execute([$username]);
-        if ($stmt->fetch()) {
+        $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+        if (!$stmt) {
+            throw new Exception('Error en la consulta de usuario');
+        }
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
             throw new Exception('El usuario ya existe');
         }
+        $stmt->close();
 
-        $stmt = $pdo->prepare("
-            INSERT INTO users (id, username, password, first_name, last_name, profile_id, active)
-            VALUES (UUID(), ?, MD5(?), ?, ?, ?, ?)
+        // Crear usuario con UUID
+        $user_id = bin2hex(random_bytes(18)); // Simular UUID
+        $password_hash = md5($password);
+
+        $stmt = $conn->prepare("
+            INSERT INTO users (id, username, password, first_name, last_name, profile_id, active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         ");
-        $stmt->execute([$username, $password, $first_name, $last_name, $profile_id, $active]);
+        if (!$stmt) {
+            throw new Exception('Error preparando inserción');
+        }
+        $stmt->bind_param("ssssssi", $user_id, $username, $password_hash, $first_name, $last_name, $profile_id, $active);
+        if (!$stmt->execute()) {
+            throw new Exception('Error al crear usuario: ' . $stmt->error);
+        }
+        $stmt->close();
 
         error_log("Usuario creado: $username");
 
         echo json_encode([
             'success' => true,
             'message' => 'Usuario creado exitosamente'
-        ]);
+        ], JSON_OUT);
     } else {
         // Actualizar usuario existente
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE id = ?");
-        $stmt->execute([$user_id]);
-        if (!$stmt->fetch()) {
+        $stmt = $conn->prepare("SELECT id FROM users WHERE id = ?");
+        if (!$stmt) {
+            throw new Exception('Error en la consulta de usuario');
+        }
+        $stmt->bind_param("s", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
             throw new Exception('Usuario no encontrado');
         }
+        $stmt->close();
 
         // Preparar query de actualización
         if (!empty($password)) {
             if (strlen($password) < 6) {
                 throw new Exception('Contraseña debe tener mínimo 6 caracteres');
             }
-            $stmt = $pdo->prepare("
+            $password_hash = md5($password);
+            $stmt = $conn->prepare("
                 UPDATE users
-                SET username = ?, password = MD5(?), first_name = ?, last_name = ?, profile_id = ?, active = ?, updated_at = NOW()
+                SET username = ?, password = ?, first_name = ?, last_name = ?, profile_id = ?, active = ?, updated_at = NOW()
                 WHERE id = ?
             ");
-            $stmt->execute([$username, $password, $first_name, $last_name, $profile_id, $active, $user_id]);
+            if (!$stmt) {
+                throw new Exception('Error preparando actualización');
+            }
+            $stmt->bind_param("sssssii", $username, $password_hash, $first_name, $last_name, $profile_id, $active, $user_id);
+            if (!$stmt->execute()) {
+                throw new Exception('Error al actualizar usuario: ' . $stmt->error);
+            }
+            $stmt->close();
         } else {
-            $stmt = $pdo->prepare("
+            $stmt = $conn->prepare("
                 UPDATE users
                 SET username = ?, first_name = ?, last_name = ?, profile_id = ?, active = ?, updated_at = NOW()
                 WHERE id = ?
             ");
-            $stmt->execute([$username, $first_name, $last_name, $profile_id, $active, $user_id]);
+            if (!$stmt) {
+                throw new Exception('Error preparando actualización');
+            }
+            $stmt->bind_param("ssssii", $username, $first_name, $last_name, $profile_id, $active, $user_id);
+            if (!$stmt->execute()) {
+                throw new Exception('Error al actualizar usuario: ' . $stmt->error);
+            }
+            $stmt->close();
         }
 
         error_log("Usuario actualizado: $username");
@@ -96,7 +141,7 @@ try {
         echo json_encode([
             'success' => true,
             'message' => 'Usuario actualizado exitosamente'
-        ]);
+        ], JSON_OUT);
     }
 
 } catch (Exception $e) {
@@ -105,6 +150,6 @@ try {
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
-    ]);
+    ], JSON_OUT);
 }
 ?>
