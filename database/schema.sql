@@ -4,6 +4,8 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS profile_permissions;
+DROP TABLE IF EXISTS module_permissions;
 DROP TABLE IF EXISTS priorities;
 DROP TABLE IF EXISTS kardex;
 DROP TABLE IF EXISTS medicines;
@@ -13,6 +15,9 @@ DROP TABLE IF EXISTS movement_categories;
 DROP TABLE IF EXISTS entities;
 DROP TABLE IF EXISTS entity_types;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS profiles;
+DROP TABLE IF EXISTS permissions;
+DROP TABLE IF EXISTS modules;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -90,6 +95,58 @@ CREATE TABLE kardex (
     FOREIGN KEY (category_id) REFERENCES movement_categories(id)
 );
 
+-- =============================================
+-- Permission and Profile Management System
+-- =============================================
+
+CREATE TABLE modules (
+    id          VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name        VARCHAR(100) NOT NULL UNIQUE COMMENT 'e.g., Llamadas-SameBit',
+    slug        VARCHAR(100) NOT NULL UNIQUE COMMENT 'e.g., llamadas_samebit',
+    description TEXT,
+    active      TINYINT(1) DEFAULT 1,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE permissions (
+    id          VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name        VARCHAR(100) NOT NULL COMMENT 'e.g., Ver, Crear, Editar',
+    slug        VARCHAR(100) NOT NULL UNIQUE COMMENT 'e.g., view, create, edit',
+    description TEXT,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE module_permissions (
+    id            VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    module_id     VARCHAR(36) NOT NULL,
+    permission_id VARCHAR(36) NOT NULL,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_module_permission (module_id, permission_id),
+    FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE profiles (
+    id          VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name        VARCHAR(100) NOT NULL UNIQUE COMMENT 'e.g., Admin, Operador, Visualizador',
+    slug        VARCHAR(100) NOT NULL UNIQUE COMMENT 'e.g., admin, operador, visualizador',
+    description TEXT,
+    active      TINYINT(1) DEFAULT 1,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE profile_permissions (
+    id                   VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    profile_id           VARCHAR(36) NOT NULL,
+    module_permission_id VARCHAR(36) NOT NULL,
+    can_access           TINYINT(1) DEFAULT 0 COMMENT '0=deny, 1=allow',
+    created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_profile_module_permission (profile_id, module_permission_id),
+    FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
+    FOREIGN KEY (module_permission_id) REFERENCES module_permissions(id) ON DELETE CASCADE
+);
+
 CREATE TABLE users (
     id               VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
     username         VARCHAR(100) NOT NULL UNIQUE,
@@ -98,8 +155,11 @@ CREATE TABLE users (
     middle_name      VARCHAR(100),
     last_name        VARCHAR(100) NOT NULL,
     second_last_name VARCHAR(100),
-    privilege        ENUM('root', 'admin', 'standard') NOT NULL DEFAULT 'standard',
-    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    profile_id       VARCHAR(36) NOT NULL DEFAULT (UUID()) COMMENT 'FK to profiles table',
+    active           TINYINT(1) DEFAULT 1,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE priorities (

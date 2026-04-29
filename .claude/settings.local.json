@@ -26,7 +26,10 @@
       "Bash(grep -E \"\\\\$\\\\\\('#|getElementById|\\\\.on\\\\\\(\" /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/dashboard.js)",
       "Bash(grep -oE \"\\\\\\\\\\\\$\\\\\\('#[^']+'\\\\\\)\" /Users/mantum/Documents/Personal/destroywolves/SameBit/Js/dashboard.js)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(grep -E \"\\\\.\\(json|ts|tsx|js|jsx\\)$|^d\")",
+      "Bash(grep -r \"i18n\\\\|i18next\\\\|gettext\\\\|locale\\\\|translation\" /Users/mantum/Documents/Personal/destroywolves/SameBit --include=\"*.php\" --include=\"*.js\" --include=\"*.json\" ! -path \"*/node_modules/*\")",
+      "Bash(grep -r \"es_CO\\\\|es_ES\\\\|en_US\\\\|locale\\\\|lang\\\\|language\" /Users/mantum/Documents/Personal/destroywolves/SameBit --include=\"*.php\" --include=\"*.js\" ! -path \"*/node_modules/*\" -n)"
     ]
   }
 }
