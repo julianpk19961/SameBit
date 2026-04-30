@@ -3,6 +3,11 @@ include './generales/header.php';
 ?>
 <script src="../Js/Login.Js" defer></script>
 
+<!-- Theme Toggle Button (compatible with existing theme.js) -->
+<button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme (System/Light/Dark)">
+  <i id="theme-icon" class="bi bi-circle-half"></i>
+</button>
+
 <div class="login-wrapper">
   <div class="login-card">
 
