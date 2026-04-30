@@ -25,7 +25,6 @@ $csrf_token = generate_csrf_token();
   <link rel="stylesheet" href="../css/font-awesome/font-awesome.min.css">
   <link rel="stylesheet" href="../css/select2/select2.min.css">
   <link rel="stylesheet" href="../Js/sweetalert2/sweetalert2.min.css">
-
   <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body<?php if ($page === 'login.php') echo ' class="login-body"'; ?>>
