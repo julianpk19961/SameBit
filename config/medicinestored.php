@@ -6,7 +6,7 @@
  * y valida los datos de entrada
  */
 
-require_once 'config.php';
+require_once 'setup.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
@@ -32,43 +32,27 @@ if (empty($name)) {
 // Validar longitud del nombre
 if (strlen($name) > 200) {
     http_response_code(400);
-    echo json_encode(['error' => 'El nombre del medicamento es demasiado largo (máx 200 caracteres, JSON_OUT)']);
+    echo json_encode(['error' => 'El nombre del medicamento es demasiado largo (max 200 caracteres)'], JSON_OUT);
     exit;
 }
 
 // Validar longitud de referencia
 if (strlen($reference) > 100) {
     http_response_code(400);
-    echo json_encode(['error' => 'La referencia es demasiado larga (máx 100 caracteres, JSON_OUT)']);
+    echo json_encode(['error' => 'La referencia es demasiado larga (max 100 caracteres)'], JSON_OUT);
     exit;
 }
 
-// Generar UUID usando PHP (más seguro que variable de sesión MySQL)
-$new_uuid = com_create_guid();
-if (empty($new_uuid)) {
-    // Fallback: generar UUID manualmente si com_create_guid no está disponible
-    $new_uuid = sprintf(
-        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0x0fff) | 0x4000,
-        mt_rand(0, 0x3fff) | 0x8000,
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff)
-    );
-}
-
-// Función para generar UUID (si com_create_guid no existe)
 if (!function_exists('com_create_guid')) {
     function com_create_guid() {
         $data = openssl_random_pseudo_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
-        $data[8] = chr(ord($data[8] & 0x3f) | 0x80); // set bits 6-7 to 10
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }
+
+$new_uuid = com_create_guid();
 
 // Usar prepared statement para INSERT
 $stmt = $conn->prepare("INSERT INTO medicines (id, name, reference, notes) VALUES (?, ?, ?, ?)");

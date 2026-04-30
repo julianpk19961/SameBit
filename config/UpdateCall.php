@@ -5,7 +5,7 @@ header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
+    echo json_encode(['error' => 'Metodo no permitido'], JSON_OUT);
     exit;
 }
 
@@ -18,7 +18,7 @@ if (!is_session_valid()) {
 $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
 if (!empty($csrf_token) && !validate_csrf_token($csrf_token)) {
     http_response_code(403);
-    echo json_encode(['error' => 'Token CSRF inválido'], JSON_OUT);
+    echo json_encode(['error' => 'Token CSRF invalido'], JSON_OUT);
     exit;
 }
 
@@ -51,7 +51,6 @@ if (empty($data['call_id'])) {
     exit;
 }
 
-// Nota: se usa === '' porque campos como contacttype/eps_status pueden ser "0" (válido).
 $required_fields = [
     'name'              => 'Nombres',
     'lastname'          => 'Apellidos',
@@ -59,7 +58,7 @@ $required_fields = [
     'ips'               => 'IPS',
     'eps_classification'=> 'Rango EPS',
     'contacttype'       => 'Tipo de Contacto',
-    'observation_in'    => 'Observación (Referencia)',
+    'observation_in'    => 'Observacion (Referencia)',
     'sent_by'           => 'Remitido Desde',
     'eps_status'        => 'Estado EPS',
 ];
@@ -77,7 +76,7 @@ try {
     $attention_datetime = !empty($data['attention_date']) ? new DateTime($data['attention_date']) : null;
 } catch (Exception $e) {
     http_response_code(400);
-    echo json_encode(['error' => 'Formato de fecha inválido'], JSON_OUT);
+    echo json_encode(['error' => 'Formato de fecha invalido'], JSON_OUT);
     exit;
 }
 
@@ -100,15 +99,12 @@ if ($check_in_datetime && $attention_datetime && $data['approved'] == 1) {
 
 $username = $_SESSION['usuario'];
 
-// Obtener patient_id y document_number actuales (el DNI no puede cambiar)
 $stmt_get = $conn->prepare("SELECT patient_id, document_number FROM priorities WHERE id = ?");
-if (!$stmt_get->execute([$data['call_id']])) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Error al verificar registro'], JSON_OUT);
-    exit;
-}
+$stmt_get->bind_param("s", $data['call_id']);
+$stmt_get->execute();
 $res = $stmt_get->get_result();
 if ($res->num_rows === 0) {
+    $stmt_get->close();
     http_response_code(404);
     echo json_encode(['error' => 'Llamada no encontrada'], JSON_OUT);
     exit;
@@ -119,7 +115,6 @@ $stmt_get->close();
 $conn->begin_transaction();
 
 try {
-    // Actualizar nombre/apellido del paciente (DNI intacto)
     $stmt_patient = $conn->prepare("
         UPDATE patients SET
             first_name  = ?,
@@ -130,7 +125,7 @@ try {
             updated_by  = ?
         WHERE id = ?
     ");
-    if (!$stmt_patient->execute([
+    $stmt_patient->bind_param("sssssss",
         $data['name'],
         $data['lastname'],
         $data['eps'],
@@ -138,12 +133,17 @@ try {
         $data['eps_classification'],
         $username,
         $existing['patient_id']
-    ])) {
+    );
+    if (!$stmt_patient->execute()) {
         throw new Exception("Error al actualizar paciente: " . $stmt_patient->error);
     }
     $stmt_patient->close();
 
-    // Construir UPDATE de priorities
+    $checkin_date_str = $check_in_datetime ? $check_in_datetime->format('Y-m-d') : null;
+    $checkin_time_str = $check_in_datetime ? $check_in_datetime->format('H:i:s') : null;
+    $resp_date_str    = $comment_datetime  ? $comment_datetime->format('Y-m-d')  : null;
+    $resp_time_str    = $comment_datetime  ? $comment_datetime->format('H:i:s')  : null;
+
     $sql = "UPDATE priorities SET
         eps_id            = ?,
         ips_id            = ?,
@@ -169,6 +169,7 @@ try {
         response_hour_diff= ?,
         updated_by        = ?";
 
+    $types = "sssssssssssssssssssssss";
     $params = [
         $data['eps'],
         $data['ips'],
@@ -186,10 +187,10 @@ try {
         $data['exhibit_ten'],
         $data['send_to'],
         $data['observation_out'],
-        $check_in_datetime  ? $check_in_datetime->format('Y-m-d')  : null,
-        $check_in_datetime  ? $check_in_datetime->format('H:i:s')  : null,
-        $comment_datetime   ? $comment_datetime->format('Y-m-d')   : null,
-        $comment_datetime   ? $comment_datetime->format('H:i:s')   : null,
+        $checkin_date_str,
+        $checkin_time_str,
+        $resp_date_str,
+        $resp_time_str,
         $response_day_diff,
         $response_time_diff,
         $username,
@@ -200,6 +201,7 @@ try {
                    appointment_time    = ?,
                    attention_day_diff  = ?,
                    attention_hour_diff = ?";
+        $types .= "ssss";
         $params[] = $attention_datetime ? $attention_datetime->format('Y-m-d') : null;
         $params[] = $attention_datetime ? $attention_datetime->format('H:i:s') : null;
         $params[] = $attention_day_diff;
@@ -207,13 +209,15 @@ try {
     }
 
     $sql .= " WHERE id = ?";
+    $types .= "s";
     $params[] = $data['call_id'];
 
     $stmt_priority = $conn->prepare($sql);
     if (!$stmt_priority) {
         throw new Exception("Error al preparar consulta: " . $conn->error);
     }
-    if (!$stmt_priority->execute($params)) {
+    $stmt_priority->bind_param($types, ...$params);
+    if (!$stmt_priority->execute()) {
         throw new Exception("Error al actualizar llamada: " . $stmt_priority->error);
     }
     $stmt_priority->close();

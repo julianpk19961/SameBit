@@ -1,38 +1,27 @@
 <?php
-/**
- * Commit.php - Guardar prioridad/llamada de forma segura
- * 
- * Usa prepared statements para prevenir SQL injection
- * y valida token CSRF para prevenir ataques
- */
-
 require_once 'setup.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
-// Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido'], JSON_OUT);
+    echo json_encode(['error' => 'Metodo no permitido'], JSON_OUT);
     exit;
 }
 
-// Verificar autenticación
 if (!is_session_valid()) {
     http_response_code(401);
     echo json_encode(['error' => 'No autenticado'], JSON_OUT);
     exit;
 }
 
-// Validar token CSRF (opcional - el token se envía automáticamente via security.js)
 $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
 if (!empty($csrf_token) && !validate_csrf_token($csrf_token)) {
     http_response_code(403);
-    echo json_encode(['error' => 'Token CSRF inválido'], JSON_OUT);
+    echo json_encode(['error' => 'Token CSRF invalido'], JSON_OUT);
     exit;
 }
 
-// Obtener y sanitizar datos de entrada
 $data = [
     'pk_uuid' => isset($_POST['pk_uuid']) ? trim($_POST['pk_uuid']) : '',
     'dni' => isset($_POST['dni']) ? trim($_POST['dni']) : '',
@@ -58,18 +47,15 @@ $data = [
     'attention_date' => isset($_POST['AtentionDate']) ? trim($_POST['AtentionDate']) : '',
 ];
 
-// Validaciones básicas
-// Nota: se usa === '' en lugar de empty() porque campos como contacttype y eps_status
-// pueden tener el valor "0" que es válido pero que empty() trata como vacío.
 $required_fields = [
-    'dni'               => 'Identificación',
+    'dni'               => 'Identificacion',
     'name'              => 'Nombres',
     'lastname'          => 'Apellidos',
     'eps'               => 'EPS',
     'ips'               => 'IPS',
     'eps_classification'=> 'Rango EPS',
     'contacttype'       => 'Tipo de Contacto',
-    'observation_in'    => 'Observación (Referencia)',
+    'observation_in'    => 'Observacion (Referencia)',
     'sent_by'           => 'Remitido Desde',
     'eps_status'        => 'Estado EPS',
 ];
@@ -81,18 +67,16 @@ foreach ($required_fields as $field => $label) {
     }
 }
 
-// Validar fechas
 try {
     $check_in_datetime = !empty($data['check_in_date']) ? new DateTime($data['check_in_date']) : null;
     $comment_datetime = !empty($data['comment_date']) ? new DateTime($data['comment_date']) : null;
     $attention_datetime = !empty($data['attention_date']) ? new DateTime($data['attention_date']) : null;
 } catch (Exception $e) {
     http_response_code(400);
-    echo json_encode(['error' => 'Formato de fecha inválido'], JSON_OUT);
+    echo json_encode(['error' => 'Formato de fecha invalido'], JSON_OUT);
     exit;
 }
 
-// Calcular diferencias de tiempo
 $response_day_diff = 0;
 $response_time_diff = '0:00';
 $attention_day_diff = 0;
@@ -112,16 +96,12 @@ if ($check_in_datetime && $attention_datetime && $data['approved'] == 1) {
 
 $username = $_SESSION['usuario'];
 
-// Iniciar transacción
 $conn->begin_transaction();
 
 try {
-    // Insertar o actualizar paciente
     if (empty($data['pk_uuid'])) {
-        // INSERT nuevo paciente
         $stmt_patient = $conn->prepare("INSERT INTO patients (id, document_number, document_type, first_name, last_name, eps_id, range_level, ips_id, created_by, updated_by) VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        if (!$stmt_patient->execute([
+        $stmt_patient->bind_param("sssssssss",
             $data['dni'],
             $data['documenttype'],
             $data['name'],
@@ -131,13 +111,15 @@ try {
             $data['ips'],
             $username,
             $username
-        ])) {
+        );
+        if (!$stmt_patient->execute()) {
             throw new Exception("Error al guardar paciente: " . $stmt_patient->error);
         }
-        
-        // Obtener ID del paciente creado
+        $stmt_patient->close();
+
         $stmt_get = $conn->prepare("SELECT id FROM patients WHERE document_number = ?");
-        $stmt_get->execute([$data['dni']]);
+        $stmt_get->bind_param("s", $data['dni']);
+        $stmt_get->execute();
         $result_get = $stmt_get->get_result();
         if ($result_get->num_rows > 0) {
             $row = $result_get->fetch_assoc();
@@ -145,18 +127,17 @@ try {
         }
         $stmt_get->close();
     } else {
-        // UPDATE paciente existente
-        $stmt_patient = $conn->prepare("UPDATE patients SET 
-            document_number = ?, 
-            document_type = ?, 
-            first_name = ?, 
-            last_name = ?, 
-            eps_id = ?, 
-            ips_id = ?, 
-            range_level = ?, 
-            updated_by = ? 
+        $stmt_patient = $conn->prepare("UPDATE patients SET
+            document_number = ?,
+            document_type = ?,
+            first_name = ?,
+            last_name = ?,
+            eps_id = ?,
+            ips_id = ?,
+            range_level = ?,
+            updated_by = ?
             WHERE document_number = ?");
-        if (!$stmt_patient->execute([
+        $stmt_patient->bind_param("sssssssss",
             $data['dni'],
             $data['documenttype'],
             $data['name'],
@@ -166,76 +147,78 @@ try {
             $data['eps_classification'],
             $username,
             $data['dni']
-        ])) {
+        );
+        if (!$stmt_patient->execute()) {
             throw new Exception("Error al actualizar paciente: " . $stmt_patient->error);
         }
+        $stmt_patient->close();
     }
-    
-    // Insertar prioridad
-    $columns = "id, patient_id, eps_id, ips_id, range_level, diagnosis_id, document_number, first_name, 
-                last_name, contact_type, approved, sent_by, eps_status, calls_count, reception_notes, 
-                created_by, updated_by, annex_nine, annex_ten, sent_to, outgoing_notes, 
-                checkin_date, checkin_time, response_date, response_time, response_day_diff, response_hour_diff";
-    
-    $values = "UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-    
+
+    $checkin_date_str = $check_in_datetime ? $check_in_datetime->format('Y-m-d') : null;
+    $checkin_time_str = $check_in_datetime ? $check_in_datetime->format('H:i:s') : null;
+    $resp_date_str    = $comment_datetime  ? $comment_datetime->format('Y-m-d')  : null;
+    $resp_time_str    = $comment_datetime  ? $comment_datetime->format('H:i:s')  : null;
+
+    $sql_priority = "INSERT INTO priorities (
+        id, patient_id, eps_id, ips_id, range_level, diagnosis_id, document_number, first_name,
+        last_name, contact_type, approved, sent_by, eps_status, calls_count, reception_notes,
+        created_by, updated_by, annex_nine, annex_ten, sent_to, outgoing_notes,
+        checkin_date, checkin_time, response_date, response_time, response_day_diff, response_hour_diff
+    ) VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $types = "sssssssssssssssssssssssss";
     $params = [
-        $data['pk_uuid'], $data['eps'], $data['ips'], $data['eps_classification'], 
-        $data['diagnosis'], $data['dni'], $data['name'], $data['lastname'], 
-        $data['contacttype'], $data['approved'], $data['sent_by'], $data['eps_status'], 
-        $data['call_number'], $data['observation_in'], $username, $username, 
+        $data['pk_uuid'], $data['eps'], $data['ips'], $data['eps_classification'],
+        $data['diagnosis'], $data['dni'], $data['name'], $data['lastname'],
+        $data['contacttype'], $data['approved'], $data['sent_by'], $data['eps_status'],
+        $data['call_number'], $data['observation_in'], $username, $username,
         $data['exhibit_nine'], $data['exhibit_ten'], $data['send_to'], $data['observation_out'],
-        $check_in_datetime ? $check_in_datetime->format('Y-m-d') : null,
-        $check_in_datetime ? $check_in_datetime->format('H:i:s') : null,
-        $comment_datetime ? $comment_datetime->format('Y-m-d') : null,
-        $comment_datetime ? $comment_datetime->format('H:i:s') : null,
-        $response_day_diff,
-        $response_time_diff
+        $checkin_date_str, $checkin_time_str,
+        $resp_date_str, $resp_time_str,
+        $response_day_diff, $response_time_diff
     ];
-    
-    // Si está aprobado, agregar campos de cita
+
     if ($data['approved'] == 1) {
-        $columns .= ", appointment_date, appointment_time, attention_day_diff, attention_hour_diff";
-        $values .= ", ?, ?, ?, ?";
+        $sql_priority = "INSERT INTO priorities (
+            id, patient_id, eps_id, ips_id, range_level, diagnosis_id, document_number, first_name,
+            last_name, contact_type, approved, sent_by, eps_status, calls_count, reception_notes,
+            created_by, updated_by, annex_nine, annex_ten, sent_to, outgoing_notes,
+            checkin_date, checkin_time, response_date, response_time, response_day_diff, response_hour_diff,
+            appointment_date, appointment_time, attention_day_diff, attention_hour_diff
+        ) VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $types .= "ssss";
         $params[] = $attention_datetime ? $attention_datetime->format('Y-m-d') : null;
         $params[] = $attention_datetime ? $attention_datetime->format('H:i:s') : null;
         $params[] = $attention_day_diff;
         $params[] = $attention_time_diff;
     }
-    
-    $sql_priority = "INSERT INTO priorities ($columns) VALUES ($values)";
+
     $stmt_priority = $conn->prepare($sql_priority);
-    
     if (!$stmt_priority) {
         throw new Exception("Error al preparar consulta de prioridad: " . $conn->error);
     }
-    
-    if (!$stmt_priority->execute($params)) {
+    $stmt_priority->bind_param($types, ...$params);
+    if (!$stmt_priority->execute()) {
         throw new Exception("Error al guardar prioridad: " . $stmt_priority->error);
     }
-    
-    // Commit de la transacción
+
     $conn->commit();
-    
-    // Log de seguridad
+
     security_log('PRIORITY_CREATED', 'Nueva prioridad registrada para DNI: ' . $data['dni']);
-    
+
     echo json_encode([
         'success' => true,
         'message' => 'Registro guardado exitosamente'
     ], JSON_OUT);
-    
+
 } catch (Exception $e) {
-    // Rollback en caso de error
     $conn->rollback();
-    
     http_response_code(500);
     echo json_encode([
         'error' => 'Error al guardar registro: ' . $e->getMessage()
     ], JSON_OUT);
 }
 
-// Cerrar statements
 if (isset($stmt_patient)) $stmt_patient->close();
 if (isset($stmt_priority)) $stmt_priority->close();
 $conn->close();

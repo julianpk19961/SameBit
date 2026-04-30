@@ -59,7 +59,8 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->execute([$id]);
+$stmt->bind_param("s", $id);
+$stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {

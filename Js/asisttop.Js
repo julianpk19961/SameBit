@@ -2,7 +2,7 @@ var user = [];
 var user = JSON.parse(localStorage.getItem('user'));
 
 if (user == null) {
-    location.href = 'http://192.168.1.22/samebit/pages/login.php';
+    location.href = '/pages/login.php';
 }
 
 //VALIDACIÓN: LA FECHA DEL FORMATO SIEMPRE SE LLENE CON EL VALOR DE LA FECHA ACTUAL
@@ -335,8 +335,6 @@ if (user == null) {
     $('#clearForm').click(()=>{
         var elements = document.getElementsByTagName("input");
         for (var i=0; i < elements.length; i++) {
-                console.log(elements[i]);
-                console.log(elements[i]).value;
                 elements[i].value = "";
         }
         $('#comment').val('');

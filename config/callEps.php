@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+require_once 'setup.php';
 
 $sql    = "SELECT id, name, nit FROM entities WHERE entity_type_id = (SELECT id FROM entity_types WHERE name = 'EPS') ORDER BY name";
 $result = mysqli_query($conn, $sql);

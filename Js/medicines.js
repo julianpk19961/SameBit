@@ -4,7 +4,7 @@ $(document).ready(function () {
     var user = JSON.parse(localStorage.getItem('user'));
 
     if (user == null) {
-        location.href = 'http://localhost/samebit/pages/login.php';
+        location.href = '/pages/login.php';
         return false;
     } else {
         getTable();
@@ -116,12 +116,20 @@ $(document).on('mouseover', '#stored', function (e) {
 stored = (postdata) => {
 
     $.post('../config/medicinestored.php', postdata, function (response) {
-        if (response.includes('Error')) {
-            return false
+        let data = (typeof response === 'object') ? response : null;
+        if (!data) {
+            try { data = JSON.parse(response); } catch(e) { return; }
         }
+        if (data && data.error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: data.error });
+            return;
+        }
+        Swal.fire({ icon: 'success', title: 'Guardado', text: data.message || 'Medicamento guardado', timer: 2000, showConfirmButton: false });
         $('#modal-record').modal('hide');
+        getTable();
+    }).fail(function() {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar el medicamento' });
     });
-    getTable(searchbox);
 
 }
 
@@ -176,7 +184,7 @@ $('#destroyMedicine').submit((e) => {
 
 
     $.post('../config/medicinedown.php', postdata, function (response) {
-        data = JSON.parse(response);
+        let data = (typeof response === 'object') ? response : JSON.parse(response);
         Swal.fire({
             icon: data.icon,
             title: data.title,
@@ -219,7 +227,7 @@ $(document).on('click', '#kardex-store', (e) => {
     }
 
     if (emptyfields) {
-        alert('Los siguientes campos están vacios: ' + emptyfields);
+        Swal.fire({ icon: 'warning', title: 'Campos vacios', text: 'Los siguientes campos estan vacios: ' + emptyfields });
         return false;
     }
 
@@ -230,7 +238,7 @@ $(document).on('click', '#kardex-store', (e) => {
 
     if (today < date) {
 
-        alert('La fecha no puede ser superior a la de hoy');
+        Swal.fire({ icon: 'warning', title: 'Fecha invalida', text: 'La fecha no puede ser superior a la de hoy' });
         return false;
     }
 
@@ -247,24 +255,32 @@ $(document).on('click', '#kardex-store', (e) => {
         comment: comment,
 
     };
-    $.post('../config/newkardexmov.php', postdata, (response) => {
+    $.post('../config/newkardexmov.php', postdata, function (response) {
+        let data = (typeof response === 'object') ? response : null;
+        if (!data) {
+            try { data = JSON.parse(response); } catch(e) {}
+        }
 
-        if (response.includes('error')) {
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: response.split('-')[1],
-            });
-
+        if (data && data.error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: data.error });
             return false;
-        };
+        }
+
+        if (!data || !data.success) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo registrar el movimiento' });
+            return false;
+        }
 
         $('#newkardexmov').trigger('reset');
-        let postdata = {
-            pk_uuid: pk_uuid
-        };
-        getkardexRow(postdata);
+        let postdataRefresh = { pk_uuid: pk_uuid };
+        getkardexRow(postdataRefresh);
+    }).fail(function(xhr) {
+        let msg = 'No se pudo registrar el movimiento';
+        try {
+            let resp = JSON.parse(xhr.responseText);
+            if (resp.error) msg = resp.error;
+        } catch(e) {}
+        Swal.fire({ icon: 'error', title: 'Error', text: msg });
     });
 
 });
@@ -546,54 +562,52 @@ function getkardexRow(postdata) {
 
     $.post('../config/getkardexmov.php', postdata, function (response) {
 
+        let data;
+        if (typeof response === 'string') {
+            try { data = JSON.parse(response); } catch(e) { return; }
+        } else {
+            data = response;
+        }
 
-        if (response == 'error') {
-            templatebody += `<tr> <td colspan='9'><strong>Aún no se registran movimientos</strong></td></tr>`
+        if (!data || !Array.isArray(data) || data.length < 2) {
+            templatebody += `<tr><td colspan='9'><strong>Aun no se registran movimientos</strong></td></tr>`;
+            $('#kardexMov').html(templatebody);
+            return;
+        }
+
+        data[0].forEach(row => {
+            templateoption += `<option value="${row.KP_UUID}" title="${row.name} - ${row.abbr}">${row.name}</option>`;
+        });
+
+        if (!Array.isArray(data[1]) || data[1].length === 0) {
+            templatebody += `<tr><td colspan='9'><strong>Aun no se registran movimientos</strong></td></tr>`;
         } else {
 
-            let data = JSON.parse(response);
-
-            data[0].forEach(row => {
-                templateoption += `<option value="${row.KP_UUID}" title="${row.name} - ${row.abbr}">${row.name}</option>`
+            data[1].forEach(row => {
+                templatebody +=
+                    `<tr class="border h-25">
+                        <td data-sort="${row.zCrea.split(' ')[0]}"> ${row.zCrea.split(' ')[0].split('-').reverse().join('/') + ' ' + row.zCrea.split(' ')[1]} </td>
+                        <td class="w-100"> ${row.patient}<br>
+                        <small>${row.bill == '' ? '' : 'fra/consec: ' + row.bill}</small>
+                        </td>
+                        <td><small> ${row.comment == null || row.comment == '' ? '' : row.comment} </small></td>
+                        <td class="w-25 text-end"> ${row.type == 1 ? row.quantity : '0'} </td>
+                        <td class="w-25 text-end"> ${row.type == 0 ? row.quantity : '0'} </td>
+                        <td  class="w-25 text-end text-${row.type == 1 ? 'success' : 'danger'}"> ${row.finalQuantity} </td>
+                    </tr>`;
             });
+        }
 
-            if (data[1] == 'error') {
-                templatebody += `<tr> <td colspan='9'><strong>Aún no se registran movimientos</strong></td></tr>`
-            } else {
+        $('#kardexMov').html(templatebody);
+        $('#categorymov').html(templateoption);
 
-                data[1].forEach(row => {
-                    templatebody +=
-                        `<tr class="border h-25">
-                            <td data-sort="${row.zCrea.split(" ")[0]}"> ${nueva = row.zCrea.split(" ")[0].split("-").reverse().join("/") + ' ' + row.zCrea.split(" ")[1]} </td>
-                            <td class="w-100"> ${row.patient}<br>
-                            <small>${row.bill == "" ? '' : 'fra/consec: ' + row.bill}</small>
-                            </td>
-                            <td><small> ${row.comment == null || row.comment == '' ? '' : row.comment} <small> </td>
-                            <td class="w-25 text-end"> ${row.type == 1 ? row.quantity : '0'} </td>
-                            <td class="w-25 text-end"> ${row.type == 0 ? row.quantity : '0'} </td>
-                            <td  class="w-25 text-end text-${row.type == 1 ? 'success' : 'danger'}"> ${row.finalQuantity} </td>
-                        </tr>`
-                });
-
-
-            }
-
-            $('#kardexMov').html(templatebody);
-            $('#categorymov').html(templateoption);
-
-            if (data[1] != 'error') {
-
-                columns_print = ':visible';
-                varTitle = 'Movimientos-' + $('#name').val();
-                orderBy = [0, 'desc'];
-                PDF = false;
-                pagination('#kardex_tbl', '8', columns_print, varTitle, orderBy, PDF);
-            }
-
-
-
-        };
-        return;
+        if (Array.isArray(data[1]) && data[1].length > 0) {
+            columns_print = ':visible';
+            varTitle = 'Movimientos-' + $('#name').val();
+            orderBy = [0, 'desc'];
+            PDF = false;
+            pagination('#kardex_tbl', '8', columns_print, varTitle, orderBy, PDF);
+        }
     });
 };
 
@@ -609,19 +623,21 @@ $(document).on('change', '#categorymov', function () {
         // console.log('in');
         $.post('../config/getLastKardex.php', { pk_uuid: pk_uuid }, function (response) {
 
-            if (response == 'error') {
+            let data = (typeof response === 'object') ? response : null;
+            if (!data) {
+                try { data = JSON.parse(response); } catch(e) { return; }
+            }
+
+            if (!Array.isArray(data) || data.length === 0) {
                 console.log('No data');
             } else {
-
-                let data = JSON.parse(response);
                 $.each(data[0], function (key, value) {
                     if (key === 'finalQuantity') {
                         $('#quantity').val(value ? value : 0);
                         $('#quantity').prop('disabled', true);
                     }
                 });
-
-            };
+            }
             return;
         });
 

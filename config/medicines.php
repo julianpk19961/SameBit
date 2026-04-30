@@ -6,7 +6,7 @@
  * Usa prepared statements y sanitización de salida
  */
 
-require_once 'config.php';
+require_once 'setup.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 

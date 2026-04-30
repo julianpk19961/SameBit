@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+require_once 'setup.php';
 
 $PK_UUID = isset($_POST["pk_uuid"]) ? trim($_POST["pk_uuid"]) : '';
 $active  = isset($_POST["z_xone"])  ? intval($_POST["z_xone"]) : 0;

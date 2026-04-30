@@ -1,6 +1,5 @@
 <?php
-include 'config.php';
-date_default_timezone_set('America/Bogota');
+require_once 'setup.php';
 
 $today = date('Y-m-d');
 

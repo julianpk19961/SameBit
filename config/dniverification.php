@@ -6,7 +6,7 @@
  * y retorna resultados en formato JSON
  */
 
-require_once 'config.php';
+require_once 'setup.php';
 
 // Verificar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

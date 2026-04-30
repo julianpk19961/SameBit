@@ -6,7 +6,7 @@
  * y retorna resultados en formato JSON para DataTables
  */
 
-require_once 'config.php';
+require_once 'setup.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 

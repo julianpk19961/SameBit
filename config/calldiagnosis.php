@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+require_once 'setup.php';
 
 $sql    = "SELECT id, code, description FROM diagnoses ORDER BY code";
 $result = mysqli_query($conn, $sql);
