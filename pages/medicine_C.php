@@ -1,20 +1,9 @@
 <?php
 include './generales/header.php';
+include './generales/nav.php';
 ?>
 
 <script src="../Js/medicineSave.js" defer></script>
-<header class="d-flex flex-wrap justify-content-center py-3 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-
-        <img src="../img/logo.png" height="40" class="logo">
-    </a>
-
-    <nav>
-        <ul class="nav nav-pills">
-            <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-</header>
 <form id="medicineStored" action="../pages/medicine_.php" method="POST" class="p-2 form h-100" enctype="multipart/form-data">
     <div class="container bg-light border">
         <div id="tittleModule" class="row border border-end">

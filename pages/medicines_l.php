@@ -1,21 +1,7 @@
 <?php
 include './generales/header.php';
+include './generales/nav.php';
 ?>
-
-<header class="d-flex flex-wrap justify-content-center py-3 border-bottom">
-
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <img src="../img/logo.png" height="40" class="logo">
-    </a>
-
-    <nav>
-        <ul class="nav nav-pills">
-            <li class="nav-item"><a href="./medicines_l.php" class="nav-link active" aria-current="page">Samecomed</a></li>
-            <li class="nav-item"><a href="../config/logout.php" class="nav-link link-secondary"><?php echo __('sign_out'); ?></a></li>
-        </ul>
-    </nav>
-
-</header>
 
 <div id="tittleModule" class="row border border-end">
     <h1 class="text-center align-self-center"><?php echo __('medicine_management'); ?></h1>

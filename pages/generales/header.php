@@ -26,16 +26,9 @@ $csrf_token = generate_csrf_token();
   <link rel="stylesheet" href="../css/select2/select2.min.css">
   <link rel="stylesheet" href="../Js/sweetalert2/sweetalert2.min.css">
 
-  <?php if ($page === 'login.php'): ?>
-  <link rel="stylesheet" href="../css/Login.css">
-  <?php else: ?>
-  <link rel="stylesheet" href="../css/pacientes.css">
-  <?php if ($page === 'calls.php'): ?>
-  <link rel="stylesheet" href="../css/calls.css">
-  <?php endif; ?>
-  <?php endif; ?>
+  <link rel="stylesheet" href="../css/theme.css">
 </head>
-<body>
+<body<?php if ($page === 'login.php') echo ' class="login-body"'; ?>>
   <!-- Variables globales: CSRF token, idioma y traducciones -->
   <script>
     window.CSRF_TOKEN = '<?php echo htmlspecialchars($csrf_token); ?>';

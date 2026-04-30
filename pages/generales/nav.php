@@ -1,70 +1,87 @@
 <?php
-// $page, $appName and $app_lang come from header.php (via setup.php)
+// $page, $appName, $app_lang come from header.php (via setup.php)
+$nav_items = [
+  ['href' => './dashboard.php',  'icon' => 'bi-speedometer2',    'label' => __('home')              ?? 'Dashboard',      'id' => 'nav-dashboard'],
+  ['href' => './calls.php',      'icon' => 'bi-telephone',       'label' => __('call_registry')      ?? 'Llamadas',       'id' => 'nav-calls'],
+  ['href' => './medicines_l.php','icon' => 'bi-capsule',         'label' => __('medicines')           ?? 'Samecomed',      'id' => 'nav-medicines'],
+  ['href' => './pacients.php',   'icon' => 'bi-people',          'label' => __('patients')            ?? 'Pacientes',      'id' => 'nav-patients'],
+  ['href' => './asisttop.php',   'icon' => 'bi-clipboard2-pulse','label' => __('asist_top')          ?? 'Asist-TOP',      'id' => 'nav-asisttop'],
+  ['href' => '#',                'icon' => 'bi-graph-up',        'label' => __('reports')             ?? 'Reportes',       'id' => 'nav-reports'],
+  ['href' => './admin_users.php','icon' => 'bi-person-gear',     'label' => __('users_management')    ?? 'Usuarios',       'id' => 'nav-admin'],
+];
 ?>
-<header class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-4 border-bottom px-4">
-  <div class="d-flex align-items-center gap-2">
-    <!-- Módulos Menu -->
+<nav class="app-navbar">
+  <a href="./dashboard.php" class="nav-brand">
+    <img src="../img/logo.png" alt="<?php echo htmlspecialchars($appName); ?>">
+  </a>
+
+  <div class="nav-center">
+    <a href="./dashboard.php" class="nav-home-link<?php echo $page === 'dashboard.php' ? ' active' : ''; ?>">
+      <i class="bi bi-speedometer2"></i> <?php echo __('home'); ?>
+    </a>
+
     <div class="dropdown">
-      <button class="btn btn-outline-primary dropdown-toggle" type="button" id="modulesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-menu-button-wide"></i> <?php echo __('modules') ?? 'Módulos'; ?>
+      <button class="nav-dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+        <i class="bi bi-grid"></i> <?php echo __('modules'); ?> <i class="bi bi-chevron-down nav-caret"></i>
       </button>
-      <ul class="dropdown-menu" aria-labelledby="modulesDropdown">
-        <li><a class="dropdown-item" href="./calls.php" id="nav-calls"><i class="bi bi-telephone"></i> <?php echo __('call_registry') ?? 'Llamadas'; ?></a></li>
-        <li><a class="dropdown-item" href="./medicines_l.php"><i class="bi bi-capsule"></i> <?php echo __('medicines') ?? 'Medicinas'; ?></a></li>
-        <li><a class="dropdown-item" href="#" id="nav-reports"><i class="bi bi-graph-up"></i> <?php echo __('reports') ?? 'Reportes'; ?></a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="./admin_users.php"><i class="bi bi-people"></i> <?php echo __('users_management') ?? 'Gestión de Usuarios'; ?></a></li>
+      <ul class="dropdown-menu nav-modules-menu">
+        <?php foreach ($nav_items as $item): ?>
+          <?php if ($item['id'] === 'nav-dashboard') continue; ?>
+          <?php
+            $active = ($page === basename($item['href'])) ? ' active' : '';
+            $click  = ($item['id'] === 'nav-reports') ? ' onclick="openReportModal(event)"' : '';
+          ?>
+          <li>
+            <a href="<?php echo $item['href']; ?>"
+               id="<?php echo $item['id']; ?>"
+               class="dropdown-item<?php echo $active; ?>"
+               <?php echo $click; ?>>
+              <i class="bi <?php echo $item['icon']; ?>"></i>
+              <?php echo $item['label']; ?>
+            </a>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </div>
-
-    <!-- Logo y nombre -->
-    <a href="/pages/dashboard.php" class="d-flex align-items-center text-dark text-decoration-none">
-      <img src="../img/logo.png" height="40" class="logo">
-      <span class="ms-2 fw-bold text-primary"><?php echo htmlspecialchars($appName); ?></span>
-    </a>
   </div>
-  <nav>
-    <ul class="nav nav-pills align-items-center gap-1">
-      <?php if ($page !== 'dashboard.php'): ?>
-      <li class="nav-item">
-        <a href="./dashboard.php" class="nav-link"><i class="bi bi-house"></i> <?php echo __('home'); ?></a>
-      </li>
-      <?php endif; ?>
-      <li class="nav-item">
-        <span class="nav-link text-muted">
-          <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['usuario']); ?>
-        </span>
-      </li>
-      <li class="nav-item">
-        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="<?php echo __('system_mode'); ?>">
-          <i class="bi bi-circle-half" id="theme-icon"></i>
-        </button>
-      </li>
-      <!-- Language switcher -->
-      <li class="nav-item dropdown">
-        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" id="lang-dropdown" data-bs-toggle="dropdown" aria-expanded="false" title="<?php echo __('language'); ?>">
-          <i class="bi bi-translate"></i>
-          <?php echo $app_lang === 'es' ? '🇨🇴' : '🇺🇸'; ?>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="lang-dropdown">
-          <li>
-            <button class="dropdown-item <?php echo $app_lang === 'en' ? 'active' : ''; ?>" onclick="setLanguage('en')">
-              🇺🇸 <?php echo __('lang_en'); ?>
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item <?php echo $app_lang === 'es' ? 'active' : ''; ?>" onclick="setLanguage('es')">
-              🇨🇴 <?php echo __('lang_es'); ?>
-            </button>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item">
-        <a href="../config/logout.php" class="nav-link link-danger"><?php echo __('sign_out'); ?></a>
-      </li>
-    </ul>
-  </nav>
-</header>
+
+  <div class="nav-right">
+    <div class="dropdown">
+      <button class="nav-user-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i>
+        <span class="nav-user-name"><?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
+        <i class="bi bi-chevron-down nav-caret"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end nav-user-menu">
+        <li class="nav-user-header">
+          <span class="nav-user-fullname"><?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <button class="dropdown-item" id="theme-toggle-nav" onclick="cycleTheme()">
+            <i class="bi bi-circle-half" id="theme-icon"></i>
+            <?php echo __('system_mode'); ?>
+          </button>
+        </li>
+        <li>
+          <div class="nav-lang-row">
+            <span class="nav-lang-label"><i class="bi bi-translate"></i> <?php echo __('language'); ?></span>
+            <div class="nav-lang-btns">
+              <button class="nav-lang-btn<?php echo $app_lang === 'en' ? ' active' : ''; ?>" onclick="setLanguage('en')">EN</button>
+              <button class="nav-lang-btn<?php echo $app_lang === 'es' ? ' active' : ''; ?>" onclick="setLanguage('es')">ES</button>
+            </div>
+          </div>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a href="../config/logout.php" class="dropdown-item nav-logout-item">
+            <i class="bi bi-box-arrow-right"></i> <?php echo __('sign_out'); ?>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 <script>
 function setLanguage(lang) {
@@ -73,16 +90,34 @@ function setLanguage(lang) {
   });
 }
 
-// Mostrar modal de reportes desde el menú
-document.getElementById('nav-reports')?.addEventListener('click', function(e) {
+function cycleTheme() {
+  var theme = (function(){
+    var KEY = 'app-theme';
+    var MODES = ['system','light','dark'];
+    var cur = localStorage.getItem(KEY) || 'system';
+    var next = MODES[(MODES.indexOf(cur) + 1) % MODES.length];
+    localStorage.setItem(KEY, next);
+    return next;
+  })();
+  if (theme === 'system') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  var ICONS = { system:'bi-circle-half', light:'bi-sun-fill', dark:'bi-moon-fill' };
+  var icon = document.getElementById('theme-icon');
+  if (icon) icon.className = 'bi ' + ICONS[theme];
+}
+
+function openReportModal(e) {
   e.preventDefault();
-  const modal = document.getElementById('modal-report');
+  var modal = document.getElementById('modal-report');
   if (modal) {
-    const bsModal = new bootstrap.Modal(modal);
+    var bsModal = new bootstrap.Modal(modal);
     bsModal.show();
     if (typeof showReportCard === 'function') {
       showReportCard(new Date());
     }
   }
-});
+}
 </script>

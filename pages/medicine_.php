@@ -1,35 +1,9 @@
 <?php
 include './generales/header.php';
+include './generales/nav.php';
 ?>
 
 <script src="../Js/medicineSave.js" defer></script>
-<header class="d-flex flex-wrap justify-content-center py-3 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-
-        <img src="../img/logo.png" height="40" class="logo" alt="logoempresa" >
-    </a>
-
-    <nav>
-        <ul class="nav nav-pills">
-            <li class="nav-item"><a href="./dashboard.php" class="nav-link active" aria-current="page">Inicio</a></li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Farmacia">
-                    Farmacia
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="./medicines_l.php">Medicamentos</a></li>
-                    <li><a class="dropdown-item" href="#">Movimientos</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Reportes</a></li>
-                </ul>
-            </li>
-            <li class="nav-item"><a href="../config/logout.php" class="nav-link">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-
-</header>
 
 
 <form id="medicineStored" action="" method="POST" class="p-2 form h-100" enctype="multipart/form-data">

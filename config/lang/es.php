@@ -8,6 +8,9 @@ return [
 
     // ── Nav ────────────────────────────────────────────────
     'home'                 => 'Inicio',
+    'modules'              => 'Módulos',
+    'asist_top'            => 'Asist-TOP',
+    'patients'             => 'Pacientes',
     'sign_out'             => 'Cerrar Sesión',
     'system_mode'          => 'Modo sistema',
     'language'             => 'Idioma',

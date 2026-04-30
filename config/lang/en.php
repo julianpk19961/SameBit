@@ -8,6 +8,9 @@ return [
 
     // ── Nav ────────────────────────────────────────────────
     'home'                 => 'Home',
+    'modules'              => 'Modules',
+    'asist_top'            => 'Asist-TOP',
+    'patients'             => 'Patients',
     'sign_out'             => 'Sign Out',
     'system_mode'          => 'System mode',
     'language'             => 'Language',
