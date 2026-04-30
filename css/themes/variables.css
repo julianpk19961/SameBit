@@ -1,0 +1,67 @@
+/* ═══════════════════════════════════════════════════════════════
+   Theme Variables - Base CSS Custom Properties
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Light Theme - Default */
+  --color-bg-from:      #ffffff;
+  --color-bg-to:        #f5f7fa;
+  --color-label:        #e8eef5;
+  --color-input-bg:     #f0f3f7;
+  --color-input-hover:  #e8eef5;
+  --color-btn:          #3ac84f;
+  --color-btn-hover:    #2fa03a;
+  --color-text:         #1a1f3c;
+  --color-text-muted:   #6b7280;
+  --color-placeholder:  #9ca3af;
+  --color-border:       #e5e7eb;
+  --color-error:        #ef4444;
+  --color-warning:      #f59e0b;
+  --color-success:      #3ac84f;
+  --color-info:         #3b82f6;
+  
+  /* Radius & Spacing */
+  --radius:             0.4rem;
+  --radius-lg:          1rem;
+}
+
+/* Dark Theme */
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-from:      #1a1f3c;
+    --color-bg-to:        #2c3e55;
+    --color-label:        #222653;
+    --color-input-bg:     #324861;
+    --color-input-hover:  #4a6278;
+    --color-btn:          #3ac84f;
+    --color-btn-hover:    #2fa03a;
+    --color-text:         #eee;
+    --color-text-muted:   #b0bec5;
+    --color-placeholder:  #b0bec5;
+    --color-border:       #445566;
+    --color-error:        #ff6b6b;
+    --color-warning:      #ffd93d;
+    --color-success:      #3ac84f;
+    --color-info:         #6bcfff;
+  }
+}
+
+/* Light Theme (explicit) */
+[data-theme="light"] {
+  --color-bg-from:      #ffffff;
+  --color-bg-to:        #f5f7fa;
+  --color-label:        #e8eef5;
+  --color-input-bg:     #f0f3f7;
+  --color-input-hover:  #e8eef5;
+  --color-btn:          #3ac84f;
+  --color-btn-hover:    #2fa03a;
+  --color-text:         #1a1f3c;
+  --color-text-muted:   #6b7280;
+  --color-placeholder:  #9ca3af;
+  --color-border:       #e5e7eb;
+  --color-error:        #ef4444;
+  --color-warning:      #f59e0b;
+  --color-success:      #3ac84f;
+  --color-info:         #3b82f6;
+}

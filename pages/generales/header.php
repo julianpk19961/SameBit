@@ -25,6 +25,13 @@ $csrf_token = generate_csrf_token();
   <link rel="stylesheet" href="../css/font-awesome/font-awesome.min.css">
   <link rel="stylesheet" href="../css/select2/select2.min.css">
   <link rel="stylesheet" href="../Js/sweetalert2/sweetalert2.min.css">
+  
+  <!-- Theme System -->
+  <link rel="stylesheet" href="../css/themes/variables.css">
+  <link rel="stylesheet" href="../css/components/theme-toggle.css">
+  <link rel="stylesheet" href="../css/components/buttons.css">
+  <link rel="stylesheet" href="../css/components/forms.css">
+  <link rel="stylesheet" href="../css/components/cards.css">
 
   <?php if ($page === 'login.php'): ?>
   <link rel="stylesheet" href="../css/Login.css">

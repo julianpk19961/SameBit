@@ -1,0 +1,171 @@
+/* ═══════════════════════════════════════════════════════════════
+   Form Components - Reusable & Themeable
+   ═══════════════════════════════════════════════════════════════ */
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form__label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+}
+
+.form__label.required::after {
+  content: ' *';
+  color: var(--color-error);
+}
+
+/* Input Fields */
+.form__input,
+.form__textarea,
+.form__select {
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font: inherit;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+}
+
+.form__input:hover,
+.form__textarea:hover,
+.form__select:hover {
+  border-color: var(--color-input-hover);
+  background: var(--color-input-hover);
+}
+
+.form__input:focus,
+.form__textarea:focus,
+.form__select:focus {
+  outline: none;
+  border-color: var(--color-btn);
+  background: var(--color-input-hover);
+  box-shadow: 0 0 0 3px rgba(58, 200, 79, 0.1);
+}
+
+.form__input::placeholder,
+.form__textarea::placeholder {
+  color: var(--color-placeholder);
+}
+
+.form__textarea {
+  resize: vertical;
+  min-height: 6rem;
+  font-family: inherit;
+}
+
+.form__select {
+  cursor: pointer;
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.5em 1.5em;
+}
+
+/* Form Field with Icon */
+.form__field {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+
+.form__field:hover {
+  border-color: var(--color-input-hover);
+  background: var(--color-input-hover);
+}
+
+.form__field:focus-within {
+  border-color: var(--color-btn);
+  box-shadow: 0 0 0 3px rgba(58, 200, 79, 0.1);
+}
+
+.form__field label {
+  background-color: var(--color-label);
+  border-radius: var(--radius) 0 0 var(--radius);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  min-width: 3rem;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.form__field input {
+  flex: 1;
+  background: var(--color-input-bg);
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  outline: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  transition: background-color 0.2s ease;
+}
+
+.form__field input:hover {
+  background-color: var(--color-input-hover);
+}
+
+.form__field input:focus {
+  background-color: var(--color-input-hover);
+}
+
+.form__field input::placeholder {
+  color: var(--color-placeholder);
+}
+
+/* Error & Help Text */
+.form__error {
+  color: var(--color-error);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.form__help {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* Checkbox & Radio */
+.form__checkbox,
+.form__radio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.form__checkbox input,
+.form__radio input {
+  cursor: pointer;
+}
+
+/* Valid & Invalid States */
+.form__input.valid,
+.form__textarea.valid {
+  border-color: var(--color-success);
+  background: var(--color-input-bg);
+}
+
+.form__input.invalid,
+.form__textarea.invalid {
+  border-color: var(--color-error);
+  background: var(--color-input-bg);
+}

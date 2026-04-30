@@ -1,0 +1,114 @@
+/* ═══════════════════════════════════════════════════════════════
+   Card Components - Reusable & Themeable
+   ═══════════════════════════════════════════════════════════════ */
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--color-btn);
+  box-shadow: 0 4px 12px rgba(58, 200, 79, 0.1);
+}
+
+/* Card Parts */
+.card__header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.card__body {
+  padding: 1.5rem;
+}
+
+.card__footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.02);
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Card Variants */
+.card.card-primary {
+  border-color: var(--color-btn);
+  border-left: 4px solid var(--color-btn);
+}
+
+.card.card-warning {
+  border-color: var(--color-warning);
+  border-left: 4px solid var(--color-warning);
+}
+
+.card.card-danger {
+  border-color: var(--color-error);
+  border-left: 4px solid var(--color-error);
+}
+
+.card.card-info {
+  border-color: var(--color-info);
+  border-left: 4px solid var(--color-info);
+}
+
+/* Glass Effect Card */
+.card.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .card.glass {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Elevated Card */
+.card.elevated {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Sizes */
+.card.compact {
+  border-radius: var(--radius);
+}
+
+.card.compact .card__body {
+  padding: 1rem;
+}
+
+.card.compact .card__header {
+  padding: 1rem;
+}
+
+/* Card Titles */
+.card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.card__subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 0.5rem 0 0 0;
+}
+
+/* Card Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
