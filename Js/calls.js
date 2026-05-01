@@ -1,26 +1,13 @@
 var user = JSON.parse(localStorage.getItem('user'));
 var diagnosisList = [];
-var L = window.LANG || {};
 
-function t(key) { return L[key] || key; }
+// Delegate to SB library (loaded globally via header.php)
+var t = SB.t.bind(SB);
 
-function swalInOffcanvas(opts) {
-    // Blur focused element before opening Swal to avoid aria-hidden warnings on offcanvas
-    const focused = document.activeElement;
-    if (focused && focused !== document.body) focused.blur();
-    return Swal.fire(opts);
-}
+function swalInOffcanvas(opts) { return SB.swal(opts); }
 
-function showFormError(msg) {
-    $('#form-error-text').text(msg);
-    $('#form-error-banner').removeClass('d-none');
-    $('#form-error-banner')[0]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function clearFormError() {
-    $('#form-error-banner').addClass('d-none');
-    $('#form-error-text').text('');
-}
+function showFormError(msg) { SB.form.error(msg, 'form-error-banner'); }
+function clearFormError()    { SB.form.clear('form-error-banner'); }
 
 $(document).ready(function () {
     if (!user) {

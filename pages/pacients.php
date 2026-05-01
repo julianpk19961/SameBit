@@ -1,140 +1,163 @@
 <?php
+require_once '../config/setup.php';
+require_auth();
 include './generales/header.php';
 include './generales/nav.php';
 ?>
+<link rel="stylesheet" href="../css/datatables/dataTables.bootstrap5.min.css">
 
-<section class="h-100 ">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col">
-        <div class="card card-registration my-4">
-          <div class="row g-0">
-            <div class="col-xl-6 d-none d-xl-block">
-              <img src="../img/reg.jpg"
-                alt="Sample photo" class="img-fluid"
-                style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
-            </div>
-            <div class="col-xl-6">
-              <div class="card-body p-md-5 text-black">
-                <h3 class="mb-5 text-uppercase"><?php echo __('patient_registration') ?? 'Registro Paciente'; ?>: </h3>
+<div class="container-fluid px-4">
 
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                      <div class="form-outline">
-                        <Select type="text" class="form-control form-control-lg" id="identification" >
-                          <option value='0'>Elija una opción</option>
-                          <option value='11'>Registro Civil de nacimiento</option>
-                          <option value="12">Tarjeta Identidad</option>
-                          <option value="13">Cedula de ciudadanía</option>
-                          <option value="21">Tarjeta de extranjería</option>
-                          <option value="22">Cédula de extranjería</option>
-                          <option value="31">NIT</option>
-                          <option value="41">Pasaport</option>
-                          <option value="42">Tipo Documento extranjero</option>
-                          <option value="43">No definido por la DIAN</option>
-                        </Select>
-                        <label class="form-label" for="form3Example1m">Tipo Identificación</label>
-                      </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                      <div class="form-outline">
-                        <input type="text" id="form3Example1m" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Example1m">Identificación</label>
-                      </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                      <input type="text" id="form3Example1m" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Example1m">Nombres</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                      <input type="text" id="form3Example1n" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Example1n">Apellidos</label>
-                    </div>
-                  </div>
-                </div>
+  <!-- Toolbar -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h5 class="fw-bold mb-0">
+        <i class="bi bi-person-vcard me-2 text-primary"></i><?php echo __('patient_registration'); ?>
+      </h5>
+    </div>
+    <button class="btn btn-primary" onclick="pacientsOpenCreate()">
+      <i class="bi bi-person-plus"></i> <?php echo __('new_patient') ?? 'Nuevo Paciente'; ?>
+    </button>
+  </div>
 
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                        <Select type="text" class="form-control form-control-lg" id="z_xOne" >
-                            <option value='0'>Elija una opción</option>
-                            <option value='1'>Activo</option>
-                            <option value="2">Inactivo</option>
-                        </Select>
-                        <label class="form-label" for="form3Example1m">Estado</label>
-                      </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                      <Select type="text" class="form-control form-control-lg" id="gender" >
-                          <option value='0'>Elija una opción</option>
-                          <option value='1'>Mujer</option>
-                          <option value="2">Hombre</option>
-                          <option value="2">Otro...</option>
-                      </Select>
-                      <label class="form-label" for="form3Example1m1">Genero</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                      <input type="date" id="form3Example8" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Example8">Fecha Nacimiento</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <input type="number" max="1" max="120" id="form3Example8" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example8">Edad</label>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                    <Select type="text" class="form-control form-control-lg" id="borncity" >
-                            <option value='0'>Elija una opción</option>
-                            <option value='1'>Bucaramanga</option>
-                            <option value="2">Medellín</option>
-                            <option value="2">Calí</option>
-                            <option value='0'>Bógota</option>
-                            <option value='1'>Villavicencio</option>
-                            <option value="2">Mocoa</option>
-                            <option value="2">Neiva</option>
-                      </Select>
-                    <label class="form-label" for="form3Example8">Lugar Nacimiento</label>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <input type="number" id="form3Example9" class="form-control form-control-lg" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
-                    <label class="form-label" for="form3Example8">Teléfono Fijo</label>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <input type="number" id="form3Example9" class="form-control form-control-lg" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
-                    <label class="form-label" for="form3Example8">Celular</label>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                  <input type="email" id="form3Example90" class="form-control form-control-lg" />
-                  <label class="form-label" for="form3Example90">Correo Electronico</label>
-                </div>
-                </div>
-
-                <div class="form-outline mb-4">
-                  <input type="text" id="form3Example9" class="form-control form-control-lg" />
-                  <label class="form-label" for="form3Example9">Dirección</label>
-                </div>
-
-                <div class="d-flex justify-content-end pt-3">
-                  <button type="button" class="btn btn-light btn-lg">Limpiar Formulario</button>
-                  <button type="button" class="btn btn-warning btn-lg ms-2">Enviar</button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Table -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <table class="table table-hover table-bordered mb-0 w-100" id="pacients-table">
+        <thead class="table-light">
+          <tr>
+            <th><?php echo __('doc_national_id') ?? 'Documento'; ?></th>
+            <th><?php echo __('name'); ?></th>
+            <th><?php echo __('last_name'); ?></th>
+            <th><?php echo __('eps') ?? 'EPS'; ?></th>
+            <th><?php echo __('status'); ?></th>
+            <th class="text-center" style="width:80px"><?php echo __('actions'); ?></th>
+          </tr>
+        </thead>
+      </table>
     </div>
   </div>
-</section>
+
+</div>
+
+<!-- ====================================================
+     OFFCANVAS — CREATE / EDIT PATIENT
+     ==================================================== -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="pacients-panel" style="width: min(560px, 100vw);">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title fw-bold" id="pacients-panel-title">
+      <i class="bi bi-person-plus me-2 text-primary"></i><?php echo __('new_patient') ?? 'Nuevo Paciente'; ?>
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form id="pacients-form" novalidate>
+      <input type="hidden" id="pac-id">
+
+      <!-- Error banner -->
+      <div id="pacients-error" class="alert alert-danger d-none mb-3" role="alert">
+        <div class="d-flex align-items-start gap-2">
+          <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1"></i>
+          <span class="sb-error-text flex-grow-1"></span>
+          <button type="button" class="btn-close" onclick="SB.form.clear('pacients-error')"></button>
+        </div>
+      </div>
+
+      <!-- Identification -->
+      <div class="row g-2 mb-3">
+        <div class="col-5">
+          <label class="form-label">Tipo ID <span class="text-danger">*</span></label>
+          <select class="form-select" id="pac-doc-type">
+            <option value="11">Registro Civil</option>
+            <option value="12">Tarjeta Identidad</option>
+            <option value="13" selected>Cédula</option>
+            <option value="21">Tarjeta Extranjería</option>
+            <option value="22">Cédula Extranjería</option>
+            <option value="31">NIT</option>
+            <option value="41">Pasaporte</option>
+            <option value="42">Doc. Extranjero</option>
+            <option value="43">No definido DIAN</option>
+          </select>
+        </div>
+        <div class="col-7">
+          <label class="form-label"><?php echo __('document') ?? 'Identificación'; ?> <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="pac-dni" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div class="row g-2 mb-3">
+        <div class="col">
+          <label class="form-label"><?php echo __('first_name'); ?> <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="pac-first-name">
+        </div>
+        <div class="col">
+          <label class="form-label"><?php echo __('last_name'); ?> <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="pac-last-name">
+        </div>
+      </div>
+
+      <!-- Demographics -->
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label">Género</label>
+          <select class="form-select" id="pac-gender">
+            <option value="">Elige...</option>
+            <option value="1">Mujer</option>
+            <option value="2">Hombre</option>
+            <option value="3">Otro</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label">Fecha Nacimiento</label>
+          <input type="date" class="form-control" id="pac-birth-date">
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label">Teléfono</label>
+          <input type="tel" class="form-control" id="pac-phone">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Celular</label>
+          <input type="tel" class="form-control" id="pac-mobile">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Correo</label>
+        <input type="email" class="form-control" id="pac-email">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Dirección</label>
+        <input type="text" class="form-control" id="pac-address">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><?php echo __('status'); ?></label>
+        <select class="form-select" id="pac-status">
+          <option value="1"><?php echo __('active'); ?></option>
+          <option value="2"><?php echo __('inactive'); ?></option>
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">
+          <?php echo __('cancel'); ?>
+        </button>
+        <button type="submit" class="btn btn-primary px-4">
+          <?php echo __('save'); ?>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../Js/datatables/jquery.dataTables.min.js"></script>
+<script src="../Js/datatables/dataTables.bootstrap5.min.js"></script>
+<script src="../Js/pacients.js"></script>
+<script>ModulePermissions.init();</script>
 <?php include './generales/footer.php'; ?>

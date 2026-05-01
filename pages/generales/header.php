@@ -19,11 +19,7 @@ $csrf_token = generate_csrf_token();
 
   <link rel="icon" href="../img/logo.png" type="image/png">
   <link rel="stylesheet" href="../css/bootstrap-css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/datatables/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="../css/datatables/buttons.dataTables.min.css">
   <link rel="stylesheet" href="../css/bootstrap-icons/bootstrap-icons.css">
-  <link rel="stylesheet" href="../css/font-awesome/font-awesome.min.css">
-  <link rel="stylesheet" href="../css/select2/select2.min.css">
   <link rel="stylesheet" href="../Js/sweetalert2/sweetalert2.min.css">
   <link rel="stylesheet" href="../css/theme.css">
 </head>
@@ -36,8 +32,6 @@ $csrf_token = generate_csrf_token();
   </script>
   
   <script src="../Js/jquery/jquery-3.6.1.min.js"></script>
-  <script src="../Js/jszip/jszip.min.js"></script>
-  <script src="../Js/FileSaver/FileSaver.min.js"></script>
   <script src="../Js/sweetalert2/sweetalert2.min.js"></script>
   <script src="../Js/popper/popper.min.js"></script>
   <script src="../Js/bootstrap/bootstrap.min.js"></script>
@@ -45,3 +39,6 @@ $csrf_token = generate_csrf_token();
   <!-- Script de seguridad para manejo de CSRF y autenticación -->
   <script src="../Js/security.js"></script>
   <script src="../Js/theme.js"></script>
+  <script src="../Js/module_permissions.js"></script>
+  <!-- SameBit core library — must load after jQuery -->
+  <script src="../Js/sb.js"></script>

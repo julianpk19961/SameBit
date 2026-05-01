@@ -69,17 +69,25 @@ CREATE TABLE medicines (
 
 CREATE TABLE patients (
     id              VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    document_number VARCHAR(50) NOT NULL UNIQUE,
-    document_type   VARCHAR(50) NOT NULL,
+    document_type   INT NOT NULL DEFAULT 13,
+    document_number VARCHAR(50) NOT NULL,
     first_name      VARCHAR(100) NOT NULL,
     last_name       VARCHAR(100) NOT NULL,
+    gender          VARCHAR(10)  NULL,
+    birth_date      DATE         NULL,
+    phone           VARCHAR(30)  NULL,
+    mobile          VARCHAR(30)  NULL,
+    email           VARCHAR(150) NULL,
+    address         VARCHAR(255) NULL,
     eps_id          VARCHAR(36),
     ips_id          VARCHAR(36),
-    range_level     VARCHAR(50),
+    range_level     INT          NULL,
+    active          TINYINT(1)   NOT NULL DEFAULT 1,
     created_by      VARCHAR(200),
     updated_by      VARCHAR(200),
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_patient_doc (document_type, document_number),
     FOREIGN KEY (eps_id) REFERENCES entities(id) ON DELETE SET NULL,
     FOREIGN KEY (ips_id) REFERENCES entities(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

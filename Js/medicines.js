@@ -43,7 +43,7 @@ getTable = () => {
                                 <button class="show-element btn btn-primary btn-sm col-sm-5 text-white">
                                     Ver
                                 </button>
-                                <button class="drop-element btn btn-${(medicine.nrows == 0 ? 'danger' : medicine.z_xOne == 1 ? 'secondary' : 'success')} btn-sm col-sm-5 text-white" data-bs-toggle="modal" data-bs-target="#modal-delete-" type="button" ">
+                                <button class="drop-element btn btn-${(medicine.nrows == 0 ? 'danger' : medicine.z_xOne == 1 ? 'secondary' : 'success')} btn-sm col-sm-5 text-white" type="button"
                                 ${(medicine.nrows == 0 ? 'Eliminar' : medicine.z_xOne == 1 ? 'Inactivar' : 'Activar')}
                                 </button>
                             </div>
@@ -125,7 +125,7 @@ stored = (postdata) => {
             return;
         }
         Swal.fire({ icon: 'success', title: 'Guardado', text: data.message || 'Medicamento guardado', timer: 2000, showConfirmButton: false });
-        $('#modal-record').modal('hide');
+        SB.panel.hide('medicines-panel');
         getTable();
     }).fail(function() {
         Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar el medicamento' });
@@ -133,67 +133,35 @@ stored = (postdata) => {
 
 }
 
-// med_status
+// med_status — delete / activate / deactivate via SB.confirm()
 $(document).on('click', '.drop-element', function (e) {
+    var table      = document.getElementById('dataMedicines');
+    var row        = $(this).closest('tr').index();
+    var dataRecord = getDataCells(table, row);
 
-    action = e.target.innerText;
-    icon = (action == 'Activar' ? 'bi bi-toggle-on' : action == 'Inactivar' ? 'bi bi-toggle-off' : 'bi bi-trash2-fill');
-    color = 'btn btn-' + (action == 'Activar' ? 'success' : action == 'Inactivar' ? 'secondary' : 'danger');
+    var pk         = dataRecord[0].innerHTML.trim();
+    var z_xone     = dataRecord[1].innerHTML.trim();
+    var medName    = dataRecord[3].innerHTML.trim();
+    var action     = e.currentTarget.innerText.trim();
 
-    document.getElementById('drop-modal-title').innerText = action;
-    document.getElementById('action').innerText = action;
+    var iconCls = action === 'Activar'   ? 'bi bi-toggle-on'  :
+                  action === 'Inactivar' ? 'bi bi-toggle-off' : 'bi bi-trash2-fill';
+    var btnCls  = action === 'Activar'   ? 'success' :
+                  action === 'Inactivar' ? 'secondary' : 'danger';
 
-    submitdDropModal = document.getElementById('commit-drop-medicine');
-    submitdDropModal.className = icon;
-    submitdDropModal.parentNode.className = color;
-
-    tabla = document.getElementById('dataMedicines');
-    row = $(this).closest('tr').index();
-    getDataCells(tabla, row);
-
-
-});
-
-$(document).on('click', '.drop-element', function (e) {
-
-    table = document.getElementById('dataMedicines');
-    row = $(this).closest('tr').index();
-
-    dataRecord = getDataCells(table, row);
-
-    pk_uuid = dataRecord[0].innerHTML;
-    z_xone = dataRecord[1].innerHTML;
-    Med_name = dataRecord[3].innerHTML;
-    action = dataRecord[6].innerHTML;
-
-    titulo = document.querySelector('.modal-body > p').innerHTML;
-    nuevotitulo = titulo.replace('registro', Med_name);
-    document.querySelector('.modal-body > p').innerHTML = nuevotitulo;
-
-    document.getElementById('modaldel_pk_uuid').innerHTML = pk_uuid;
-    document.getElementById('modaldel_z_xone').innerHTML = z_xone;
-
-});
-
-$('#destroyMedicine').submit((e) => {
-
-    let postdata = {
-        pk_uuid: document.getElementById('modaldel_pk_uuid').innerText,
-        z_xone: document.getElementById('modaldel_z_xone').innerText
-    };
-
-
-    $.post('../config/medicinedown.php', postdata, function (response) {
-        let data = (typeof response === 'object') ? response : JSON.parse(response);
-        Swal.fire({
-            icon: data.icon,
-            title: data.title,
-            text: data.text,
-            timer: 5000
+    SB.confirm({
+        title:              action + ' medicamento',
+        html:               action + ': <strong>' + SB.esc(medName) + '</strong>',
+        confirmButtonText:  action,
+        confirmButtonColor: btnCls === 'danger' ? '#dc3545' : btnCls === 'success' ? '#198754' : '#6c757d'
+    }).then(function (r) {
+        if (!r.isConfirmed) return;
+        $.post('../config/medicinedown.php', { pk_uuid: pk, z_xone: z_xone }, function (response) {
+            var data = (typeof response === 'object') ? response : JSON.parse(response);
+            Swal.fire({ icon: data.icon, title: data.title, text: data.text, timer: 3000 });
+            getTable();
         });
     });
-
-
 });
 
 
@@ -297,7 +265,9 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
     btnPdf = ''
     btnExcel = ''
 
-    if (create == true) {
+    var slug = $(table).closest('[data-module-slug]').data('module-slug') || 'medicina_samecomed';
+
+    if (create == true && ModulePermissions.can(slug, 'guardar')) {
 
         btnCreate = {
             text: '<i class="bi bi-plus-circle-fill"></i>',
@@ -308,7 +278,7 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
 
 
 
-    if (PDF == true) {
+    if (PDF == true && ModulePermissions.can(slug, 'informes')) {
 
 
         btnExcel = {
@@ -380,8 +350,8 @@ function pagination(table, row, columns_print, varTitle, orderBy, create = false
 
         if (table != '#kardex_tbl') {
             $('.new-item')
-                .attr('data-bs-toggle', 'modal')
-                .attr('data-bs-target', '#modal-record')
+                .attr('data-bs-toggle', 'offcanvas')
+                .attr('data-bs-target', '#medicines-panel')
                 .attr('id', 'new-item');
         }
     });
@@ -441,11 +411,11 @@ $("#medicaldiv").on("click", "#new-item", function (e) {
     } else {
 
         selector = document.querySelector('#save-buttons');
-        selector.innerHTML = `<button type="submit" class="btn btn-primary" id="stored">Guardar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>`;
+        selector.innerHTML = `<button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancelar</button><button type="submit" class="btn btn-primary" id="stored">Guardar</button>`;
         $('#observation').val('').attr('rows', '10');
         $('#medicineStored').trigger('reset');
         $('#kardex').html('');
-        $('#modal-head h5').html('Nuevo  Medicamento');
+        SB.panel.setTitle('medicines-panel', '<i class="bi bi-plus-circle me-2 text-primary"></i>Nuevo Medicamento');
 
     }
 });
@@ -460,8 +430,8 @@ $(document).on('click', '.show-element', function (e) {
 
     dataRecord = getDataCells(table, row);
 
-    $('#modal-record').modal('show');
-    $('#modal-head h5').html('Ver Medicamento');
+    SB.panel.show('medicines-panel');
+    SB.panel.setTitle('medicines-panel', '<i class="bi bi-capsule me-2 text-primary"></i>Ver Medicamento');
 
     pk_uuid = dataRecord[0].innerHTML;
     z_xone = dataRecord[1].innerHTML;
@@ -493,7 +463,7 @@ $(document).on('click', '.show-element', function (e) {
             </thead>
             <tbody id="kardexMov"></tbody>
         </table>
-        <button type="button" class="btn btn-secondary m-1 ms-auto" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary m-1 ms-auto" data-bs-dismiss="offcanvas">Cerrar</button>
         `;
 
     $('#kardex').html(template);

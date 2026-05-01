@@ -4,6 +4,7 @@ require_auth();
 include './generales/header.php';
 include './generales/nav.php';
 ?>
+<link rel="stylesheet" href="../css/datatables/dataTables.bootstrap5.min.css">
 
 <div class="container-fluid px-4">
 
@@ -280,4 +281,5 @@ include './generales/nav.php';
 <script src="../Js/datatables/jquery.dataTables.min.js"></script>
 <script src="../Js/datatables/dataTables.bootstrap5.min.js"></script>
 <script src="../Js/calls.js"></script>
+<script>ModulePermissions.init();</script>
 <?php include './generales/footer.php'; ?>
