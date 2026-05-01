@@ -103,6 +103,7 @@ function login()
             $_SESSION['id'] = $row['id'];
             $_SESSION['usuario'] = $userFullName;
             $_SESSION['privilege'] = $privilegeSet;
+            $_SESSION['profile_id'] = $row['profile_id'];
             $_SESSION['last_activity'] = time();
 
             // Construir URL

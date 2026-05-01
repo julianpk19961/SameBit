@@ -2,6 +2,8 @@
 include './generales/header.php';
 include './generales/nav.php';
 ?>
+<link rel="stylesheet" href="../css/datatables/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="../css/datatables/buttons.dataTables.min.css">
 
 <div class="container-fluid mt-5">
   <div class="row mb-4">
@@ -133,10 +135,12 @@ include './generales/nav.php';
   </div>
 </div>
 
+<script src="../Js/jszip/jszip.min.js"></script>
+<script src="../Js/FileSaver/FileSaver.min.js"></script>
 <script src="../Js/datatables/jquery.dataTables.min.js"></script>
 <script src="../Js/datatables/dataTables.bootstrap5.min.js"></script>
 <script src="../Js/datatables/dataTables.buttons.min.js"></script>
 <script src="../Js/datatables/buttons.html5.min.js"></script>
-<script src="../Js/datatables/buttons.print.min.js"></script>
 <script src="../Js/dashboard.js"></script>
+<script>ModulePermissions.init();</script>
 <?php include './generales/footer.php'; ?>

@@ -1,13 +1,44 @@
 <?php
-// $page, $appName, $app_lang come from header.php (via setup.php)
+// $page, $appName, $app_lang, $profileSlug, $conn vienen de setup.php (vía header.php)
+
+// Módulos a los que el usuario tiene permiso 'ingresar'
+$accessible_modules = [];
+if (isset($_SESSION['id'])) {
+    $nav_stmt = $conn->prepare("
+        SELECT m.slug
+        FROM profile_permissions pp
+        INNER JOIN module_permissions mp ON pp.module_permission_id = mp.id
+        INNER JOIN modules m ON mp.module_id = m.id
+        INNER JOIN permissions p ON mp.permission_id = p.id
+        INNER JOIN users u ON u.profile_id = pp.profile_id
+        WHERE u.id = ?
+          AND p.slug = 'ingresar'
+          AND pp.can_access = 1
+          AND m.active = 1
+          AND u.active = 1
+    ");
+    $nav_stmt->bind_param('s', $_SESSION['id']);
+    $nav_stmt->execute();
+    $nav_result = $nav_stmt->get_result();
+    while ($nav_row = $nav_result->fetch_assoc()) {
+        $accessible_modules[] = $nav_row['slug'];
+    }
+    $nav_stmt->close();
+}
+
+$is_admin_nav = ($profileSlug === 'admin');
+
 $nav_items = [
-  ['href' => './dashboard.php',  'icon' => 'bi-speedometer2',    'label' => __('home')              ?? 'Dashboard',      'id' => 'nav-dashboard'],
-  ['href' => './calls.php',      'icon' => 'bi-telephone',       'label' => __('call_registry')      ?? 'Llamadas',       'id' => 'nav-calls'],
-  ['href' => './medicines_l.php','icon' => 'bi-capsule',         'label' => __('medicines')           ?? 'Samecomed',      'id' => 'nav-medicines'],
-  ['href' => './pacients.php',   'icon' => 'bi-people',          'label' => __('patients')            ?? 'Pacientes',      'id' => 'nav-patients'],
-  ['href' => './asisttop.php',   'icon' => 'bi-clipboard2-pulse','label' => __('asist_top')          ?? 'Asist-TOP',      'id' => 'nav-asisttop'],
-  ['href' => '#',                'icon' => 'bi-graph-up',        'label' => __('reports')             ?? 'Reportes',       'id' => 'nav-reports'],
-  ['href' => './admin_users.php','icon' => 'bi-person-gear',     'label' => __('users_management')    ?? 'Usuarios',       'id' => 'nav-admin'],
+  ['href' => './dashboard.php',       'icon' => 'bi-speedometer2',     'label' => __('home')              ?? 'Dashboard',    'id' => 'nav-dashboard'],
+  ['href' => './calls.php',           'icon' => 'bi-telephone',        'label' => __('call_registry')      ?? 'Llamadas',     'id' => 'nav-calls',      'module_slug' => 'llamadas_samebit'],
+  ['href' => './medicines_l.php',     'icon' => 'bi-capsule',          'label' => __('medicines')           ?? 'Samecomed',    'id' => 'nav-medicines',  'module_slug' => 'medicina_samecomed'],
+  ['href' => './pacients.php',        'icon' => 'bi-people',           'label' => __('patients')            ?? 'Pacientes',    'id' => 'nav-patients',   'module_slug' => 'pacientes'],
+  ['href' => './asisttop.php',        'icon' => 'bi-clipboard2-pulse', 'label' => __('asist_top')          ?? 'Asist-TOP',    'id' => 'nav-asisttop',   'module_slug' => 'asist_top'],
+  ['href' => '#',                     'icon' => 'bi-graph-up',         'label' => __('reports')             ?? 'Reportes',     'id' => 'nav-reports',    'module_slug' => 'reportes_dashboard'],
+  ['href' => './admin_users.php',     'icon' => 'bi-person-gear',      'label' => __('users_management')    ?? 'Usuarios',     'id' => 'nav-admin',      'module_slug' => 'admin_usuarios', 'admin_only' => true],
+  ['href' => './admin_profiles.php',  'icon' => 'bi-person-badge',     'label' => __('profiles_management') ?? 'Perfiles',     'id' => 'nav-profiles',   'admin_only' => true],
+  ['href' => './admin_modules.php',   'icon' => 'bi-grid-3x3-gap',    'label' => __('modules_management') ?? 'Módulos',      'id' => 'nav-modules',    'admin_only' => true],
+  ['href' => './admin_permissions.php','icon'=> 'bi-shield-lock',      'label' => __('permissions_matrix') ?? 'Permisos',     'id' => 'nav-permissions','admin_only' => true],
 ];
 ?>
 <nav class="app-navbar">
@@ -28,9 +59,20 @@ $nav_items = [
         <?php foreach ($nav_items as $item): ?>
           <?php if ($item['id'] === 'nav-dashboard') continue; ?>
           <?php
+            // Ocultar ítems exclusivos de admin
+            if (!empty($item['admin_only']) && !$is_admin_nav) continue;
+
+            // Ocultar módulos sin permiso 'ingresar' (solo para no-admin y si tiene module_slug)
+            if (!$is_admin_nav && !empty($item['module_slug']) && !in_array($item['module_slug'], $accessible_modules)) continue;
+
             $active = ($page === basename($item['href'])) ? ' active' : '';
             $click  = ($item['id'] === 'nav-reports') ? ' onclick="openReportModal(event)"' : '';
-          ?>
+
+            // Separador visual antes de los ítems de admin
+            if (!empty($item['admin_only']) && $item['id'] === 'nav-admin'): ?>
+              <li><hr class="dropdown-divider"></li>
+              <li class="dropdown-header text-muted small px-3">Administración</li>
+            <?php endif; ?>
           <li>
             <a href="<?php echo $item['href']; ?>"
                id="<?php echo $item['id']; ?>"
@@ -55,6 +97,7 @@ $nav_items = [
       <ul class="dropdown-menu dropdown-menu-end nav-user-menu">
         <li class="nav-user-header">
           <span class="nav-user-fullname"><?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
+          <br><small class="text-muted"><?php echo htmlspecialchars($profileSlug ?? ''); ?></small>
         </li>
         <li><hr class="dropdown-divider"></li>
         <li>
@@ -113,11 +156,8 @@ function openReportModal(e) {
   e.preventDefault();
   var modal = document.getElementById('modal-report');
   if (modal) {
-    var bsModal = new bootstrap.Modal(modal);
-    bsModal.show();
-    if (typeof showReportCard === 'function') {
-      showReportCard(new Date());
-    }
+    new bootstrap.Modal(modal).show();
+    if (typeof showReportCard === 'function') showReportCard(new Date());
   }
 }
 </script>

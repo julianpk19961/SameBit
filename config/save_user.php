@@ -14,8 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Verificar que sea admin
-    if ($_SESSION['privilege'] !== 'admin') {
+    if (!is_admin()) {
         throw new Exception('Acceso denegado - solo administradores');
     }
 

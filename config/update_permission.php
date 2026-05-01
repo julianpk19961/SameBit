@@ -14,9 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_SERVER['HTTP_X_REQUESTED_WI
 }
 
 try {
-    // Verificar que el usuario es admin
-    $pm = new PermissionManager($pdo, $_SESSION['user_id']);
-    if (!$pm->isAdmin()) {
+    if (!is_admin()) {
         http_response_code(403);
         die(json_encode(['success' => false, 'message' => 'Acceso denegado']));
     }

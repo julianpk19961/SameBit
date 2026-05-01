@@ -23,3 +23,4 @@ $conn->query("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
 // - JSON_UNESCAPED_UNICODE  : "í" en vez de "í"
 // - JSON_UNESCAPED_SLASHES  : "/" en vez de "\/"
 define('JSON_OUT', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+

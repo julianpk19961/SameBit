@@ -780,7 +780,8 @@ include './generales/nav.php';
 
   <br /><br />
 
-  <script src="../Js/asisttop.Js"></script> 
+  <script src="../Js/asisttop.Js"></script>
+  <script>ModulePermissions.init();</script>
   
 
   <footer class="container">

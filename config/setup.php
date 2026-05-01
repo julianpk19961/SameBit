@@ -25,6 +25,9 @@ require_once __DIR__ . '/i18n.php';
 $app_lang    = detect_language();
 $translations = load_language($app_lang);
 
+// Profile slug del usuario actual (disponible en todas las páginas)
+$profileSlug = $_SESSION['privilege'] ?? null;
+
 // Configuración de la aplicación
 $appName = 'bit-medical';
 
