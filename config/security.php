@@ -251,7 +251,7 @@ function set_security_headers() {
     header('Referrer-Policy: strict-origin-when-cross-origin');
     
     // Content Security Policy - Permitir CDNs para scripts, estilos y source maps
-    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net code.jquery.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net; img-src 'self' data:; font-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com; connect-src 'self' https:; media-src 'self' data:;");
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net code.jquery.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com cdn.datatables.net; img-src 'self' data:; font-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com; connect-src 'self' https:; media-src 'self' data:;");
 }
 
 /**

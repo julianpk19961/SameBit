@@ -34,7 +34,7 @@ getTable = () => {
                         `<tr id='${i}'>
                         <td hidden>${medicine.KP_UUID}</td>
                         <td hidden>${medicine.z_xOne}</td>
-                        <td class=" text-center text-white bg-${(medicine.z_xOne == 1 ? 'success' : 'secondary')} opacity-75"> <input class="z_xOne" hidden>  ${(medicine.z_xOne == 1 ? 'ACTIVO' : 'INACTIVO')} </td>
+                        <td class=" text-center text-white bg-${(medicine.z_xOne == 1 ? 'success' : 'secondary')} opacity-75">${(medicine.z_xOne == 1 ? 'ACTIVO' : 'INACTIVO')}</td>
                         <td>  ${medicine.nombre} </td>
                         <td > ${(medicine.referencia == null ? '' : medicine.referencia)} </td>
                         <td > ${(medicine.observacion == null ? '' : medicine.observacion)} </td>
@@ -471,41 +471,39 @@ $(document).on('click', '.show-element', function (e) {
     templateKardex = ``;
     if (z_xone != 0) {
         templateKardex = `
-                <form id="newkardexmov" clas="row g-4" method="POST">
-                   <strong> <blockquote class="text-center m-1">Agregar movimiento</blockquote></strong>
+                <form id="newkardexmov" class="row g-4" method="POST">
+                   <strong><blockquote class="text-center m-1">Agregar movimiento</blockquote></strong>
                    <hr />
                     <div class="row p-1">
                         <div class="form-group col-3">
-                                <label for="datemov">Fecha</label>
-                                <input type="date" class="form-control form-control-sm" id="datemov" aria-label="datemov" />
+                            <label for="datemov">Fecha</label>
+                            <input type="date" class="form-control form-control-sm" id="datemov" name="datemov" autocomplete="off" />
                         </div>
                         <div class="form-group col-3">
                             <label for="categorymov">Categoría</label>
-                            <select class="form-select form-select-sm" id="categorymov" aria-label="categorymov">
+                            <select class="form-select form-select-sm" id="categorymov" name="categorymov">
                             </select>
                         </div>
-                        
                         <div class="form-group col-3">
                             <label for="bill">Factura / Consecutivo</label>
-                            <input type="text" class="form-control form-control-sm" id="bill" placeholder="ingrese consecutivo">
+                            <input type="text" class="form-control form-control-sm" id="bill" name="bill" placeholder="ingrese consecutivo" autocomplete="off">
                         </div>
                         <div class="form-group col-3">
                             <label for="quantity">Cantidad</label>
-                            <input type="number" class="form-control form-control-sm" id="quantity" placeholder="Cantidad">
+                            <input type="number" class="form-control form-control-sm" id="quantity" name="quantity" placeholder="Cantidad" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="patientmov" title="Persona/Entidad que realiza el movimiento" >Tercero</label>
-                            <input type="text" class="form-control form-control-sm" id="patientmov" placeholder="Ingresar Nombre">
+                            <label for="patientmov" title="Persona/Entidad que realiza el movimiento">Tercero</label>
+                            <input type="text" class="form-control form-control-sm" id="patientmov" name="patientmov" placeholder="Ingresar Nombre" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="notemov" title="Observación del movimiento" >Comentario</label>
-                            <textarea class="form-control form-control-sm" id="notemov" placeholder="Agregar comentario"></textarea>
+                            <label for="notemov" title="Observación del movimiento">Comentario</label>
+                            <textarea class="form-control form-control-sm" id="notemov" name="notemov" placeholder="Agregar comentario" autocomplete="off"></textarea>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end pt-1">
                             <button type="button" class="btn btn-success" title="Enviar Movimiento" id="kardex-store"><i class="bi bi-send-fill"></i></button>
                         </div>
                     </div>
-                    
                 </form>`;
     }
 

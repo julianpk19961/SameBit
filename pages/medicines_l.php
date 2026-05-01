@@ -53,28 +53,28 @@ include './generales/nav.php';
   </div>
   <div class="offcanvas-body">
     <form id="medicineStored" novalidate>
-      <input type="hidden" id="pk_uuid">
+      <input type="hidden" id="pk_uuid" name="pk_uuid">
 
       <!-- Error banner -->
       <div id="medicines-error" class="alert alert-danger d-none mb-3" role="alert">
         <div class="d-flex align-items-start gap-2">
           <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1"></i>
           <span class="sb-error-text flex-grow-1"></span>
-          <button type="button" class="btn-close" onclick="SB.form.clear('medicines-error')"></button>
+          <button type="button" class="btn-close" onclick="SB.form.clear('medicines-error')" aria-label="Cerrar"></button>
         </div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label"><?php echo __('name_label'); ?> <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="name" name="name">
+        <label class="form-label" for="name"><?php echo __('name_label'); ?> <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" autocomplete="off">
       </div>
       <div class="mb-3">
-        <label class="form-label"><?php echo __('reference_label'); ?></label>
-        <input type="text" class="form-control" id="reference" name="reference">
+        <label class="form-label" for="reference"><?php echo __('reference_label'); ?></label>
+        <input type="text" class="form-control" id="reference" name="reference" autocomplete="off">
       </div>
       <div class="mb-3">
-        <label class="form-label"><?php echo __('observation_label'); ?></label>
-        <textarea class="form-control" id="observation" name="observation" rows="3"></textarea>
+        <label class="form-label" for="observation"><?php echo __('observation_label'); ?></label>
+        <textarea class="form-control" id="observation" name="observation" rows="3" autocomplete="off"></textarea>
       </div>
 
       <!-- Action buttons — populated by medicines.js -->
