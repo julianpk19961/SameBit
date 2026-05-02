@@ -36,9 +36,8 @@ $nav_items = [
   ['href' => './asisttop.php',        'icon' => 'bi-clipboard2-pulse', 'label' => __('asist_top')          ?? 'Asist-TOP',    'id' => 'nav-asisttop',   'module_slug' => 'asist_top'],
   ['href' => '#',                     'icon' => 'bi-graph-up',         'label' => __('reports')             ?? 'Reportes',     'id' => 'nav-reports',    'module_slug' => 'reportes_dashboard'],
   ['href' => './admin_users.php',     'icon' => 'bi-person-gear',      'label' => __('users_management')    ?? 'Usuarios',     'id' => 'nav-admin',      'module_slug' => 'admin_usuarios', 'admin_only' => true],
-  ['href' => './admin_profiles.php',  'icon' => 'bi-person-badge',     'label' => __('profiles_management') ?? 'Perfiles',     'id' => 'nav-profiles',   'admin_only' => true],
-  ['href' => './admin_modules.php',   'icon' => 'bi-grid-3x3-gap',    'label' => __('modules_management') ?? 'Módulos',      'id' => 'nav-modules',    'admin_only' => true],
-  ['href' => './admin_permissions.php','icon'=> 'bi-shield-lock',      'label' => __('permissions_matrix') ?? 'Permisos',     'id' => 'nav-permissions','admin_only' => true],
+  ['href' => './admin_profiles.php', 'icon' => 'bi-person-badge',  'label' => __('profiles') ?? 'Perfiles', 'id' => 'nav-profiles', 'admin_only' => true],
+  ['href' => './admin_modules.php',  'icon' => 'bi-grid-3x3-gap', 'label' => __('modules')  ?? 'Módulos',  'id' => 'nav-modules',  'admin_only' => true],
 ];
 ?>
 <nav class="app-navbar">

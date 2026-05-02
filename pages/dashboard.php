@@ -29,7 +29,7 @@ include './generales/nav.php';
         <form action="" method="post" class="p-1" id="form-reporte">
           <div class="row">
             <div class="col-6">
-              <label><h6><sub><?php echo __('general_data'); ?></sub></h6></label>
+              <p class="fw-semibold small text-muted mb-1"><?php echo __('general_data'); ?></p>
               <div class="row">
                 <div class="col-6" title="<?php echo __('search_by_name_or_doc'); ?>">
                   <label for="dni-request"><?php echo __('patient_label'); ?></label>
@@ -49,7 +49,7 @@ include './generales/nav.php';
               </div>
             </div>
             <div class="col-6">
-              <label><h6><sub><?php echo __('request_date_range'); ?></sub></h6></label>
+              <p class="fw-semibold small text-muted mb-1"><?php echo __('request_date_range'); ?></p>
               <div class="row">
                 <div class="col-6">
                   <label for="checkin-start"><?php echo __('from'); ?></label>
@@ -62,7 +62,7 @@ include './generales/nav.php';
               </div>
             </div>
             <div class="col-6">
-              <label><h6><sub><?php echo __('comment_date_range'); ?></sub></h6></label>
+              <p class="fw-semibold small text-muted mb-1"><?php echo __('comment_date_range'); ?></p>
               <div class="row">
                 <div class="col-6">
                   <label for="checkout-start"><?php echo __('from'); ?></label>
@@ -75,7 +75,7 @@ include './generales/nav.php';
               </div>
             </div>
             <div class="col-6">
-              <label><h6><sub><?php echo __('appointment_date_range'); ?></sub></h6></label>
+              <p class="fw-semibold small text-muted mb-1"><?php echo __('appointment_date_range'); ?></p>
               <div class="row">
                 <div class="col-6">
                   <label for="appointment-start"><?php echo __('from'); ?></label>

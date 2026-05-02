@@ -38,8 +38,7 @@ function renderModulesTable() {
             '<td class="text-center"><span class="badge ' + (mod.active ? 'bg-success' : 'bg-secondary') + '">' +
                 SB.esc(mod.active ? SB.t('active') : SB.t('inactive')) + '</span></td>' +
             '<td class="text-center">' +
-                '<button class="btn btn-sm btn-outline-primary me-1" onclick="modulesViewPermissions(\'' + mod.id + '\')" title="Permisos"><i class="bi bi-shield-lock"></i></button>' +
-                '<button class="btn btn-sm btn-outline-warning me-1" onclick="modulesOpenEdit(\'' + mod.id + '\')" title="' + SB.t('edit') + '"><i class="bi bi-pencil"></i></button>' +
+                '<button class="btn btn-sm btn-outline-primary me-1" onclick="modulesOpenEdit(\'' + mod.id + '\')" title="' + SB.t('edit') + '"><i class="bi bi-pencil"></i></button>' +
                 '<button class="btn btn-sm btn-outline-danger" onclick="modulesDelete(\'' + mod.id + '\', \'' + SB.esc(mod.name) + '\')" title="' + SB.t('delete') + '"><i class="bi bi-trash"></i></button>' +
             '</td>' +
         '</tr>';

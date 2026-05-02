@@ -16,7 +16,7 @@ if ($profileSlug !== 'admin') {
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h5 class="fw-bold mb-0">
-        <i class="bi bi-person-badge me-2 text-primary"></i><?php echo __('profiles_management'); ?>
+        <i class="bi bi-person-badge me-2 text-primary"></i><?php echo __('profiles') ?? 'Perfiles'; ?>
       </h5>
     </div>
     <button class="btn btn-primary" onclick="profilesOpenCreate()">
@@ -35,7 +35,7 @@ if ($profileSlug !== 'admin') {
             <th><?php echo __('description'); ?></th>
             <th class="text-center"><?php echo __('users'); ?></th>
             <th class="text-center"><?php echo __('status'); ?></th>
-            <th class="text-center" style="width:140px"><?php echo __('actions'); ?></th>
+            <th class="text-center" style="width:100px"><?php echo __('actions'); ?></th>
           </tr>
         </thead>
         <tbody id="profiles-body"></tbody>
@@ -46,9 +46,9 @@ if ($profileSlug !== 'admin') {
 </div>
 
 <!-- ====================================================
-     OFFCANVAS — CREATE / EDIT PROFILE
+     OFFCANVAS — CREATE / EDIT PROFILE + PERMISSIONS
      ==================================================== -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="profiles-panel" style="width: min(480px, 100vw);">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="profiles-panel" style="width: min(660px, 100vw);">
   <div class="offcanvas-header border-bottom">
     <h5 class="offcanvas-title fw-bold" id="profiles-panel-title">
       <i class="bi bi-plus-circle me-2 text-primary"></i><?php echo __('new_profile'); ?>
@@ -57,36 +57,36 @@ if ($profileSlug !== 'admin') {
   </div>
   <div class="offcanvas-body">
     <form id="profiles-form" novalidate>
-      <input type="hidden" id="prof-id">
+      <input type="hidden" id="prof-id" name="prof-id">
 
       <!-- Error banner -->
       <div id="profiles-error" class="alert alert-danger d-none mb-3" role="alert">
         <div class="d-flex align-items-start gap-2">
           <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1"></i>
           <span class="sb-error-text flex-grow-1"></span>
-          <button type="button" class="btn-close" onclick="SB.form.clear('profiles-error')"></button>
+          <button type="button" class="btn-close" onclick="SB.form.clear('profiles-error')" aria-label="Cerrar"></button>
         </div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label"><?php echo __('name'); ?> <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="prof-name">
+        <label class="form-label" for="prof-name"><?php echo __('name'); ?> <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="prof-name" name="prof-name" autocomplete="off">
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Slug <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="prof-slug" placeholder="ej: supervisor">
+        <label class="form-label" for="prof-slug">Slug <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="prof-slug" name="prof-slug" placeholder="ej: supervisor" autocomplete="off">
         <small class="text-muted">a-z, 0-9, _ — no se puede cambiar después de crear.</small>
       </div>
 
       <div class="mb-3">
-        <label class="form-label"><?php echo __('description'); ?></label>
-        <textarea class="form-control" id="prof-description" rows="2"></textarea>
+        <label class="form-label" for="prof-description"><?php echo __('description'); ?></label>
+        <textarea class="form-control" id="prof-description" name="prof-description" rows="2" autocomplete="off"></textarea>
       </div>
 
       <div class="mb-3">
         <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="prof-active" checked>
+          <input class="form-check-input" type="checkbox" id="prof-active" name="prof-active" checked>
           <label class="form-check-label" for="prof-active"><?php echo __('active'); ?></label>
         </div>
       </div>
@@ -100,36 +100,18 @@ if ($profileSlug !== 'admin') {
         </button>
       </div>
     </form>
-  </div>
-</div>
 
-<!-- ====================================================
-     MODAL — PERMISSIONS MATRIX (wide layout)
-     ==================================================== -->
-<div class="modal fade" id="profiles-perms-modal" tabindex="-1">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="profiles-perms-title">
-          <i class="bi bi-shield-lock me-2"></i>Permisos del Perfil
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="profiles-perms-body">
-        <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
-      </div>
-      <div class="modal-footer">
-        <div class="alert alert-secondary mb-0 small flex-grow-1">
-          <i class="bi bi-info-circle me-1"></i>
-          <strong>Ingresar</strong>: ver el módulo &nbsp;|&nbsp;
-          <strong>Guardar</strong>: crear registros &nbsp;|&nbsp;
-          <strong>Editar</strong>: modificar registros &nbsp;|&nbsp;
-          <strong>Informes</strong>: exportar
-        </div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <?php echo __('close'); ?>
-        </button>
-      </div>
+    <!-- Permissions section — visible only in edit mode -->
+    <div id="prof-perms-section" class="d-none mt-4">
+      <hr>
+      <p class="fw-semibold mb-1"><i class="bi bi-shield-lock me-1"></i><?php echo __('permissions') ?? 'Permisos'; ?></p>
+      <p class="text-muted small mb-3">
+        <strong>Ingresar</strong>: ver módulo &nbsp;|&nbsp;
+        <strong>Guardar</strong>: crear &nbsp;|&nbsp;
+        <strong>Editar</strong>: modificar &nbsp;|&nbsp;
+        <strong>Informes</strong>: exportar
+      </p>
+      <div id="prof-perms-grid"></div>
     </div>
   </div>
 </div>
