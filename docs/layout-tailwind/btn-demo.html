@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Btn — Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-full bg-gray-100 text-gray-900 p-6 md:p-10">
+<div class="max-w-4xl mx-auto space-y-10">
+
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Btn — Sistema de botones</h1>
+    <p class="mt-1 text-sm text-gray-500">Tailwind + vanilla JS. Sin dependencias externas.</p>
+  </div>
+
+  <!-- ── Variantes ─────────────────────────────────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Variantes</h2>
+    <div id="variants" class="flex flex-wrap gap-3"></div>
+  </section>
+
+  <!-- ── Tamaños ───────────────────────────────────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Tamaños</h2>
+    <div id="sizes" class="flex flex-wrap items-center gap-3"></div>
+  </section>
+
+  <!-- ── Presets ───────────────────────────────────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Presets</h2>
+    <div id="presets" class="flex flex-wrap gap-3"></div>
+  </section>
+
+  <!-- ── Estados ───────────────────────────────────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Estados</h2>
+    <div id="states" class="flex flex-wrap gap-3"></div>
+  </section>
+
+  <!-- ── Toggle loading demo ───────────────────────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Loading dinámico</h2>
+    <div id="loading-demo" class="flex flex-wrap gap-3"></div>
+    <p class="text-xs text-gray-400">Haz clic en el botón para simular una operación async.</p>
+  </section>
+
+  <!-- ── Uso con DataTable render() ────────────────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+      Integración con DataTable (HTML strings en render)
+    </h2>
+    <div id="table-demo"></div>
+  </section>
+
+  <!-- ── Referencia de API ──────────────────────────────────────────────── -->
+  <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="px-5 py-3 border-b border-gray-200 bg-gray-50">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Referencia</span>
+    </div>
+    <pre class="p-5 text-xs text-gray-700 overflow-x-auto leading-relaxed"><code>// ─── DOM element (para appendChild) ────────────────────────────
+Btn.create({ text, variant, size, disabled, loading, icon, onClick, type, title })
+
+// ─── HTML string (para innerHTML / DataTable render) ────────────
+Btn.html({ text, variant, size, disabled, loading, icon, onclick, type, title })
+
+// ─── Presets DOM (onClick es una función JS) ─────────────────────
+Btn.edit(onClick, opts?)
+Btn.delete(onClick, opts?)
+Btn.new(onClick, opts?)
+Btn.activate(onClick, opts?)
+Btn.deactivate(onClick, opts?)
+
+// ─── Presets HTML string (onclick es una cadena) ─────────────────
+Btn.editHtml("openEdit(" + row.id + ")", opts?)
+Btn.deleteHtml("confirmDelete(" + row.id + ")", opts?)
+Btn.newHtml("openCreate()", opts?)
+Btn.activateHtml("activate(" + row.id + ")", opts?)
+Btn.deactivateHtml("deactivate(" + row.id + ")", opts?)
+
+// ─── Iconos disponibles (HTML strings) ──────────────────────────
+Btn.icons.edit | Btn.icons.trash | Btn.icons.plus
+Btn.icons.check | Btn.icons.ban  | Btn.icons.spinner
+
+// ─── Loading dinámico ────────────────────────────────────────────
+const btn = Btn.create({ text: 'Guardar', variant: 'success', onClick: save });
+container.appendChild(btn);
+
+function save() {
+  // Reemplazar con versión loading
+  const loading = Btn.create({ text: 'Guardando…', variant: 'success', loading: true });
+  btn.replaceWith(loading);
+  fetch('/api/save').finally(() => loading.replaceWith(btn));
+}
+
+// ─── Dentro de DataTable columns ────────────────────────────────
+{
+  label: '',
+  field: null,
+  render: (val, row) =>
+    Btn.editHtml("openEdit(" + row.id + ")") +
+    Btn.deleteHtml("confirmDelete(" + row.id + ")")
+}</code></pre>
+  </section>
+
+</div>
+
+<script src="btn.js"></script>
+<script src="data-table.js"></script>
+<script>
+
+  // ── Variantes ───────────────────────────────────────────────────────────
+  const variantsEl = document.getElementById('variants');
+  ['primary','secondary','success','danger','warning','ghost'].forEach(v => {
+    variantsEl.appendChild(
+      Btn.create({ text: v.charAt(0).toUpperCase() + v.slice(1), variant: v })
+    );
+  });
+
+  // ── Tamaños ─────────────────────────────────────────────────────────────
+  const sizesEl = document.getElementById('sizes');
+  [
+    { size: 'sm',      text: 'Pequeño (sm)'      },
+    { size: 'default', text: 'Normal (default)'  },
+    { size: 'lg',      text: 'Grande (lg)'       },
+  ].forEach(({ size, text }) => {
+    sizesEl.appendChild(Btn.create({ text, size }));
+  });
+
+  // ── Presets ─────────────────────────────────────────────────────────────
+  const presetsEl = document.getElementById('presets');
+  presetsEl.appendChild(Btn.edit(       () => alert('Editar')));
+  presetsEl.appendChild(Btn.delete(     () => alert('Eliminar')));
+  presetsEl.appendChild(Btn.new(        () => alert('Nuevo')));
+  presetsEl.appendChild(Btn.activate(   () => alert('Activar')));
+  presetsEl.appendChild(Btn.deactivate( () => alert('Desactivar')));
+
+  // ── Estados ─────────────────────────────────────────────────────────────
+  const statesEl = document.getElementById('states');
+  statesEl.appendChild(
+    Btn.create({ text: 'Deshabilitado', variant: 'primary', disabled: true })
+  );
+  statesEl.appendChild(
+    Btn.create({ text: 'Cargando…', variant: 'success', loading: true })
+  );
+  statesEl.appendChild(
+    Btn.create({ text: 'Ghost disabled', variant: 'ghost', disabled: true })
+  );
+
+  // ── Loading dinámico ─────────────────────────────────────────────────────
+  const loadingDemoEl = document.getElementById('loading-demo');
+
+  function makeSimulatedBtn(variant, label) {
+    const btn = Btn.create({
+      text: label,
+      variant,
+      onClick: function () {
+        const spinner = Btn.create({ text: 'Procesando…', variant, loading: true });
+        btn.replaceWith(spinner);
+        setTimeout(() => spinner.replaceWith(btn), 2000);
+      },
+    });
+    return btn;
+  }
+
+  loadingDemoEl.appendChild(makeSimulatedBtn('primary', 'Guardar cambios'));
+  loadingDemoEl.appendChild(makeSimulatedBtn('success', 'Confirmar'));
+  loadingDemoEl.appendChild(makeSimulatedBtn('danger',  'Eliminar'));
+
+  // ── DataTable integration demo ───────────────────────────────────────────
+  const SAMPLE = [
+    { id: 1, name: 'Ana García',    status: true  },
+    { id: 2, name: 'Luis Martínez', status: false },
+    { id: 3, name: 'Sofía Herrera', status: true  },
+  ];
+
+  const table = new DataTable('table-demo', {
+    columns: [
+      { label: 'Nombre', field: 'name' },
+      {
+        label: 'Estado',
+        field: 'status',
+        render: (val) => val
+          ? '<span class="inline-flex items-center gap-1 text-xs font-medium text-green-700"><span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>Activo</span>'
+          : '<span class="inline-flex items-center gap-1 text-xs font-medium text-gray-400"><span class="h-1.5 w-1.5 rounded-full bg-gray-300"></span>Inactivo</span>',
+      },
+      {
+        label: '',
+        field: null,
+        render: (val, row) =>
+          '<span class="inline-flex gap-1.5">' +
+          Btn.editHtml('demoEdit(' + row.id + ')') +
+          (row.status
+            ? Btn.deactivateHtml('demoToggle(' + row.id + ')')
+            : Btn.activateHtml('demoToggle(' + row.id + ')')) +
+          Btn.deleteHtml('demoDelete(' + row.id + ')') +
+          '</span>',
+      },
+    ],
+    emptyText: 'Sin registros',
+  });
+
+  table.setData(SAMPLE);
+
+  function demoEdit(id)   { alert('Editar id=' + id); }
+  function demoDelete(id) { alert('Eliminar id=' + id); }
+  function demoToggle(id) {
+    const row = SAMPLE.find(r => r.id === id);
+    if (row) { row.status = !row.status; table.setData(SAMPLE); }
+  }
+
+</script>
+</body>
+</html>

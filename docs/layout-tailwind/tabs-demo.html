@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabs — Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-full bg-gray-100 p-6 md:p-10">
+<div class="max-w-4xl mx-auto space-y-10">
+
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Tabs — Demo</h1>
+    <p class="mt-1 text-sm text-gray-500">Filtro Activos / Inactivos integrado con DataTable.</p>
+  </div>
+
+  <!-- ── Ejemplo principal: Tabs + DataTable ─────────────────────────── -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+
+    <!-- Toolbar -->
+    <div class="flex items-center justify-between px-5 pt-4 pb-0 gap-4 flex-wrap">
+      <div id="tabs-main"></div>
+      <div id="btn-new-wrap"></div>
+    </div>
+
+    <!-- Table -->
+    <div class="p-4 pt-3">
+      <div id="table-main"></div>
+    </div>
+  </div>
+
+  <!-- ── Ejemplo mínimo: solo las pestañas ──────────────────────────── -->
+  <section class="space-y-3">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Solo el componente</h2>
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+      <div id="tabs-plain"></div>
+      <p class="text-sm text-gray-500">
+        Pestaña activa: <code id="active-label" class="font-mono text-blue-600">active</code>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── API reference ──────────────────────────────────────────────── -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="px-5 py-3 border-b border-gray-200 bg-gray-50">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Referencia</span>
+    </div>
+    <pre class="p-5 text-xs text-gray-700 overflow-x-auto leading-relaxed"><code>// Instanciar
+const tabs = new Tabs('container-id', {
+  tabs: [
+    { label: 'Activos',   key: 'active',   default: true },
+    { label: 'Inactivos', key: 'inactive' },
+  ],
+  onChange: (key) => {
+    const isActive = key === 'active';
+    table.setData(data.filter(r => r.active === isActive));
+  },
+});
+
+// API
+tabs.setActive('inactive')   // cambia pestaña (dispara onChange)
+tabs.getActive()             // → 'active' | 'inactive'
+tabs.setBadge('active', 12)  // muestra badge con conteo
+tabs.setBadge('active', null) // oculta badge</code></pre>
+  </div>
+
+</div>
+
+<script src="btn.js"></script>
+<script src="data-table.js"></script>
+<script src="tabs.js"></script>
+<script>
+
+  const DATA = [
+    { id: 1, name: 'Ana García',     role: 'Administrador', active: true  },
+    { id: 2, name: 'Luis Martínez',  role: 'Operador',      active: false },
+    { id: 3, name: 'Sofía Herrera',  role: 'Supervisora',   active: true  },
+    { id: 4, name: 'Carlos Ríos',    role: 'Operador',      active: false },
+    { id: 5, name: 'Valeria Ospina', role: 'Auditora',      active: true  },
+    { id: 6, name: 'Tomás Vargas',   role: 'Operador',      active: true  },
+  ];
+
+  // ── Table ───────────────────────────────────────────────────────────────
+  const table = new DataTable('table-main', {
+    columns: [
+      { label: 'Nombre', field: 'name' },
+      { label: 'Rol',    field: 'role' },
+      {
+        label: '',
+        field: null,
+        render: (val, row) =>
+          '<span class="inline-flex gap-1.5">' +
+          Btn.editHtml('editUser(' + row.id + ')') +
+          Btn.deleteHtml('deleteUser(' + row.id + ')') +
+          '</span>',
+      },
+    ],
+    emptyText: 'No hay registros en esta categoría',
+  });
+
+  function applyFilter(key) {
+    const isActive = key === 'active';
+    const filtered = DATA.filter(r => r.active === isActive);
+    table.setData(filtered);
+
+    // update badges
+    const active   = DATA.filter(r =>  r.active).length;
+    const inactive = DATA.filter(r => !r.active).length;
+    tabs.setBadge('active',   active);
+    tabs.setBadge('inactive', inactive);
+  }
+
+  // ── Tabs ────────────────────────────────────────────────────────────────
+  const tabs = new Tabs('tabs-main', {
+    tabs: [
+      { label: 'Activos',   key: 'active',   default: true },
+      { label: 'Inactivos', key: 'inactive' },
+    ],
+    onChange: applyFilter,
+  });
+
+  // ── New button ──────────────────────────────────────────────────────────
+  document.getElementById('btn-new-wrap').appendChild(
+    Btn.new(() => alert('Nuevo usuario'))
+  );
+
+  // Initial render
+  applyFilter('active');
+
+  // ── Plain tabs example ──────────────────────────────────────────────────
+  const plainTabs = new Tabs('tabs-plain', {
+    tabs: [
+      { label: 'Activos',   key: 'active',   default: true },
+      { label: 'Inactivos', key: 'inactive' },
+    ],
+    onChange: (key) => {
+      document.getElementById('active-label').textContent = key;
+    },
+  });
+
+  // ── Placeholder handlers ─────────────────────────────────────────────────
+  function editUser(id)   { alert('Editar id=' + id); }
+  function deleteUser(id) { alert('Eliminar id=' + id); }
+
+</script>
+</body>
+</html>

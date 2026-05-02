@@ -60,7 +60,9 @@ getTable = () => {
                 varTitle = 'Listado Medicamentos';
                 orderBy = [1, 'asc'];
                 create = true;
-                pagination('#medical_tbl', '15', columns_print, varTitle, orderBy, create);
+                ModulePermissions.load().then(function () {
+                    pagination('#medical_tbl', '15', columns_print, varTitle, orderBy, create);
+                });
             }
 
 

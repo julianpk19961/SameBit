@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title — MyApp</title>
+
+  <!-- Tailwind CSS (CDN — swap for compiled bundle in production) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Alpine.js (required by navbar.html) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!--
+    Active-link helper: the page sets window.CURRENT_PAGE to the slug of the
+    active nav item so navbar.html can highlight it without hard-coding per page.
+    Example: <script>window.CURRENT_PAGE = 'inicio';</script>
+  -->
+  <script>window.CURRENT_PAGE = 'inicio';</script>
+</head>
+
+<body class="h-full bg-gray-50 text-gray-900">
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       NAVBAR — include once per page, never copy-paste its markup
+       PHP  : <?php include 'navbar.html'; ?>
+       Node : <%- include('navbar.html') %>  (EJS)
+               {{ include 'navbar' }}        (Nunjucks)
+  ══════════════════════════════════════════════════════════════════ -->
+  <!-- [navbar.html goes here] -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MAIN CONTENT SLOT
+       • pt-16  offsets the fixed h-16 navbar
+       • min-h-screen keeps the footer at the bottom on short pages
+       Replace everything inside <main> per page.
+  ══════════════════════════════════════════════════════════════════ -->
+  <main class="pt-16 min-h-screen">
+
+    <!-- ── PAGE CONTENT SLOT — replace this section per page ──────── -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <!-- Page heading -->
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Título de la página</h1>
+        <p class="mt-1 text-sm text-gray-500">Descripción opcional de la sección.</p>
+      </div>
+
+      <!-- Content card placeholder -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <p class="text-gray-400 text-sm text-center py-12">
+          Contenido de la página va aquí.
+        </p>
+      </div>
+
+    </div>
+    <!-- ── END SLOT ─────────────────────────────────────────────────── -->
+
+  </main>
+
+</body>
+</html>
