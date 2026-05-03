@@ -52,7 +52,7 @@ if ($profileSlug !== 'admin') {
     <h5 class="offcanvas-title fw-bold" id="modules-panel-title">
       <i class="bi bi-plus-circle me-2 text-primary"></i><?php echo __('new_module'); ?>
     </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" tabindex="-1"></button>
   </div>
   <div class="offcanvas-body">
     <form id="modules-form" novalidate>
@@ -125,7 +125,7 @@ if ($profileSlug !== 'admin') {
         <h5 class="modal-title fw-bold" id="modules-perms-title">
           <i class="bi bi-shield-lock me-2"></i>Permisos del Módulo
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" tabindex="-1"></button>
       </div>
       <div class="modal-body" id="modules-perms-body">
         <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>

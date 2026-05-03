@@ -13,6 +13,8 @@ return [
     'patients'             => 'Pacientes',
     'sign_out'             => 'Cerrar Sesión',
     'system_mode'          => 'Modo sistema',
+    'light_mode'           => 'Modo claro',
+    'dark_mode'            => 'Modo oscuro',
     'language'             => 'Idioma',
     'lang_en'              => 'Inglés',
     'lang_es'              => 'Español',

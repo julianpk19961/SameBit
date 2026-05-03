@@ -113,7 +113,7 @@ if ($result) {
     <h5 class="offcanvas-title fw-bold" id="users-panel-title">
       <i class="bi bi-person-plus me-2 text-primary"></i><?php echo __('new_user'); ?>
     </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" tabindex="-1"></button>
   </div>
   <div class="offcanvas-body">
     <form id="users-form" novalidate>
@@ -193,7 +193,7 @@ if ($result) {
         <h5 class="modal-title fw-bold" id="users-perms-title">
           <i class="bi bi-shield-lock me-2"></i><?php echo __('user_permissions'); ?>
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" tabindex="-1"></button>
       </div>
       <div class="modal-body" id="users-perms-body">
         <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>

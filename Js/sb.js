@@ -107,7 +107,15 @@
                 $b.find('.sb-error-text').text(msg);
                 $b.removeClass('d-none');
                 var el = document.getElementById(bid);
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                if (el) {
+                    // Scroll dentro del contenedor offcanvas/modal si aplica
+                    var scrollParent = el.closest('.offcanvas-body') || el.closest('.modal-body');
+                    if (scrollParent) {
+                        scrollParent.scrollTop = 0;
+                    } else {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }
             },
             clear: function (bannerId) {
                 var bid = bannerId || 'sb-error-banner';

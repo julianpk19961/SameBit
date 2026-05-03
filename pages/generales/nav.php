@@ -102,7 +102,7 @@ $nav_items = [
         <li>
           <button class="dropdown-item" id="theme-toggle-nav" onclick="cycleTheme()">
             <i class="bi bi-circle-half" id="theme-icon"></i>
-            <?php echo __('system_mode'); ?>
+            <span id="theme-label"><?php echo __('system_mode'); ?></span>
           </button>
         </li>
         <li>
@@ -126,6 +126,24 @@ $nav_items = [
 </nav>
 
 <script>
+var THEME_LABELS = {
+  system: '<?php echo addslashes(__('system_mode')); ?>',
+  light:  '<?php echo addslashes(__('light_mode')); ?>',
+  dark:   '<?php echo addslashes(__('dark_mode')); ?>'
+};
+var THEME_ICONS  = { system: 'bi-circle-half', light: 'bi-sun-fill', dark: 'bi-moon-fill' };
+
+function _applyThemeUI(mode) {
+  var icon  = document.getElementById('theme-icon');
+  var label = document.getElementById('theme-label');
+  if (icon)  icon.className   = 'bi ' + (THEME_ICONS[mode]  || THEME_ICONS.system);
+  if (label) label.textContent = THEME_LABELS[mode] || THEME_LABELS.system;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  _applyThemeUI(localStorage.getItem('app-theme') || 'system');
+});
+
 function setLanguage(lang) {
   $.post('../config/set_language.php', { lang: lang }, function () {
     location.reload();
@@ -133,22 +151,17 @@ function setLanguage(lang) {
 }
 
 function cycleTheme() {
-  var theme = (function(){
-    var KEY = 'app-theme';
-    var MODES = ['system','light','dark'];
-    var cur = localStorage.getItem(KEY) || 'system';
-    var next = MODES[(MODES.indexOf(cur) + 1) % MODES.length];
-    localStorage.setItem(KEY, next);
-    return next;
-  })();
-  if (theme === 'system') {
+  var KEY   = 'app-theme';
+  var MODES = ['system', 'light', 'dark'];
+  var cur   = localStorage.getItem(KEY) || 'system';
+  var next  = MODES[(MODES.indexOf(cur) + 1) % MODES.length];
+  localStorage.setItem(KEY, next);
+  if (next === 'system') {
     document.documentElement.removeAttribute('data-theme');
   } else {
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', next);
   }
-  var ICONS = { system:'bi-circle-half', light:'bi-sun-fill', dark:'bi-moon-fill' };
-  var icon = document.getElementById('theme-icon');
-  if (icon) icon.className = 'bi ' + ICONS[theme];
+  _applyThemeUI(next);
 }
 
 function openReportModal(e) {

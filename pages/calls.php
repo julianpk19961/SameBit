@@ -173,8 +173,7 @@ include './generales/nav.php';
           <div class="col-6">
             <label class="form-label" for="call-approved"><?php echo __('approved'); ?> <span class="text-danger">*</span></label>
             <select class="form-select" id="call-approved" name="call-approved" novalidate>
-              <option value="" disabled selected><?php echo __('select_option'); ?></option>
-              <option value="0"><?php echo __('no'); ?></option>
+              <option value="0" selected><?php echo __('no'); ?></option>
               <option value="1"><?php echo __('yes'); ?></option>
             </select>
           </div>
@@ -224,8 +223,7 @@ include './generales/nav.php';
           <div class="col-6">
             <label class="form-label" for="call-exhibit-nine"><?php echo __('annex_9'); ?></label>
             <select class="form-select" id="call-exhibit-nine" name="call-exhibit-nine" novalidate>
-              <option value="" disabled selected><?php echo __('select_option'); ?></option>
-              <option value="0"><?php echo __('no'); ?></option>
+              <option value="0" selected><?php echo __('no'); ?></option>
               <option value="1"><?php echo __('yes'); ?></option>
             </select>
           </div>
@@ -252,8 +250,7 @@ include './generales/nav.php';
           <div class="col-4">
             <label class="form-label" for="call-exhibit-ten"><?php echo __('annex_10'); ?></label>
             <select class="form-select" id="call-exhibit-ten" name="call-exhibit-ten" novalidate>
-              <option value="" disabled selected><?php echo __('select_option'); ?></option>
-              <option value="0"><?php echo __('no'); ?></option>
+              <option value="0" selected><?php echo __('no'); ?></option>
               <option value="1"><?php echo __('yes'); ?></option>
             </select>
           </div>

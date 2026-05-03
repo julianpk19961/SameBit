@@ -53,7 +53,7 @@ if ($profileSlug !== 'admin') {
     <h5 class="offcanvas-title fw-bold" id="profiles-panel-title">
       <i class="bi bi-plus-circle me-2 text-primary"></i><?php echo __('new_profile'); ?>
     </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" tabindex="-1"></button>
   </div>
   <div class="offcanvas-body">
     <form id="profiles-form" novalidate>

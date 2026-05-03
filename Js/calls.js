@@ -47,6 +47,11 @@ $(document).ready(function () {
             e.preventDefault();
         }
     });
+
+    // Garantizar que los triggers de change se ejecuten al salir de un selector por Tab
+    $(document).on('blur', '#form-registro-call select', function () {
+        $(this).trigger('change');
+    });
 });
 
 // ──────────────────────────────────────────────

@@ -48,7 +48,7 @@ include './generales/nav.php';
     <h5 class="offcanvas-title fw-bold" id="pacients-panel-title">
       <i class="bi bi-person-plus me-2 text-primary"></i><?php echo __('new_patient') ?? 'Nuevo Paciente'; ?>
     </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" tabindex="-1"></button>
   </div>
   <div class="offcanvas-body">
     <form id="pacients-form" novalidate>
